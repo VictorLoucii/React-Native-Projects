@@ -1,0 +1,23 @@
+//my tsconfig.json file:
+
+{
+  "compilerOptions": {
+    "strict":true,
+    "target": "es5",
+    "lib": ["es6"],
+    "jsx": "react-native",
+    "allowJs": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "outDir": "./dist",  // Compiled .js files go here,  dist folder only contains compiled .js files from your src folder because of your TypeScript configuration (tsconfig.json).
+    "rootDir": "./src"   // Tells TypeScript to look inside 'src/' folder
+  },
+  "include": ["src"],     // Ensures TS only compiles files inside 'src/'
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "index.js",
+    "jest.config.js",
+    "metro.config.js"
+  ]
+}
