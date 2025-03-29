@@ -1,5 +1,8 @@
-# React-Native-Projects
-All kinds of projects I am working on
+# Music Player App using Zustand 
+
+# have to disable newArch = disable for running React-Native Track Player
+
+## songs are being uploaded in Supa Base.
 
 ## Design Resources
 - Using Figma for getting templates (like font size, button appearance, image size, etc.)
