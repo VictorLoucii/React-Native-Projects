@@ -36,6 +36,6 @@ const styles = StyleSheet.create({
     },
     twitter:{
         height:80,
-        width: 100,
+        width: 60,
     }
 })

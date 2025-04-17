@@ -5,7 +5,7 @@ import MyTextInputs from '../components/MyTextInputs'
 import SocialMedia from '../components/SocialMedia'
 import auth from '@react-native-firebase/auth'
 
-const SignUpScreen = () => {
+const SignUpScreen = ({navigation}) => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -29,6 +29,8 @@ const SignUpScreen = () => {
         auth().createUserWithEmailAndPassword(email, password)
             .then(() => {
                 Alert.alert('User created with credentials:--'+email,password);
+                navigation.navigate('Login');
+
             })
             .catch((error) => {
                 console.log('Error:----', error);
@@ -124,7 +126,7 @@ const styles = StyleSheet.create({
 
     },
     inputConatiner: {
-        height: 450,
+        height: 440,
         backgroundColor: 'white',
         width: '90%',
         borderRadius: 20,
