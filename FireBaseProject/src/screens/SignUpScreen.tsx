@@ -1,10 +1,42 @@
-import { Image, ImageBackground, Platform, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, Image, ImageBackground, Platform, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 import MyButtons from '../components/MyButtons'
 import MyTextInputs from '../components/MyTextInputs'
 import SocialMedia from '../components/SocialMedia'
+import auth from '@react-native-firebase/auth'
 
 const SignUpScreen = () => {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [confirmPass, setConfirmPass] = useState('');
+
+
+
+    const TestSignUpFn = () => {
+        //edge cases
+        //case1:
+        if(!password || !email || !confirmPass){
+            Alert.alert('All input fields need to be filled!!');
+            return;
+        }
+        //case2:
+        if(password !== confirmPass){
+            Alert.alert('Passwords do not match!!');
+            return;
+        }
+        //user creation:
+        auth().createUserWithEmailAndPassword(email, password)
+            .then(() => {
+                Alert.alert('User created with credentials:--'+email,password);
+            })
+            .catch((error) => {
+                console.log('Error:----', error);
+                Alert.alert('Error while creating user:---',error.message);
+            })
+    }
+
+
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -20,18 +52,36 @@ const SignUpScreen = () => {
                 <View style={styles.inputConatiner}>
                     <MyTextInputs
                         placeholder='Enter Email or username'
+                        value={email}
+                        onChangeText={(text) => {
+                            console.log('email:---', text)
+                            setEmail(text);
+                        }}
                     />
                     <MyTextInputs
                         placeholder='Enter password'
-                        secureTextEntry = {true}
+                        secureTextEntry={true}
+                        value={password}
+                        onChangeText={(text) => {
+                            console.log('Password:----', text);
+                            setPassword(text);
+                        }}
                     />
-                                        <MyTextInputs
+                    <MyTextInputs
                         placeholder='Confirm password'
-                        secureTextEntry = {true}
+                        secureTextEntry={true}
+                        value={confirmPass}
+                        onChangeText={(text) => {
+                            console.log('Confirmed Password:----', text);
+                            setConfirmPass(text);
+                        }}
                     />
-                    <MyButtons title='Sign Up' />
+                    <MyButtons
+                        title='Sign Up'
+                        onpress={TestSignUpFn}
+                    />
 
-                    <Text style = {styles.textOR}>OR</Text>
+                    <Text style={styles.textOR}>OR</Text>
 
                     <SocialMedia />
 
@@ -84,14 +134,14 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
 
     },
-    dontHaveAccount:{
+    dontHaveAccount: {
         alignSelf: 'flex-end',
         marginBottom: 10,
         fontFamily: 'NovaFlat-Regular',
-        marginRight: 10,     
+        marginRight: 10,
     },
-    textOR:{
-        marginTop:20,
+    textOR: {
+        marginTop: 20,
         fontSize: 30,
         fontFamily: 'Audiowide-Regular',
     }

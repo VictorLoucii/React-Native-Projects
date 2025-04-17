@@ -16,7 +16,7 @@ const HomeScreen = () => {
                         <Text style={styles.thisIstheHomeText}>Products</Text>
                     </View>
                     <View style={styles.goToSignUpView}>
-                        <Text style={styles.goToSignUpText}>click here to go to SignUp Screen</Text>
+                        <Text style={styles.goToSignUpText}>click here to go to  the SignUp Screen</Text>
                     </View>
 
 
@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
    },
     goToSignUpText:{
         fontSize: 20,
-        fontFamily: 'Audiowide-Regular',
+        fontFamily: 'Langar-Regular',
         color: 'white',
     }
 

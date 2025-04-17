@@ -6,9 +6,12 @@ interface Props {
 }
 
 
-const MyButtons:FC<Props> = ({title}) => {
+const MyButtons:FC<Props> = ({title, onpress}) => {
   return (
-    <TouchableOpacity style = {styles.container}>
+    <TouchableOpacity 
+        style = {styles.container}
+        onPress={onpress}
+    >
         <Text style = {styles.title}>{title}</Text>
     </TouchableOpacity>
 
