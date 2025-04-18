@@ -1,10 +1,33 @@
-import { Image, ImageBackground, Platform, StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, Image, ImageBackground, Platform, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 import MyButtons from '../components/MyButtons'
 import MyTextInputs from '../components/MyTextInputs'
 import SocialMedia from '../components/SocialMedia'
+import auth from '@react-native-firebase/auth'
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const LoginWithEmailAndPass = () => {
+        //edge case 1:
+        if(!email || !password){
+            Alert.alert("All input fields need to be filled")
+            return;
+        }
+        auth().signInWithEmailAndPassword(email,password)
+        .then((response) => {
+            console.log('Response:------',response);
+            Alert.alert('User Logged in with email:='+email,'and password:-'+password);
+            navigation.navigate('HomeScreen');
+        })
+        .catch((error)=> {
+            console.log('Error:----',error.message);
+            Alert.alert("Error:---",error.message);
+        })
+    }
+
     return (
         <View style={styles.container}>
             <ImageBackground
@@ -20,13 +43,26 @@ const LoginScreen = () => {
                 <View style={styles.inputConatiner}>
                     <MyTextInputs
                         placeholder='Enter Email or username'
+                        value={email}
+                        onChangeText={(text)=>{
+                            console.log('Email:----',text);
+                            setEmail(text);
+                        }}
                     />
                     <MyTextInputs
                         placeholder='Enter password'
                         secureTextEntry = {true}
+                        value={password}
+                        onChangeText={(text)=>{
+                            console.log("Password:------",text);
+                            setPassword(text);
+                        }}
                     />
                     <Text style ={styles.dontHaveAccount}>Don't have an account yet?</Text>
-                    <MyButtons title='Login' />
+                    <MyButtons 
+                        title='Login' 
+                        onpress={LoginWithEmailAndPass}
+                    />
 
                     <Text style = {styles.textOR}>OR</Text>
 

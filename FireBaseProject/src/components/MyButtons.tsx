@@ -2,7 +2,8 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { FC } from 'react'
 
 interface Props {
-    title: string,
+    title: string;
+    onpress?:() => void;
 }
 
 

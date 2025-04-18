@@ -5,9 +5,13 @@ import SignUpScreen from './src/screens/SignUpScreen'
 import HomeScreen from './src/screens/HomeScreen'
 import { NavigationContainer } from '@react-navigation/native'
 import MyStack from './src/navigation/MyStack'
+import { useNotification } from './src/notification/Notification'
 
 
 const App = () => {
+
+  useNotification();
+
   return (
     <NavigationContainer>
       <MyStack />
