@@ -7,6 +7,7 @@ import auth from '@react-native-firebase/auth'
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 
+
 const LoginScreen = ({ navigation }) => {
 
     const [email, setEmail] = useState('');
@@ -51,8 +52,6 @@ const LoginScreen = ({ navigation }) => {
         return auth().signInWithCredential(googleCredential);
 
     }
-
-
 
     const LoginWithEmailAndPass = () => {
         //edge case 1:
