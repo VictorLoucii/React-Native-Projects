@@ -1,3 +1,37 @@
+// tsconfig.json
 {
-  "extends": "@react-native/typescript-config/tsconfig.json"
+  // This line means your config inherits recommended settings for React Native
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  "compilerOptions": {
+    // These are common compiler options for RN TypeScript projects.
+    // Some might be inherited from "extends", but explicitly listing is safe.
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "isolatedModules": true, // Often recommended for Babel/ESM setups
+    "jsx": "react-native", // <--- THIS IS THE FIX FOR JSX ERRORS (Errors 1 & 2)
+    "lib": ["es2017", "dom"], // 'dom' often needed for React Native's WebViews or certain libs
+    "moduleResolution": "node",
+    "noEmit": true, // Important for RN, Babel handles transpilation
+    "strict": true, // Highly recommended for strong type checking
+    "target": "esnext",
+    "skipLibCheck": true, // Often useful to ignore type errors in node_modules
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      // If you use path aliases, they go here. E.g.:
+      // "@components/*": ["./src/components/*"]
+    }
+  },
+  // This tells TypeScript which files to include in type checking
+  "include": [
+    "src/**/*", // <--- THIS ENSURES ALL FILES IN 'src' ARE CHECKED, INCLUDING '.d.ts'
+    "index.js"  // Your main entry point
+  ],
+  // Files/folders to exclude from type checking
+  "exclude": [
+    "node_modules",
+    "babel.config.js",
+    "metro.config.js",
+    "jest.config.js"
+  ]
 }
