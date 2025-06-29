@@ -11,7 +11,7 @@ export const formatSecondsToMinute = (seconds) => {
 
 export const isExist = (songs, track) => {
     if(!track || !track.url) return false;   // ✅ Prevents crash if track is undefined
-    return songs.some( song => song.url === track.url)
+    return songs.some( song => song.url === track.url)  // returns `true` if **at least one** element/song object satisfies the condition. Otherwise, `false`
 }
 
 
@@ -45,7 +45,7 @@ export const isExist = (songs, track) => {
 //    - `songs`: An array of song objects this is state.likedSongs which was initially an empty array defined in likeStore.jsx. It gets updated when new songs are added.
 //    - `track`: A song object to check ths is newSong(a track object) which was passed from file PlayerScreen.jsx to likeStore.js and finally to index.js(this file).
 // 2. It uses the `.some()` method, which:
-//    - Iterates over `songs` and returns `true` if **at least one** song in the array has the same `url` as `track.url`.
+//    - Iterates over `songs` array and returns `true` if **at least one** song in the array has the same `url` as `track.url`.
 //    - Otherwise, it returns `false`.
 // 3. The function helps prevent duplicate songs from being added to the liked songs list.
 

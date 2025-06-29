@@ -3,7 +3,7 @@ import { create } from 'zustand';
 // Define the shape of your store's state and actions
 interface PlayerState {
   activePlaylistId: string | null;
-  setActivePlaylistId: (playlistId: string | null) => void;
+  setActivePlaylistId: (playlistId: string | null) => void;  //setActivePlaylistId is a function. It takes one argument named playlistId. The argument must be of type string or null. It returns nothing (void means no return value).
   // ... other player states like activeTrack, isPlaying, etc.
 }
 

@@ -36,7 +36,7 @@ const PlayerScreen = () => {
 
     // --- End of hooks ---
 
-    console.log('Active track:----', activeTrack);
+    // console.log('Active track:----', activeTrack);
 
     const setVolumeIcon = async () => {
         const Volume = await TrackPlayer.getVolume();
@@ -82,16 +82,22 @@ const PlayerScreen = () => {
             </View>
             <View style={styles.imageContainer}>
                 <Image
-                    source={{ uri: activeTrack?.artwork ?? 'no image' }}
+                    source={{ uri: activeTrack?.artwork || 'https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/001/875/325x325/sky-high-x-feel-good-mashup-1744110058-9Z7X0XldXy.jpg' }}
                     style={styles.imageStyle}
                 />
             </View>
             <View style={styles.titleArtistAndHeart}>
                 <View style={styles.titleAndArtist}>
-                    <Text style={[styles.title, {color: colors.textPrimary}]}>
+                    <Text 
+                        style={[styles.title, {color: colors.textPrimary}]}
+                        numberOfLines={1}
+                    >
                         {activeTrack?.title ?? 'uknown title'}
                     </Text>
-                    <Text style={[styles.artist, {color: colors.textSecondary}]}>
+                    <Text 
+                        style={[styles.artist, {color: colors.textSecondary}]}
+                        numberOfLines={1}
+                    >
                         {activeTrack?.artist ?? 'unkown artist'}
                     </Text>
                 </View>

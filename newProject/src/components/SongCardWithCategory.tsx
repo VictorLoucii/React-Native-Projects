@@ -9,13 +9,10 @@ import { useTheme } from '@react-navigation/native'
 import { CustomTheme } from '../theme/CustomTheme'
 import { usePlayerStore } from '../ZustandStore/PlayerStore'
 
-type SongProps = {
-    url: string;
-    title: string;
-    artist: string;
-    artwork: string;
-    album?: string;
-}
+//Import the single source of truth for the SongProps type
+import { SongProps } from './SongCard';
+
+
 
 type SongCardWithCategoryProps = {
     title: string,
@@ -30,7 +27,7 @@ const SongCardWithCategory: React.FC<SongCardWithCategoryProps> = ({ title,
     const { colors } = useTheme() as CustomTheme;
 
     //create a function that will play songs/tracks in queue
-    const handlePlayTrack = async (selectedTrack) => {
+    const handlePlayTrack = async (selectedTrack: SongProps) => {
         console.log('songs:---', songs);
 
         //optimized version using Zustand and TrackPlayer.skip():

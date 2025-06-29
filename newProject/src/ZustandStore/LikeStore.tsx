@@ -12,7 +12,7 @@ const useLikedSongs = create((set) => ({
     let updatedSongs; // Declare variable to store updated  Zustand state
 
     set((state) => {  //don't put async keyword here, it should be in the parent function
-     // ✅ Check if the song already exists in the likedSongs list
+     // ✅ Check if the song already exists in the likedSongs list by call the 'isExist' function which has been defined in module index.js in utitlityFunction folder
       const isAlreadyExist = isExist(state.likedSongs, newSong);
 
        // ✅ If song exists → remove it (unlike), otherwise → add it to the beginning
@@ -43,7 +43,7 @@ const useLikedSongs = create((set) => ({
 
 export default useLikedSongs;
 
-// In `likeStore.jsx`, you're using **Zustand**, a lightweight state management library for React. Let's break down the `create((set) => ({ ... }))` function and clarify how `set`, `state.likedSongs`, and `newSong` work.
+// In `likeStore.jsx`, you're using **Zustand**, a global lightweight state management library for React. Let's break down the `create((set) => ({ ... }))` function and clarify how `set`, `state.likedSongs`, and `newSong` work.
 
 // ---
 

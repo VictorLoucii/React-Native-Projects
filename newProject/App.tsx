@@ -15,6 +15,7 @@ import useLikedSongs from './src/ZustandStore/LikeStore';
 import { DarkMode } from './src/theme/DarkMode';
 import { LightMode } from './src/theme/LightMode';
 import { useThemeStore } from './src/theme/ThemeStore';
+import useSearchStore from './src/ZustandStore/SearchStore';
 
 
 
@@ -27,10 +28,14 @@ const App = () => {
   console.log('isDarkMode:------', isDarkMode);
 
   const { loadLikedSongs } = useLikedSongs();
+  const { searchInAllSongs } = useSearchStore();
 
   useEffect(() => {
+    //call loadLikedSongs() in the useEffect of your main App.tsx component, then you do not and should not call it again in your other screens like LikedScreen, AllSongsScreen, or PlayerScreen, This is the ideal architecture for managing global state like "liked songs"
     loadLikedSongs();
+    searchInAllSongs();
     scheme === 'light' ? toggleTheme(false) : toggleTheme(true);
+
   }, [scheme])
 
   const onLoad = () => {

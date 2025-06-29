@@ -19,6 +19,10 @@ react {
     // cliFile = file("../../node_modules/react-native/cli.js")
 
     /* Variants */
+    // This is the officially documented solution for RN 0.71+ to force
+    // assets to be included in debug builds.
+    // debuggableVariants = []
+    
     //   The list of variants to that are debuggable. For those we're going to
     //   skip the bundling of the JS bundle and the assets. By default is just 'debug'.
     //   If you add flavors like lite, prod, etc. you'll have to list your debuggableVariants.

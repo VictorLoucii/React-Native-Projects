@@ -80,7 +80,7 @@ const FloatingPlayer = () => {
                     onPress={handleGoToPlayerScreen}
                 >
                     <Image
-                        source={{ uri: activeTrack?.artwork ?? 'no image' }}
+                        source={{ uri: activeTrack?.artwork || 'https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/001/875/325x325/sky-high-x-feel-good-mashup-1744110058-9Z7X0XldXy.jpg' }}
                         style={styles.floatingImage}
                     />
                     <View style={styles.songDetails}>

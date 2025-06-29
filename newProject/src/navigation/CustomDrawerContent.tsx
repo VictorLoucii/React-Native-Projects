@@ -16,15 +16,19 @@ import { CustomTheme } from 'src/theme/CustomTheme'
 import { useThemeStore } from '../theme/ThemeStore'
 
 
+
 const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
 
 
-    const { isDarkMode, toggleTheme} = useThemeStore();
+    const { isDarkMode, toggleTheme } = useThemeStore();
 
     const { colors } = useTheme() as CustomTheme;
 
     const { navigation } = props;
 
+    const goToAllSongsScreen = () => {
+        navigation.navigate('HomeScreen_Drawer', { screen: 'AllSongsScreen' });
+    }
     const goToPlayerScreen = () => {
         navigation.navigate('HomeScreen_Drawer', { screen: 'PlayerScreen' });
     }
@@ -42,7 +46,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
 
 
     return (
-        <DrawerContentScrollView style={[styles.container, {backgroundColor: colors.bkGroundClr}]}>
+        <DrawerContentScrollView style={[styles.container, { backgroundColor: colors.bkGroundClr }]}>
             <View style={styles.headerContainer}>
                 <TouchableOpacity
                     onPress={close}
@@ -73,11 +77,28 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                     color={colors.iconPrimary}
                 />
                 <Text
-                    style={[styles.textStyle, {color: colors.textPrimary}]}
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
                 >
                     Profile
                 </Text>
             </TouchableOpacity>
+            <TouchableOpacity
+                onPress={goToAllSongsScreen}
+                style={styles.playerScreenContainer}
+            >
+                <MaterialIcons
+                    name={'library-music'}
+                    size={iconSizes.large}
+                    color={colors.iconPrimary}
+                />
+                <Text
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
+                >
+                    All Songs
+                </Text>
+            </TouchableOpacity>
+
+
             <TouchableOpacity
                 onPress={goToPlayerScreen}
                 style={styles.playerScreenContainer}
@@ -88,7 +109,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                     color={colors.iconPrimary}
                 />
                 <Text
-                    style={[styles.textStyle, {color: colors.textPrimary}]}
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
                 >
                     Player Screen
                 </Text>
@@ -103,7 +124,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                     color={colors.iconPrimary}
                 />
                 <Text
-                    style={[styles.textStyle, {color: colors.textPrimary}]}
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
                 >
                     Liked Songs
                 </Text>
@@ -118,7 +139,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                     color={colors.iconPrimary}
                 />
                 <Text
-                    style={[styles.textStyle, {color: colors.textPrimary}]}
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
                 >
                     Home Screen
                 </Text>
@@ -133,7 +154,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                 />
 
                 <Text
-                    style={[styles.textStyle, {color: colors.textPrimary}]}
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
                 >
                     Language
                 </Text>
@@ -148,7 +169,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                 />
 
                 <Text
-                    style={[styles.textStyle, {color: colors.textPrimary}]}
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
                 >
                     Contact-Us
                 </Text>
@@ -163,7 +184,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                 />
 
                 <Text
-                    style={[styles.textStyle, {color: colors.textPrimary}]}
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
                 >
                     FAQs
                 </Text>
@@ -178,7 +199,7 @@ const CustomDrawerContent: React.FC<DrawerContentComponentProps> = (props) => {
                 />
 
                 <Text
-                    style={[styles.textStyle, {color: colors.textPrimary}]}
+                    style={[styles.textStyle, { color: colors.textPrimary }]}
                 >
                     Settings
                 </Text>

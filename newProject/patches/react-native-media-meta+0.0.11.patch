@@ -1,0 +1,15 @@
+diff --git a/node_modules/react-native-media-meta/android/build.gradle b/node_modules/react-native-media-meta/android/build.gradle
+index 3aaac78..bceea62 100644
+--- a/node_modules/react-native-media-meta/android/build.gradle
++++ b/node_modules/react-native-media-meta/android/build.gradle
+@@ -15,8 +15,8 @@ buildscript {
+ apply plugin: 'com.android.library'
+ 
+ android {
+-    compileSdkVersion 29
+-    buildToolsVersion "29.0.2"
++    compileSdkVersion 34
++    // buildToolsVersion "29.0.2"  //remove this line for newer versions
+ 
+     defaultConfig {
+         minSdkVersion 21

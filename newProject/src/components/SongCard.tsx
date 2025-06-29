@@ -9,13 +9,16 @@ import { CustomTheme } from '../theme/CustomTheme'
 
 const imageUrl = 'https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/001/836/850x850/mortals-funk-remix-1737075671-f0Fq4IOd7G.jpg'
 
-type SongProps = {
+// Export this type so it can be used elsewhere
+export type SongProps = {
   url: string;
   title: string;
   artist: string;
-  artwork: string;
+  artwork?: string; // Make artwork optional here
   album?: string;
+  duration?: number; // Add optional duration
 }
+
 type SongCardProps = {
   containerStyle?: StyleProp<ViewStyle>,
   imageStyle?: StyleProp<ImageStyle>,
@@ -41,17 +44,27 @@ const SongCard: FC<SongCardProps> = ({ data, containerStyle, imageStyle, handleP
       style={[styles.container, containerStyle]}
       onPress={() => {
         console.log("Playing:", data.title);
-        handlePlay(data);
+        handlePlay?.(data);
       }}
 
 
     >
       <Image
-        source={{ uri: data.artwork }}
+        // If data.artwork exists use it, otherwise use a placeholder image
+        source={{ uri: data.artwork || 'https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/001/875/325x325/sky-high-x-feel-good-mashup-1744110058-9Z7X0XldXy.jpg' }}
         style={[styles.coverImage, imageStyle]}
       />
-      <Text style={[styles.title, { color: colors.textPrimary }]}>{data.title}</Text>
-      <Text style={[styles.artist, { color: colors.textSecondary }]}>{data.artist}</Text>
+         {/* ADD numberOfLines={1} HERE TO TRUNCATE LONG TITLES */}
+      <Text 
+        style={[styles.title, { color: colors.textPrimary }]}
+        numberOfLines={1}
+      >
+        {data.title}</Text>
+      <Text 
+        style={[styles.artist, { color: colors.textSecondary }]}
+        numberOfLines={1}
+      >
+        {data.artist}</Text>
     </TouchableOpacity>
   )
 }
