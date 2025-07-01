@@ -1,5 +1,5 @@
 {
-  "name": "newProject",
+  "name": "MusicPlayerUpdated",
   "version": "0.0.1",
   "private": true,
   "scripts": {
@@ -26,6 +26,7 @@
     "react-native-reanimated-carousel": "^4.0.0-canary.22",
     "react-native-safe-area-context": "^5.4.1",
     "react-native-screens": "^4.11.1",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-track-player": "^4.1.1",
     "react-native-vector-icons": "^10.2.0",
     "zustand": "^5.0.5"

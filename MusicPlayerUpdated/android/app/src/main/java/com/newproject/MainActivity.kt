@@ -1,12 +1,22 @@
 package com.newproject
 
-import android.os.Bundle;  
+import android.os.Bundle // Keep this import
 import com.facebook.react.ReactActivity
 import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
+import org.devio.rn.splashscreen.SplashScreen // <-- **Add this import**
 
 class MainActivity : ReactActivity() {
+
+  /**
+   * This is the only onCreate method you need.
+   * It handles both React Navigation and the Splash Screen.
+   */
+  override fun onCreate(savedInstanceState: Bundle?) {
+    SplashScreen.show(this) // <-- **Show the splash screen here**
+    super.onCreate(savedInstanceState) // Use savedInstanceState, not null
+  }
 
   /**
    * Returns the name of the main component registered from JavaScript. This is used to schedule
@@ -20,9 +30,4 @@ class MainActivity : ReactActivity() {
    */
   override fun createReactActivityDelegate(): ReactActivityDelegate =
       DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
-
-  // 👇 Add this method for react navigation:
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(null)
-  }
 }

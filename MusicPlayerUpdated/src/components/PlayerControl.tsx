@@ -11,7 +11,8 @@ import { iconSizes } from '../constants/dimensions'
 // import { colors } from '../constants/colors'
 import TrackPlayer, { State, usePlaybackState } from 'react-native-track-player'
 import { useTheme } from '@react-navigation/native'
-import { CustomTheme } from 'src/theme/CustomTheme'
+import { CustomTheme } from '../theme/CustomTheme'
+import { useShuffleStore } from '../ZustandStore/ShuffleStore'
 
 
 export const GoToPrevButton = () => {
@@ -47,7 +48,7 @@ export const GoToPrevButton = () => {
 
 export const PlayPauseButton = () => {
 
-    const { colors } = useTheme() as CustomTheme; 
+    const { colors } = useTheme() as CustomTheme;
 
     const playBackState = usePlaybackState();
 
@@ -84,22 +85,50 @@ export const PlayPauseButton = () => {
 
 export const GoToNext = () => {
 
-    const { colors } = useTheme() as CustomTheme; 
+    const { colors } = useTheme() as CustomTheme;
+    const { isShuffleOn } = useShuffleStore();
 
-    //skip to next track music player control:
-    const skipToNextSong = async () => {
+    //note: don't use fischeyates shuffle algorithm here (check doc notes)
+
+        const skipToNextSong = async () => {
         try {
-            await TrackPlayer.skipToNext();
+            // Check if shuffle mode is on
+            if (isShuffleOn) {
+                // --- SHUFFLE LOGIC ---
+                const queue = await TrackPlayer.getQueue();
+                if (queue.length <= 1) {
+                    // If there is only 1 song in the queue, just restart it or do nothing
+                    await TrackPlayer.seekTo(0);
+                    return;
+                }
+
+                const currentTrackIndex = await TrackPlayer.getActiveTrackIndex();
+                let nextTrackIndex;
+
+                // Keep picking a random track until it's different from the current one
+                //do while loop executes once even if the condition is false
+                do {
+                    nextTrackIndex = Math.floor(Math.random() * queue.length);
+                } while (nextTrackIndex === currentTrackIndex && queue.length > 1);
+
+                await TrackPlayer.skip(nextTrackIndex);
+
+            } else {
+                // it runs when isShuffleOn state is false/off
+                await TrackPlayer.skipToNext();
+            }
         }
         catch (e) {
-            console.log('Error:----', e);
+            console.log('Error skipping to next song:----', e);
         }
     };
+
 
     return (
         <View>
             <TouchableOpacity
-                onPress={skipToNextSong}
+                // dont do this: onPress={() => skipToNextSong} , check document notes for better explanation
+                onPress={skipToNextSong}  //or call it as an anonymous function : onPress={() => skipToNextSong()}
             >
                 <MaterialCommunityIcons
                     name={'skip-next-outline'}

@@ -16,6 +16,7 @@ import { DarkMode } from './src/theme/DarkMode';
 import { LightMode } from './src/theme/LightMode';
 import { useThemeStore } from './src/theme/ThemeStore';
 import useSearchStore from './src/ZustandStore/SearchStore';
+import SplashScreen from 'react-native-splash-screen';
 
 
 
@@ -30,13 +31,21 @@ const App = () => {
   const { loadLikedSongs } = useLikedSongs();
   const { searchInAllSongs } = useSearchStore();
 
+  //EFFECT 1: Runs only ONCE when the app starts
   useEffect(() => {
+    SplashScreen.hide();
+
     //call loadLikedSongs() in the useEffect of your main App.tsx component, then you do not and should not call it again in your other screens like LikedScreen, AllSongsScreen, or PlayerScreen, This is the ideal architecture for managing global state like "liked songs"
     loadLikedSongs();
     searchInAllSongs();
-    scheme === 'light' ? toggleTheme(false) : toggleTheme(true);
 
-  }, [scheme])
+  }, [])
+
+  //EFFECT 2: Runs whenever the system theme (scheme) changes
+  useEffect(() => {
+    // This syncs your app's theme with the system's theme
+    scheme === 'light' ? toggleTheme(false) : toggleTheme(true);
+  }, [scheme]); // The [scheme] array means "re-run this if scheme changes"
 
   const onLoad = () => {
     console.log('onLoad function executed')

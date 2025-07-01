@@ -1,40 +1,25 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { colors } from '../constants/colors'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import { colors } from '../constants/colors'
 import { iconSizes } from '../constants/dimensions'
 import TrackPlayer from 'react-native-track-player'
+import { useShuffleStore } from '../ZustandStore/ShuffleStore'
+import { useTheme } from '@react-navigation/native';
+import { CustomTheme } from 'src/theme/CustomTheme';
 
 const PlayerShuffleToggle = () => {
 
-    // Fisher-Yates Shuffle algorithm
-    const fisherYatesShuffle = (array) => {
-        for (let i = array.length - 1; i > 0; i--) {
-            let j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    };
-
-    const shuffleSongs = async () => {
-        let Queue = await TrackPlayer.getQueue();
-        console.log("Queue:----", Queue);
-
-        await TrackPlayer.reset();// Clear the current queue
-
-        // Queue.sort(() => Math.random() - 0.5); // Apply shuffle using sort (not optimal)
-        fisherYatesShuffle(Queue); // calling the function, Applying shuffle using Fisher-Yates Shuffle** algorithm (optimal)
-
-        await TrackPlayer.add(Queue);
-        await TrackPlayer.play();
-    }
+    const { isShuffleOn, toggleShuffle } = useShuffleStore();
+    const { colors } = useTheme() as CustomTheme;
 
     return (
         <View>
             <TouchableOpacity
-                onPress={shuffleSongs}
+                onPress={() => toggleShuffle()}
             >
                 <MaterialCommunityIcons
-                    name={'shuffle'}
+                    name={isShuffleOn ? 'shuffle' : 'shuffle-disabled'}
                     size={iconSizes.large}
                     color={colors.iconSecondary}
                 />

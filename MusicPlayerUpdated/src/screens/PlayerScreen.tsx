@@ -222,7 +222,8 @@ const styles = StyleSheet.create({
     playPauseNextContainer: {
         flexDirection: 'row',
         justifyContent: 'center',
-        marginVertical: 65,
+        // marginVertical: 65,
+        paddingVertical: spacing.large,
         gap: spacing.xtraLarge,
     }
 })
