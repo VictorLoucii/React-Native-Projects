@@ -31,8 +31,8 @@ Check out this quick demo of the app in action! Click the GIF to see the full 4-
   - Skip to Next / Previous  
   - Shuffle Mode
 
-- 🖼 **Search Funtionality**
-  - search functionaity available 
+- 🔎 **Search Functionality**
+  - Intuitive search to find any song by title.
 
 - 🖼 **Eye-Catching UI**
   - Built using two `FlatList` components for dynamic and scrollable sections
@@ -61,36 +61,37 @@ Check out this quick demo of the app in action! Click the GIF to see the full 4-
 
 ## 📸 Screenshots
 
-### Home Screen (Light)
-![Home Screen Light](assets/screenshots/HomeScreen_light.jpg)
-
-### Search (Light)
-![Search Screen](assets/screenshots/search_light.jpg)
-
-### Player Screen (Light)
-![Player Screen Light](assets/screenshots/playerScreen_light.png)
-
-### Player Screen (Dark)
-![Player Screen Dark](assets/screenshots/playerScreen_dark.png)
-
-### All Songs (Light)
-![All Songs Light](assets/screenshots/allSongs_light.jpg)
-
-### All Songs (Dark)
-![All Songs Dark](assets/screenshots/allSongs_dark.jpg)
-
-### Liked Songs (Light)
-![Liked Songs Light](assets/screenshots/likedScreen_light.png)
-
-### Liked Songs (Dark)
-![Liked Songs Dark](assets/screenshots/likedScreen_dark.jpg)
-
-### Drawer Menu (Light)
-![Drawer Menu Light](assets/screenshots/drawer_light.jpg)
-
-### Drawer Menu (Dark)
-![Drawer Menu Dark](assets/screenshots/drawer_dark.jpg)
-
-
-
-
+<table>
+  <tr>
+    <td align="center"><img src="assets/screenshots/HomeScreen_light.jpg" alt="Home Screen" width="300"></td>
+    <td align="center"><img src="assets/screenshots/playerScreen_light.png" alt="Player Screen Light" width="300"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><b>Home Screen (Light)</b></sub></td>
+    <td align="center"><sub><b>Player Screen (Light)</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/playerScreen_dark.png" alt="Player Screen Dark" width="300"></td>
+    <td align="center"><img src="assets/screenshots/allSongs_light.jpg" alt="All Songs Light" width="300"></td>
+  </tr>
+   <tr>
+    <td align="center"><sub><b>Player Screen (Dark)</b></sub></td>
+    <td align="center"><sub><b>All Songs (Light)</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/likedScreen_light.png" alt="Liked Songs Light" width="300"></td>
+    <td align="center"><img src="assets/screenshots/likedScreen_dark.jpg" alt="Liked Songs Dark" width="300"></td>
+  </tr>
+   <tr>
+    <td align="center"><sub><b>Liked Songs (Light)</b></sub></td>
+    <td align="center"><sub><b>Liked Songs (Dark)</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/search_light.jpg" alt="Search Screen" width="300"></td>
+    <td align="center"><img src="assets/screenshots/drawer_dark.jpg" alt="Drawer Dark" width="300"></td>
+  </tr>
+   <tr>
+    <td align="center"><sub><b>Search Screen</b></sub></td>
+    <td align="center"><sub><b>Drawer Menu (Dark)</b></sub></td>
+  </tr>
+</table>
