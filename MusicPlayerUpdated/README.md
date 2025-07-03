@@ -3,6 +3,11 @@
 A feature-rich **offline music player** built using **React Native**, offering smooth performance, a modern interface, and all essential playback controls — designed to run directly on your device.
 
 ---
+## 🚀 App Demo
+
+Check out this quick demo of the app in action! Click the GIF to see the full 4-minute video with audio.
+
+[![My App Demo GIF](assets/demo.gif)](https://youtu.be/ntR_VW1cnW0)
 
 ## ✨ Features
 
@@ -26,6 +31,9 @@ A feature-rich **offline music player** built using **React Native**, offering s
   - Skip to Next / Previous  
   - Shuffle Mode
 
+- 🖼 **Search Funtionality**
+  - search functionaity available 
+
 - 🖼 **Eye-Catching UI**
   - Built using two `FlatList` components for dynamic and scrollable sections
 
@@ -46,11 +54,11 @@ A feature-rich **offline music player** built using **React Native**, offering s
 - Metro Bundler
 - TypeScript / JavaScript
 - Android Native Modules (for file access)
+- RNFS
+- React Native Media Meta
 
 ---
 
-## 📸 Screenshots (Coming Soon!)
 
----
 
 

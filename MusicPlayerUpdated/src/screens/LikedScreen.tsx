@@ -12,12 +12,15 @@ import useLikedSongs from '../ZustandStore/LikeStore'
 import TrackPlayer from 'react-native-track-player'
 import { CustomTheme } from '../theme/CustomTheme'
 import { usePlayerStore } from '../ZustandStore/PlayerStore'
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+
 
 const LikedScreen = () => {
 
     const { activePlaylistId, setActivePlaylistId } = usePlayerStore();
 
     const { colors } = useTheme() as CustomTheme;  //note that this colors object is coming from the files DarkMode/LightMode in theme folder not from the colors.js file in the constants folder
+    const insets = useSafeAreaInsets();
 
 
     const { likedSongs } = useLikedSongs();
@@ -26,7 +29,7 @@ const LikedScreen = () => {
         navigation.goBack();
     }
     //create a function that will play songs/tracks in queue
-    const handlePlayTrack = async (selectedTrack ) => {
+    const handlePlayTrack = async (selectedTrack) => {
         console.log('likedSongs:---', likedSongs);
 
         //optimized version(like in SongCardWithCategory.tsx file) using Zustand and TrackPlayer.skip():
@@ -70,7 +73,7 @@ const LikedScreen = () => {
     }
 
     return (
-        <View style={[styles.container, { backgroundColor: colors.bkGroundClr }]}>
+        <View style={[styles.container, { backgroundColor: colors.bkGroundClr, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
             <View style={styles.vectorIcons}>
                 <TouchableOpacity
                     onPress={goToPrevScreen}
@@ -101,7 +104,7 @@ const LikedScreen = () => {
                             containerStyle={{ width: '47%' }}
                             imageStyle={{
                                 height: 170,
-                                width: 170,
+                                width: "100%",  // Use 100% width for responsiveness
                             }}
                             data={item}
                             handlePlay={() => {
@@ -113,17 +116,26 @@ const LikedScreen = () => {
                 }}
                 contentContainerStyle={{
                     paddingBottom: 400,
+                    paddingHorizontal: spacing.large,
                 }}
                 columnWrapperStyle={{
-                    justifyContent: 'flex-end',
+                    justifyContent: 'space-between',
 
                 }}
                 numColumns={2}
+                ListEmptyComponent={
+                    <View style={styles.emptyListContainer}>
+                        <Text style={[styles.emptyListText, { color: colors.textSecondary }]}>
+                            You haven't liked any songs yet
+                        </Text>
+                        <Text style={[styles.emptyListText, { color: colors.textSecondary }]}>
+                            Tap the heart on a song to add it here
+                        </Text>
+                    </View>
+                }
 
             />
             <FloatingPlayer />
-
-
         </View>
     )
 }
@@ -137,7 +149,7 @@ const styles = StyleSheet.create({
 
     },
     vectorIcons: {
-        paddingTop: 60,
+        // paddingTop: 60,
         paddingHorizontal: spacing.large,
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -148,7 +160,21 @@ const styles = StyleSheet.create({
         fontSize: FONTsize.xtraLarge,
         // color: colors.textPrimary,
         fontFamily: fonts.Bold,
+        // paddingHorizontal: spacing.medium,
+        paddingBottom: 20,
+        // marginBottom: 20,
+    },
+    emptyListContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 100, // Push it down a bit from the header
+    },
+    emptyListText: {
+        fontFamily: fonts.Medium,
+        fontSize: FONTsize.medium,
+        textAlign: 'center',
         paddingHorizontal: spacing.large,
-        marginBottom: 20,
+        lineHeight: 22,
     }
 })

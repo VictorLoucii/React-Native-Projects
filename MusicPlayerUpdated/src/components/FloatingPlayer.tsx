@@ -58,7 +58,7 @@ const FloatingPlayer = () => {
                     thumbWidth={40}
                     renderThumb={() => (
                         <View style={styles.invisibleTouchSensitiveContainer}>
-                            <View style={[styles.thumbVisualContainer, {backgroundColor: colors.minTintColor}]} />
+                            <View style={[styles.thumbVisualContainer, { backgroundColor: colors.minTintColor }]} />
                         </View>
                     )}
                     onSlidingStart={() => (isSliding.value = true)}
@@ -87,9 +87,11 @@ const FloatingPlayer = () => {
                         <MovingText
                             text={activeTrack?.title ?? 'no track playing'}
                             animationThreshold={15}
-                            style={[styles.title, {color: colors.textPrimary}]}
+                            style={[styles.title, { color: colors.textPrimary }]}
                         />
-                        <Text style={[styles.artist, {color: colors.textSecondary}]} numberOfLines={1}>
+                        {/* Use a normal Text component for the artist, as it's less likely to need scrolling */}
+                        {/* This also prevents two scrolling animations at once, which can be distracting */}
+                        <Text style={[styles.artist, { color: colors.textSecondary }]}>
                             {activeTrack?.artist ?? 'no artist'}
                         </Text>
                     </View>
@@ -120,7 +122,7 @@ const styles = StyleSheet.create({
         // backgroundColor: colors.bkGroundClr,
         // Now use padding for internal spacing, which is its correct use
         paddingTop: spacing.small,
-        paddingBottom: spacing.large, // Padding to avoid the phone's home bar
+        // paddingBottom: spacing.large, // Padding to avoid the phone's home bar
 
     },
     sliderContainer: {

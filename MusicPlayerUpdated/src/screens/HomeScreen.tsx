@@ -34,33 +34,18 @@ interface SongCategory {
 
 const HomeScreen = () => {
 
-  const { filteredSongs, isSearchActive, searchQuery, toggleSearch, setSearchQuery } = useSearchStore();
+  const { filteredSongs, isSearchActive, searchQuery, toggleSearch, setSearchQuery, allSongsForSearch } = useSearchStore();
   const insets = useSafeAreaInsets();
   const { likedSongs, addToLiked } = useLikedSongs();
   const { activePlaylistId, setActivePlaylistId } = usePlayerStore();
 
-
-
   const { colors } = useTheme() as CustomTheme;  //note that this colors object is coming from the files DarkMode/LightMode in theme folder not from the colors.js file in the constants folder
 
-  //  State to hold our local tracks and loading status
-  const [localTracks, setLocalTracks] = useState<Track[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
+  // First, filter the master list to get only the songs from the user's device
+  const localTracks = allSongsForSearch.filter(song => song.url.startsWith('file://'))
 
-  // useEffect to load local tracks when the component mounts
-  useEffect(() => {
-    const fetchLocalMusic = async () => {
-      setIsLoading(true);
-      const tracks = await loadLocalTracks();
-      setLocalTracks(tracks);
-      setIsLoading(false);
-    };
-
-    fetchLocalMusic();//Since fetchLocalMusic() is an async function (it uses await), you can’t directly make useEffect itself async, Trigger it inside useEffect
-
-  }, []); // The empty array [] ensures this runs only once
-
-  // Combine your existing SongsList with the new local tracks
+  // Combine your existing SongsList with the new local tracks:
+  // Start with your hardcoded categories from SongsList
   const allSongCategories: SongCategory[] = SongsList.map(category => ({
     ...category,
     // Ensure every song in the hardcoded list also matches the Track interface
@@ -104,10 +89,10 @@ const HomeScreen = () => {
       await TrackPlayer.skip(trackIndex);  // Then just skip to the selected track/song
       setActivePlaylistId(playListId); // Update the global state with the new dynamic playListId
     }
-    await TrackPlayer.play(); 
+    await TrackPlayer.play();
   }
 
-    // ---This function is ONLY for rendering a single SEARCH RESULT item ---
+  // ---This function is ONLY for rendering a single SEARCH RESULT item ---
   const renderSearchResultItem = ({ item }: { item: Track }) => (
 
     <View style={styles.songRow}>
@@ -141,59 +126,57 @@ const HomeScreen = () => {
 
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.bkGroundClr }]}>
+    <View style={[styles.container, { backgroundColor: colors.bkGroundClr, paddingBottom: insets.bottom }]}>
       <StatusBar />
-      <View style={[styles.headerContainer, {paddingTop: insets.top}]}>
+      <View style={[styles.headerContainer, { paddingTop: insets.top }]}>
         <Header />
       </View>
 
+      {/* case when isSearchActive is false i.e when user is not searching */}
       {!isSearchActive && (
-        // put flex: 1 in flatList view otherwise you'll have layout issues
-        <View style = {styles.flatListContainer}>
-          <FlatList
-            // Use the combined list of categories
-            data={allSongCategories}
-
-            //loading message when the device is scanning. using 'isLoading' state.
-            ListHeaderComponent={
-              isLoading ? (
-                <View style={styles.loadingContainer}>
-                  <ActivityIndicator size="large" color={colors.textPrimary} />
-                  <Text style={[styles.loadingText, { color: colors.textPrimary }]}>
-                    Scanning for local music...
-                  </Text>
-                </View>
-              ) : null
-            }
-            //rendering SongCardWithCategory.tsx component:
-            renderItem={({ item }) => <SongCardWithCategory title={item.title} songs={item.songs} />}
-            contentContainerStyle={{
-              paddingBottom: insets.bottom + 150,
-
-            }}
-            showsVerticalScrollIndicator={false}
-          />
+        // put flex: 1 in flatListContainer view otherwise you'll have layout issues
+        <View style={styles.flatListContainer}>
+          {allSongsForSearch.length === 0 ? (
+            // If loading, show only the centered ActivityIndicator
+            <View style={styles.loadingContainer}>
+              <ActivityIndicator size="large" color={colors.textPrimary} />
+              <Text style={[styles.loadingText, { color: colors.textPrimary }]}>
+                Scanning for music...
+              </Text>
+            </View>
+          ) : (
+            // If done loading, show only the FlatList
+            <FlatList
+              data={allSongCategories}
+              renderItem={({ item }) => <SongCardWithCategory title={item.title} songs={item.songs} />}
+              contentContainerStyle={{
+                paddingBottom: insets.bottom + 150,
+              }}
+              showsVerticalScrollIndicator={false}
+            />
+          )}
         </View>
       )}
 
+      {/* case when isSearchActive is true i.e when user is searching  */}
       {isSearchActive && (
         <FlatList
-        data={filteredSongs}
-        renderItem={renderSearchResultItem}
-        keyExtractor={item => `search-${item.url}`}
-        contentContainerStyle={{
-          paddingBottom: insets.bottom + 150,
-          paddingHorizontal: 20,
-        }}
-        showsVerticalScrollIndicator={false}
-        ItemSeparatorComponent={() => <View style={{ marginBottom: 10 }} />}
-        ListHeaderComponent={() => (
-          searchQuery.length > 0 && filteredSongs.length === 0 ? (
-            <Text style={styles.noResultsText}>No results found.</Text>
-          ) : null
-        )}
+          data={filteredSongs}
+          renderItem={renderSearchResultItem}
+          keyExtractor={item => `search-${item.url}`}
+          contentContainerStyle={{
+            paddingBottom: insets.bottom + 150,
+            paddingHorizontal: 20,
+          }}
+          showsVerticalScrollIndicator={false}
+          ItemSeparatorComponent={() => <View style={{ marginBottom: 10 }} />}
+          ListHeaderComponent={() => (
+            searchQuery.length > 0 && filteredSongs.length === 0 ? (
+              <Text style={styles.noResultsText}>No results found.</Text>
+            ) : null
+          )}
         />
-      
+
       )}
       <FloatingPlayer />
 
@@ -213,6 +196,7 @@ const styles = StyleSheet.create({
     // flex: 1,
   },
   loadingContainer: {
+    flex:1,
     alignItems: 'center',
     justifyContent: 'center',
     padding: spacing.large,
@@ -257,8 +241,8 @@ const styles = StyleSheet.create({
     fontSize: FONTsize.medium,
     color: 'grey',
   },
-  flatListContainer:{
-    flex:1,
+  flatListContainer: {
+    flex: 1,
   }
 
 

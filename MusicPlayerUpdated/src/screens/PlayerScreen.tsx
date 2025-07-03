@@ -15,6 +15,10 @@ import TrackPlayer, { useActiveTrack } from 'react-native-track-player'
 import { isExist } from '../utilityFunction'
 import useLikedSongs from '../ZustandStore/LikeStore'
 import { CustomTheme } from 'src/theme/CustomTheme'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import MovingText from '../components/MovingText'
+
+
 
 
 const imageUrl = 'https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/001/655/325x325/1712055855_8OZEb5mgxW_MANSHN---Code-Art-Final.jpg'
@@ -22,12 +26,13 @@ const imageUrl = 'https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/001/655
 const PlayerScreen = () => {
 
     // --- RULE: Call ALL hooks at the top level, unconditionally ---
-    const { colors } = useTheme() as CustomTheme; 
+    const insets = useSafeAreaInsets();
+    const { colors } = useTheme() as CustomTheme;
     const navigation = useNavigation();
     const activeTrack = useActiveTrack();
     const [isMute, setIsMute] = useState(false);
-    const { likedSongs, addToLiked} = useLikedSongs();
-    console.log('likedSongs:---',likedSongs || 'empty array')
+    const { likedSongs, addToLiked } = useLikedSongs();
+    console.log('likedSongs:---', likedSongs || 'empty array')
 
     //When the screen loads, check the current player volume and set the mute icon accordingly:
     useEffect(() => {
@@ -65,72 +70,79 @@ const PlayerScreen = () => {
 
 
     return (
-        <View style={[styles.container, {backgroundColor: colors.bkGroundClr}]}>
-            <View style={styles.headerContainer}>
-                <TouchableOpacity
-                    onPress={goToPrevScreen}
-                >
-                    <Ionicons
-                        name={'arrow-back'}
-                        size={30}
-                        color={colors.iconPrimary}
-                    />
-                </TouchableOpacity>
-                <Text style={[styles.headerText, {color: colors.textPrimary}]}>
-                    Playing Now
-                </Text>
-            </View>
-            <View style={styles.imageContainer}>
-                <Image
-                    source={{ uri: activeTrack?.artwork || 'https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/001/875/325x325/sky-high-x-feel-good-mashup-1744110058-9Z7X0XldXy.jpg' }}
-                    style={styles.imageStyle}
-                />
-            </View>
-            <View style={styles.titleArtistAndHeart}>
-                <View style={styles.titleAndArtist}>
-                    <Text 
-                        style={[styles.title, {color: colors.textPrimary}]}
-                        numberOfLines={1}
+        <View style={[styles.container, { backgroundColor: colors.bkGroundClr, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+            {/* This view will expand, pushing the controls to the bottom */}
+            <View style={{ flex: 1 }}>
+                <View style={styles.headerContainer}>
+                    <TouchableOpacity
+                        onPress={goToPrevScreen}
                     >
-                        {activeTrack?.title ?? 'uknown title'}
-                    </Text>
-                    <Text 
-                        style={[styles.artist, {color: colors.textSecondary}]}
-                        numberOfLines={1}
-                    >
-                        {activeTrack?.artist ?? 'unkown artist'}
+                        <Ionicons
+                            name={'arrow-back'}
+                            size={30}
+                            color={colors.iconPrimary}
+                        />
+                    </TouchableOpacity>
+                    <Text style={[styles.headerText, { color: colors.textPrimary }]}>
+                        Playing Now
                     </Text>
                 </View>
-                <TouchableOpacity onPress={() => addToLiked(activeTrack)}>
-                    <AntDesign
-                        name={isExist(likedSongs, activeTrack) ? 'heart' : 'hearto'}
-                        size={iconSizes.large}
-                        color={colors.iconSecondary}
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={{ uri: activeTrack?.artwork || 'https://ncsmusic.s3.eu-west-1.amazonaws.com/tracks/000/001/875/325x325/sky-high-x-feel-good-mashup-1744110058-9Z7X0XldXy.jpg' }}
+                        style={styles.imageStyle}
                     />
-                </TouchableOpacity>
-            </View>
-            <View style={styles.playerScreenControls}>
-                <TouchableOpacity
-                    style={styles.volumeContainer}
-                    onPress={toggleMuteUnmute}
-                >
-                    <Feather
-                        name={isMute ? 'volume-x' : 'volume-1'}
-                        size={iconSizes.xtraLarge}
-                        color={colors.iconSecondary}
-                    />
-                </TouchableOpacity>
+                </View>
+                <View style={styles.titleArtistAndHeart}>
+                    <View style={styles.titleAndArtist}>
+                        {/* USE MovingText FOR THE TITLE */}
+                        <MovingText
+                            text={activeTrack?.title ?? 'uknown title'}
+                            animationThreshold={25} // Start scrolling if title is long
+                            style={[styles.title, { color: colors.textPrimary }]}
+                        />
+                        <Text
+                            style={[styles.artist, { color: colors.textSecondary }]}
+                            numberOfLines={1}
+                            adjustsFontSizeToFit={true}
+                            minimumFontScale={0.7} // Optional: prevents text from getting too small
+                        >
+                            {activeTrack?.artist ?? 'unkown artist'}
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPress={() => addToLiked(activeTrack)}>
+                            <AntDesign
+                                name={isExist(likedSongs, activeTrack) ? 'heart' : 'hearto'}
+                                size={iconSizes.large}
+                                color={colors.iconSecondary}
+                            />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.playerScreenControls}>
+                    <TouchableOpacity
+                        style={styles.volumeContainer}
+                        onPress={toggleMuteUnmute}
+                    >
+                        <Feather
+                            name={isMute ? 'volume-x' : 'volume-1'}
+                            size={iconSizes.xtraLarge}
+                            color={colors.iconSecondary}
+                        />
+                    </TouchableOpacity>
 
-                <TouchableOpacity style={styles.repeatShuffleContainer}>
-                    <PlayerRepeatToggle />
-                    <PlayerShuffleToggle />
-                </TouchableOpacity>
+                    <View style={styles.repeatShuffleContainer}>
+                        <PlayerRepeatToggle />
+                        <PlayerShuffleToggle />
+                    </View>
 
-            </View>
+                </View>
 
-            <View style={styles.playerProgressBar}>
-                <PlayerScreenProgressBar />
+                <View style={styles.playerProgressBar}>
+                    <PlayerScreenProgressBar />
+                </View>
             </View>
+            {/* --- End of the new wrapper --- */}
+            {/* The below controls are now outside the expanding view, so they stay at the bottom */}
             <View style={styles.playPauseNextContainer}>
                 <GoToPrevButton />
                 <PlayPauseButton />
@@ -150,7 +162,7 @@ const styles = StyleSheet.create({
 
     },
     headerContainer: {
-        paddingTop: 60,
+        // paddingTop: 60,
         paddingHorizontal: spacing.large,
         flexDirection: 'row',
         alignItems: 'center',
@@ -165,7 +177,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         // justifyContent: 'center',
         alignItems: 'center',
-        marginTop: spacing.xtraLarge,
+        marginTop: spacing.large,
 
     },
     imageStyle: {
@@ -184,18 +196,28 @@ const styles = StyleSheet.create({
     titleAndArtist: {
         flex: 1,
         alignItems: 'center',  //this will bring the title and artist in the middle
+        // paddingRight: spacing.small,
+        // overflow: 'hidden',
+        // justifyContent:"center"
+
     },
     title: {
+        width: '100%',
         fontFamily: fonts.Medium,
         fontSize: FONTsize.xtraLarge,
         // color: colors.textPrimary,
         paddingVertical: spacing.small,
+        textAlign: 'center',
+        // paddingLeft: 60,
+        // paddingRight: spacing.large
 
     },
     artist: {
+        width: '100%',
         fontFamily: fonts.Regular,
         fontSize: FONTsize.large,
         // color: colors.textSecondary,
+        textAlign: 'center',
     },
     playerScreenControls: {
         marginVertical: spacing.medium,
@@ -215,7 +237,7 @@ const styles = StyleSheet.create({
     },
 
     playerProgressBar: {
-        marginVertical: spacing.small,
+        marginVertical: spacing.large,
         paddingHorizontal: spacing.medium
 
     },
@@ -223,7 +245,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         // marginVertical: 65,
-        paddingVertical: spacing.large,
+        paddingTop: spacing.large,
         gap: spacing.xtraLarge,
+        paddingBottom: spacing.medium,
     }
 })

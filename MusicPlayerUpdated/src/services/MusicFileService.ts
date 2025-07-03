@@ -150,9 +150,10 @@ export async function loadLocalTracks(): Promise<Track[]> {
         const track: Track = {
           //url: Must be prefixed with file:// for TrackPlayer also Fallbacks are used if data is missing (e.g., file name as title)
           url: `file://${path}`, // CRITICAL: TrackPlayer needs the 'file://' prefix
-          title: metadata.title || path.split('/').pop()?.replace(/\.[^/.]+$/, "") || 'Unknown Title',
-          artist: metadata.artist || 'Unknown Artist',
-          album: metadata.album || 'Unknown Album',
+          // Use .trim() to clean the metadata before the fallback check ---
+          title: metadata.title?.trim() || path.split('/').pop()?.replace(/\.[^/.]+$/, "") || 'Unknown Title',
+          artist: metadata.artist?.trim() || 'Unknown Artist',
+          album: metadata.album?.trim() || 'Unknown Album',
           artwork: metadata.thumb ? `data:image/jpeg;base64,${metadata.thumb}` : undefined,
           duration: metadata.duration ? Math.floor(parseInt(metadata.duration, 10) / 1000) : 0,
         };
@@ -214,7 +215,7 @@ export const LoadAllSongs = async () => {
 
 
 
-//some parts explanation:
+//explanation:
 
 // In this line:
 

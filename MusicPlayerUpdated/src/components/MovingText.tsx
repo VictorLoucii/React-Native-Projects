@@ -5,17 +5,24 @@ import Animated, { Easing, useAnimatedStyle, useSharedValue, withDelay, withRepe
 type MovingTextProps = {
     text: string;
     animationThreshold: number;
-    style?:StyleProp<TextStyle>;  //import StyleProp and TextStyle from react-native
+    style?: StyleProp<TextStyle>;  //import StyleProp and TextStyle from react-native
 };
 
-const MovingText:React.FC<MovingTextProps> = ({ text, animationThreshold, style }) => {
+const MovingText: React.FC<MovingTextProps> = ({ text, animationThreshold, style }) => {
 
     const translateX = useSharedValue(0);
     const shouldWeAnimate = text.length >= animationThreshold;
     const textWidth = text.length * 3;
 
     useEffect(() => {
-        if (!shouldWeAnimate) return;
+        if (!shouldWeAnimate) {
+            translateX.value = 0; // For short titles, no animation, start at 0
+            return;
+        }
+
+        // For long titles, set an initial offset (e.g., 150) to prevent clipping
+        translateX.value = 150;
+
         translateX.value = withDelay(
             1000,
             withRepeat(
@@ -28,8 +35,7 @@ const MovingText:React.FC<MovingTextProps> = ({ text, animationThreshold, style 
                 true
             )
         )
-    }, [translateX, text, textWidth, animationThreshold])
-
+    }, [translateX, text, textWidth, shouldWeAnimate]) // Added shouldWeAnimate to dependencies
 
     const animatedStyling = useAnimatedStyle(() => {
         return {
@@ -37,7 +43,6 @@ const MovingText:React.FC<MovingTextProps> = ({ text, animationThreshold, style 
         }
 
     })
-
 
 
     return (
@@ -50,11 +55,12 @@ const MovingText:React.FC<MovingTextProps> = ({ text, animationThreshold, style 
                     style,
                     shouldWeAnimate && {
                         width: 9999,
-                        paddingHorizontal: 5,
+                        // textAlign: 'left'
                     },
                 ]}
+
             >
-                <Text>{text}</Text>
+                {text}
             </Animated.Text>
         </View>
     )
@@ -63,7 +69,8 @@ const MovingText:React.FC<MovingTextProps> = ({ text, animationThreshold, style 
 export default MovingText
 
 const styles = StyleSheet.create({
-    container:{
-        overflow:'hidden',
+    container: {
+        overflow: 'hidden',
+        // width: '100%'
     }
 })

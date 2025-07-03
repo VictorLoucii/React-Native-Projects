@@ -18,34 +18,24 @@ import useSearchStore from '../ZustandStore/SearchStore'
 const AllSongsScreen = () => {
 
     const { activePlaylistId, setActivePlaylistId } = usePlayerStore();
-    const { isSearchActive, filteredSongs, searchQuery } = useSearchStore();
-    const [allSongs, setAllSongs] = useState<Track[]>([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const { isSearchActive, filteredSongs, searchQuery, allSongsForSearch } = useSearchStore();
     const { colors } = useTheme() as CustomTheme;
     const insets = useSafeAreaInsets();
     const { likedSongs, addToLiked } = useLikedSongs();
     console.log('likedSongs:---', likedSongs || 'empty array')
 
-    useEffect(() => {
-        const fetchAllSongs = async () => {
-            setIsLoading(true);
-            const allMusic = await LoadAllSongs();
-            setAllSongs(allMusic);
-            setIsLoading(false);
-        }
-        fetchAllSongs();
-    }, [])
+
 
     //track player logic:
     // --- The 'handlePlayTrack' function now needs to be smarter. ---
     // It should play from the 'filteredSongs' list if search is active.
     const handlePlayTrack = async (selectedTrack: Track) => {
-        console.log('allSongs:----', allSongs);
+        console.log('allSongsForSearch array:----', allSongsForSearch);
 
 
         // Determine which list is currently active based on isSearchActive
-        const currentPlaylist = isSearchActive ? filteredSongs : allSongs;
-        const playListId = isSearchActive ? 'Search_Results' : 'All Songs'; //defined unique string names for filteredSongs and allSongs
+        const currentPlaylist = isSearchActive ? filteredSongs : allSongsForSearch;
+        const playListId = isSearchActive ? 'Search_Results' : 'All Songs'; //defined unique string names for filteredSongs and allSongsForSearch arrays
 
         if (activePlaylistId === playListId) {
             console.log(`Same playlist selected : (${playListId}). Skipping to new track`)
@@ -72,7 +62,7 @@ const AllSongsScreen = () => {
     }
 
     const renderSongItem = ({ item }: { item: Track }) => (
-        
+
         <View style={styles.songRow}>
             <View style={styles.imageTitleArtistContainer}>
                 <TouchableOpacity onPress={() => handlePlayTrack(item)}>
@@ -102,8 +92,8 @@ const AllSongsScreen = () => {
         </View>
     );
 
-    if (isLoading) {
-        // This is correct and needs no changes
+    if (allSongsForSearch.length === 0) {
+        // show activity indicator if the allSongsForSearch array is not ready/loaded yet
         return (
             <View>
                 <ActivityIndicator
@@ -130,7 +120,7 @@ const AllSongsScreen = () => {
                         All Songs
                     </Text>
                     <FlatList
-                        data={allSongs}
+                        data={allSongsForSearch}
                         renderItem={renderSongItem}
                         keyExtractor={item => item.url}
                         contentContainerStyle={{
@@ -162,8 +152,11 @@ const AllSongsScreen = () => {
                     )}
                 />
             )}
+            <View style = {{paddingBottom:insets.bottom}}>
+                <FloatingPlayer />
+            </View>
 
-            <FloatingPlayer />
+
         </View>
     );
 }
@@ -218,5 +211,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.Regular,
         fontSize: FONTsize.medium,
         color: 'grey',
-    }
+    },
+
 });
