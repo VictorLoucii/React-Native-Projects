@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
     searchIconAndInputContainer: {
         flexDirection: 'row',
         marginTop: 20,
-        width: 364,
+        width: '90%',
         height: 54,
         backgroundColor: '#FFFFFF',
         paddingHorizontal: spacing.large,

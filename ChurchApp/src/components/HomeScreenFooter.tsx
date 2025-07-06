@@ -7,89 +7,95 @@ import { FONTS } from '../constants/fonts';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { BottomTabBarProps } from '@react-navigation/bottom-tabs';  //import this and put this as the type for 'state' and 'navigation' otherwise you'll get ts errors
 
+//this FC has become our custom TabNavigator
+const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
+    console.log('state:---',state);
+    console.log('navigation:---',navigation);
 
-const HomeScreenFooter = () => {
 
     const insets = useSafeAreaInsets();
     // Define the padding you want *above* the content, and the padding you want *below* the content (before the safe area starts).
     const VERTICAL_PADDING = 10;
 
-    const [activeTab, setActiveTab] = useState('Home');
+    // const [activeTab, setActiveTab] = useState('Home');
     const activeColor = '#A96F00';
     const inactiveColor = '#FFFFFF';
+
+    const activeRouteName = state.routes[state.index].name;
 
     return (
         <View style={[styles.container, { paddingBottom: insets.bottom + VERTICAL_PADDING }]}>
 
             <TouchableOpacity
-                onPress={() => setActiveTab('Home')}
+                onPress={() => navigation.navigate('Home')}
                 style={styles.iconAndTextContainer}
 
             >
                 <MaterialIcons
                     name={'home'}
                     size={30}
-                    color={activeTab === 'Home' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'Home' ? activeColor : inactiveColor}
                 />
-                <Text style={[styles.textStyle, { color: activeTab === 'Home' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'Home' ? activeColor : inactiveColor }]}>
                     Home
                 </Text>
             </TouchableOpacity>
 
 
             <TouchableOpacity
-                onPress={() => setActiveTab('Connect')}
+                onPress={() => navigation.navigate('Connect')}
                 style={styles.iconAndTextContainer}
             >
                 <Ionicons
                     name={'people'}
                     size={30}
-                    color={activeTab === 'Connect' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'Connect' ? activeColor : inactiveColor}
                 />
-                <Text style={[styles.textStyle, { color: activeTab === 'Connect' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'Connect' ? activeColor : inactiveColor }]}>
                     Connect
                 </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-                onPress={() => setActiveTab('Give')}
+                onPress={() => navigation.navigate('Give')}
                 style={styles.iconAndTextContainer}
             >
                 <Ionicons
                     name={'gift'}
                     size={30}
-                    color={activeTab === 'Give' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'Give' ? activeColor : inactiveColor}
                 />
-                <Text style={[styles.textStyle, { color: activeTab === 'Give' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'Give' ? activeColor : inactiveColor }]}>
                     Give
                 </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-                onPress={() => setActiveTab('Media')}
+                onPress={() => navigation.navigate('Media')}
                 style={styles.iconAndTextContainer}
             >
                 <FontAwesome
                     name={'play-circle-o'}
                     size={30}
-                    color={activeTab === 'Media' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'Media' ? activeColor : inactiveColor}
                 />
-                <Text style={[styles.textStyle, { color: activeTab === 'Media' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'Media' ? activeColor : inactiveColor }]}>
                     Media
                 </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
-                onPress={() => setActiveTab('More')}
+                onPress={() => navigation.navigate('More')}
                 style={styles.iconAndTextContainer}
             >
                 <MaterialIcons
                     name={'more-vert'}
                     size={30}
-                    color={activeTab === 'More' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'More' ? activeColor : inactiveColor}
                 />
-                <Text style={[styles.textStyle, { color: activeTab === 'More' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'More' ? activeColor : inactiveColor }]}>
                     More
                 </Text>
             </TouchableOpacity>
@@ -111,12 +117,13 @@ const styles = StyleSheet.create({
         borderTopColor: '#FFFFFF',
         paddingTop: 15,
         paddingHorizontal: spacing.medium,
+        backgroundColor:'#000000'
     },
     iconAndTextContainer: {
         gap: spacing.xtraSmall,
         alignItems: 'center',
         justifyContent: 'center',
-        flex:1, //This makes each button expand to take up an equal amount of space in the footer, which is a better way to achieve the space-around effect.
+        flex: 1, //This makes each button expand to take up an equal amount of space in the footer, which is a better way to achieve the space-around effect.
 
     },
     textStyle: {

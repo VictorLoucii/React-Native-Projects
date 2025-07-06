@@ -8,12 +8,10 @@ const HomeScreen = () => {
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false} >
-           <HomeScreenHeader />
-           <HomeScreenBody />
-           <HomeScreenFooter />
-
-
+                <HomeScreenHeader />
+                <HomeScreenBody />
             </ScrollView>
+            {/* <HomeScreenFooter />  we don't need this anymore in the HomeScreen since we are using this component in BottomTabNavigator*/}
         </View>
     )
 }
