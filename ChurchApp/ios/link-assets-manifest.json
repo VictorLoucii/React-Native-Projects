@@ -1,0 +1,37 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/ARIBLK.TTF",
+      "sha1": "e6528182997a46a5daf8008fab9ec5fed0a84ce2"
+    },
+    {
+      "path": "assets/fonts/Inter-Black.otf",
+      "sha1": "68c456410eebd937a6496fff66d71311c8e844f7"
+    },
+    {
+      "path": "assets/fonts/Inter-Bold.otf",
+      "sha1": "c376b59a48facc029b9a384cc86f02992b2171ea"
+    },
+    {
+      "path": "assets/fonts/Inter-ExtraLight-BETA.otf",
+      "sha1": "475fb0d042b74667d43ceadd8d05edfab38b01f5"
+    },
+    {
+      "path": "assets/fonts/Inter-Medium.otf",
+      "sha1": "699375c590a1879bde1b53a7949b2659292ee3b0"
+    },
+    {
+      "path": "assets/fonts/Inter-Regular.otf",
+      "sha1": "efd846697930d88ab013b64d4e0f2129cd7e971f"
+    },
+    {
+      "path": "assets/fonts/Inter-SemiBold.otf",
+      "sha1": "ff17bae635a4bffbaa773aa18ef3cfd8d6f41a17"
+    },
+    {
+      "path": "assets/fonts/Romanesco-Regular.ttf",
+      "sha1": "d7aac3e18d4f6185f0d53ca6ae701062f03c96f4"
+    }
+  ]
+}
