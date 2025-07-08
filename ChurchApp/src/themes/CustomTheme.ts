@@ -14,12 +14,24 @@ export interface CustomColors {
   iconSecondary: string;
   minTintColor: string;
   maxtTintColor: string;
+  icon: string;
+  settingsBGC: string;
+  mediaBGC: string;
+  settingOptionsBGC: string;
+  tabBarBGC: string;
+  tabBarIconActive: string;
+  tabBarIconInactive: string;
+  searchInputBGC: string,
+  notifiBGC: string,
+  notifiIcon: string;
+ 
 }
 
 export interface CustomTheme {
   dark: boolean;
   colors: CustomColors;
 }
+
 
 // i am using CustomTheme.ts file because of the reason:
 // i can't access colors. properties which i have defined in DarkMode.tsx and LightMode.tsx files. i am only able to get the default values.
@@ -30,7 +42,7 @@ export interface CustomTheme {
 
 // const { isDarkMode, toggleTheme} = useThemeStore();
 
-//NOTE: when i tried using navigation.d.ts file i still wasn't able to get colors.  properties from my DarkMode.tsx and LightMode.tsx files, was only getting the DefaultTheme.colors object properties thus i switched to CustomTheme.ts approach which was working at the moment. 
+//NOTE: when i tried using navigation.d.ts file i still wasn't able to get colors.  properties from my DarkMode.tsx and LightMode.tsx files, was only getting the DefaultTheme.colors object properties thus i switched to CustomTheme.ts approach which was working at the moment.
 
 
 

@@ -2,11 +2,19 @@ import { ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { FONTS } from '../constants/fonts'
 import { FONTsize, spacing } from '../constants/dimensions'
+import { useThemeStore } from '../themes/ThemeStore'
+import { useTheme } from '@react-navigation/native'
+import { CustomTheme } from '../themes/CustomTheme'
 
 const UpComingEvents = () => {
+
+    const { isDarkMode, toggleTheme } = useThemeStore();
+    const { colors } = useTheme() as CustomTheme;
+
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.upComingEventsStyling}>UpComingEvents</Text>
+        <View style={[styles.container, {backgroundColor:colors.bkGroundClr}]}>
+            <Text style={[styles.upComingEventsStyling, {color:colors.textPrimary}]}>UpComingEvents</Text>
 
             <View style={styles.allImagesContainer}>
 
@@ -86,13 +94,13 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: spacing.large,
         marginTop: 30,
-        backgroundColor: '#131314'
+        // backgroundColor: '#131314'
 
     },
     upComingEventsStyling: {
         fontFamily: FONTS.interBold,
         fontSize: 24,
-        color: "#FFFFFF",
+        // color: "#FFFFFF",
         marginBottom: 20,
     },
     allImagesContainer: {

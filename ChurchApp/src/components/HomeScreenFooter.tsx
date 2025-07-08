@@ -9,25 +9,30 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';  //import this and put this as the type for 'state' and 'navigation' otherwise you'll get ts errors
+import { useTheme } from '@react-navigation/native';
+import { CustomTheme } from '../themes/CustomTheme';
+import { useThemeStore } from '../themes/ThemeStore';
 
 //this FC has become our custom TabNavigator
 const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
     // console.log('state:---',state);
     // console.log('navigation:---',navigation);
 
+    const { isDarkMode, toggleTheme } = useThemeStore();
+    const { colors } = useTheme() as CustomTheme;
 
     const insets = useSafeAreaInsets();
     // Define the padding you want *above* the content, and the padding you want *below* the content (before the safe area starts).
     const VERTICAL_PADDING = 10;
 
     // const [activeTab, setActiveTab] = useState('Home');
-    const activeColor = '#A96F00';
-    const inactiveColor = '#FFFFFF';
+    // const activeColor = '#A96F00';
+    // const inactiveColor = '#FFFFFF';
 
     const activeRouteName = state.routes[state.index].name;
 
     return (
-        <View style={[styles.container, { paddingBottom: insets.bottom + VERTICAL_PADDING }]}>
+        <View style={[styles.container, { paddingBottom: insets.bottom + VERTICAL_PADDING, backgroundColor:colors.tabBarBGC,  borderTopColor: colors.border, borderTopWidth:1  }]}>
 
             <TouchableOpacity
                 onPress={() => navigation.navigate('Home')}
@@ -37,9 +42,9 @@ const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
                 <MaterialIcons
                     name={'home'}
                     size={30}
-                    color={activeRouteName === 'Home' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'Home' ? colors.tabBarIconActive : colors.tabBarIconInactive}
                 />
-                <Text style={[styles.textStyle, { color: activeRouteName === 'Home' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'Home' ? colors.tabBarIconActive : colors.tabBarIconInactive }]}>
                     Home
                 </Text>
             </TouchableOpacity>
@@ -52,9 +57,9 @@ const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
                 <Ionicons
                     name={'people'}
                     size={30}
-                    color={activeRouteName === 'Connect' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'Connect' ? colors.tabBarIconActive : colors.tabBarIconInactive}
                 />
-                <Text style={[styles.textStyle, { color: activeRouteName === 'Connect' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'Connect' ? colors.tabBarIconActive : colors.tabBarIconInactive }]}>
                     Connect
                 </Text>
             </TouchableOpacity>
@@ -66,9 +71,9 @@ const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
                 <Ionicons
                     name={'gift'}
                     size={30}
-                    color={activeRouteName === 'Give' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'Give' ? colors.tabBarIconActive : colors.tabBarIconInactive}
                 />
-                <Text style={[styles.textStyle, { color: activeRouteName === 'Give' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'Give' ? colors.tabBarIconActive : colors.tabBarIconInactive }]}>
                     Give
                 </Text>
             </TouchableOpacity>
@@ -80,9 +85,9 @@ const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
                 <FontAwesome
                     name={'play-circle-o'}
                     size={30}
-                    color={activeRouteName === 'Media' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'Media' ? colors.tabBarIconActive : colors.tabBarIconInactive}
                 />
-                <Text style={[styles.textStyle, { color: activeRouteName === 'Media' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'Media' ? colors.tabBarIconActive : colors.tabBarIconInactive }]}>
                     Media
                 </Text>
             </TouchableOpacity>
@@ -94,9 +99,9 @@ const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
                 <MaterialIcons
                     name={'more-vert'}
                     size={30}
-                    color={activeRouteName === 'More' ? activeColor : inactiveColor}
+                    color={activeRouteName === 'More' ? colors.tabBarIconActive : colors.tabBarIconInactive}
                 />
-                <Text style={[styles.textStyle, { color: activeRouteName === 'More' ? activeColor : inactiveColor }]}>
+                <Text style={[styles.textStyle, { color: activeRouteName === 'More' ? colors.tabBarIconActive : colors.tabBarIconInactive }]}>
                     More
                 </Text>
             </TouchableOpacity>
@@ -118,7 +123,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#FFFFFF',
         paddingTop: 15,
         paddingHorizontal: spacing.medium,
-        backgroundColor:'#131314'
+        // backgroundColor: '#131314'
     },
     iconAndTextContainer: {
         gap: spacing.xtraSmall,

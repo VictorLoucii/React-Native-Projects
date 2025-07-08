@@ -1,20 +1,31 @@
-import { ScrollView, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { FONTS } from '../constants/fonts'
 import { FONTsize, spacing } from '../constants/dimensions'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ConnectCard from '../components/ConnectCard'
+import { useThemeStore } from '../themes/ThemeStore'
+import { useTheme } from '@react-navigation/native'
+import { CustomTheme } from '../themes/CustomTheme'
 
 const ConnectScreen = () => {
   const insets = useSafeAreaInsets();
   // const VERTICAL_PADDING = 10;
+  const { isDarkMode, toggleTheme } = useThemeStore();
+  const { colors } = useTheme() as CustomTheme;
 
 
   return (
-    <View style={[styles.container, { paddingTop: insets.top }]}>
+    <View style={[styles.container, { paddingTop: insets.top, backgroundColor: colors.bkGroundClr }]}>
+
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        translucent={true} //this hides the status bar in android 
+        backgroundColor='transparent'
+      />
 
       <View style={styles.headingContainer}>
-        <Text style={styles.headingStyle}>
+        <Text style={[styles.headingStyle, { color: colors.textPrimary }]}>
           Connect
         </Text>
       </View>
@@ -79,7 +90,7 @@ export default ConnectScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#131314'
+    // backgroundColor: '#131314'
   },
   headingContainer: {
   },
@@ -87,7 +98,7 @@ const styles = StyleSheet.create({
     fontSize: FONTsize.medium,
     fontFamily: FONTS.interSemiBold,
     textAlign: 'center',
-    color: '#FFFFFF',
+    // color: '#FFFFFF',
     paddingVertical: spacing.small,
     // marginTop:10,
   },

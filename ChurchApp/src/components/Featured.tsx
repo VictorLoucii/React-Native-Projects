@@ -2,12 +2,19 @@ import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
 import React from 'react'
 import { FONTsize, spacing } from '../constants/dimensions'
 import { FONTS } from '../constants/fonts'
+import { useThemeStore } from '../themes/ThemeStore'
+import { useTheme } from '@react-navigation/native'
+import { CustomColors } from '../themes/CustomTheme'
 
 
 const Featured = () => {
+
+    const { isDarkMode, toggleTheme } = useThemeStore();
+    const { colors } = useTheme() as CustomColors;
+
     return (
-        <View style={styles.container}>
-            <Text style={styles.FeaturedStyle}>
+        <View style={[styles.container, {backgroundColor:colors.bkGroundClr}]}>
+            <Text style={[styles.FeaturedStyle, {color: colors.textPrimary}]}>
                 Featured
             </Text>
             <View style={styles.allImagesContainer}>
@@ -84,7 +91,7 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: spacing.large,
         marginTop: 30,
-        backgroundColor: '#131314'
+        // backgroundColor: '#131314'
 
     },
     allImagesContainer: {
@@ -96,7 +103,7 @@ const styles = StyleSheet.create({
     FeaturedStyle: {
         fontFamily: FONTS.interBold,
         fontSize: 24,
-        color: "#FFFFFF",
+        // color: "#FFFFFF",
     },
     card1ImageContainer: {
         width: 164,

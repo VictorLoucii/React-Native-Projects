@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -8,19 +8,31 @@ import { FONTsize, spacing } from '../constants/dimensions'
 import { FONTS } from '../constants/fonts'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
+import { useTheme } from '@react-navigation/native'
+import { CustomTheme } from '../themes/CustomTheme'
+import { useThemeStore } from '../themes/ThemeStore'
 
 const MoreScreen = () => {
+
+  const { isDarkMode, toggleTheme } = useThemeStore();
+  const { colors } = useTheme() as CustomTheme;
 
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom, paddingTop: insets.top }]}>
+    <View style={[styles.container, { paddingBottom: insets.bottom, paddingTop: insets.top, backgroundColor: colors.settingsBGC }]}>
+
+      <StatusBar
+        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        translucent={true} //this hides the status bar in android 
+        backgroundColor='transparent'
+      />
 
       <TouchableOpacity style={[styles.backButtonTouchable, { top: insets.top }]}>
         <Ionicons
           name={'return-up-back'}
           size={30}
-          style={styles.backButtonStyling} //  We use the top inset to position it safely below the status bar. The `top` value is now set dynamically in the component
+          style={[styles.backButtonStyling, { color: colors.icon }]} //  We use the top inset to position it safely below the status bar. The `top` value is now set dynamically in the component
         />
       </TouchableOpacity>
 
@@ -37,20 +49,20 @@ const MoreScreen = () => {
           style={styles.userImage}
         />
       </View>
-      <Text style={styles.name}>
+      <Text style={[styles.name, { color: colors.textPrimary }]}>
         XABI
       </Text>
-      <Text style={styles.email}>
+      <Text style={[styles.email, { color: colors.textPrimary }]}>
         uknown@gmail.com
       </Text>
       <TouchableOpacity style={styles.editContainer}>
-        <Text style={styles.editText}>
+        <Text style={[styles.editText, { color: colors.textPrimary }]}>
           Edit Profile
         </Text>
       </TouchableOpacity>
 
 
-      <View style={styles.optionsContainer}>
+      <View style={[styles.optionsContainer, { backgroundColor: colors.settingOptionsBGC }]}>
         <Text style={styles.optionsText}>OPTIONS</Text>
 
         <View style={styles.notificationContainer}>
@@ -88,9 +100,9 @@ const MoreScreen = () => {
               Dark Mode
             </Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => toggleTheme()}>
             <FontAwesome
-              name={'toggle-on'}
+              name={isDarkMode ? 'toggle-on' : 'toggle-off'}
               size={40}
               style={styles.toggleStyle}
             />
@@ -158,7 +170,7 @@ export default MoreScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#131314',
+    // backgroundColor: '#131314',  //use cutom theme
     alignItems: 'center',
     // paddingHorizontal:spacing.medium
   },
@@ -169,7 +181,7 @@ const styles = StyleSheet.create({
     left: 24,
   },
   backButtonStyling: {
-    color: '#FFFFFF',
+    // color: '#FFFFFF',
   },
   userImageContainer: {
     marginTop: spacing.medium,
@@ -198,14 +210,14 @@ const styles = StyleSheet.create({
     marginTop: 10,
     fontSize: FONTsize.large,
     fontFamily: FONTS.robotoSlabBold,
-    color: '#FFFFFF',
+    // color: '#FFFFFF',
     // textAlign:'center',
   },
   email: {
 
     fontSize: FONTsize.medium,
     fontFamily: FONTS.robotoRegular,
-    color: '#FFFFFF',
+    // color: '#FFFFFF',
     // textAlign:'center',
   },
   editContainer: {
@@ -218,16 +230,17 @@ const styles = StyleSheet.create({
   editText: {
     fontSize: FONTsize.medium,
     fontFamily: FONTS.robotoLight,
-    color: '#FFFFFF',
+    // color: '#FFFFFF',
     textAlign: 'center',
   },
   optionsContainer: {
     marginTop: spacing.bigerLarge,
     // height: 387,  // REMOVED: This allows the container to grow with its content
     width: '85%',
-    backgroundColor: '#FFFFFF',
+    // backgroundColor: '#FFFFFF',
     borderRadius: 20,
     paddingBottom: spacing.medium,
+
     // marginBottom: spacing.xtraLarge,
 
   },
