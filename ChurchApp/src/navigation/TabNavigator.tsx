@@ -1,11 +1,12 @@
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+//import all the tab screens
 import HomeScreen from '../screens/HomeScreen';
 import ConnectScreen from '../screens/ConnectScreen';
 import GiftScreen from '../screens/GiftScreen';
 import MoreScreen from '../screens/MoreScreen';
 import MediaScreen from '../screens/MediaScreen';
 
-// Import your custom footer component
+// Import your custom footer component i.e HomeScreenFooter
 import HomeScreenFooter from '../components/HomeScreenFooter';
 
 const Tab = createBottomTabNavigator();

@@ -7,4 +7,11 @@ export const FONTS = {
   arialBlack: 'Arial Black',
   interMedium: 'Inter-Medium',
   romanescoRegular: 'Romanesco-Regular',
+  sahityaBold: 'Sahitya-Bold',
+  sahityaRegular: 'Sahitya-Regular',
+  robotoLight: 'Roboto-Light',
+  robotoMedium: 'Roboto-Medium',
+  robotoRegular: 'Roboto-Regular',
+  robotoSemiBold: 'RobotoSlab-Bold',
+  robotoSlabBold: 'RobotoSlab-Bold',
 };

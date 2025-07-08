@@ -84,6 +84,8 @@ const styles = StyleSheet.create({
     container: {
         paddingHorizontal: spacing.large,
         marginTop: 30,
+        backgroundColor: '#131314'
+
     },
     allImagesContainer: {
         flexDirection: 'row',

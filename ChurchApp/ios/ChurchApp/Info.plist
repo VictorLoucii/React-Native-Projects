@@ -56,6 +56,13 @@
 		<string>Inter-SemiBold.otf</string>
 		<string>Inter-Medium.otf</string>
 		<string>Romanesco-Regular.ttf</string>
+		<string>Sahitya-Bold.ttf</string>
+		<string>Sahitya-Regular.ttf</string>
+		<string>Roboto-Light.ttf</string>
+		<string>Roboto-Medium.ttf</string>
+		<string>Roboto-Regular.ttf</string>
+		<string>Roboto-SemiBold.ttf</string>
+		<string>RobotoSlab-Bold.ttf</string>
 	</array>
 </dict>
 </plist>

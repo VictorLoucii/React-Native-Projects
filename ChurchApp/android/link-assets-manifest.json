@@ -30,8 +30,36 @@
       "sha1": "ff17bae635a4bffbaa773aa18ef3cfd8d6f41a17"
     },
     {
+      "path": "assets/fonts/Roboto-Light.ttf",
+      "sha1": "318b44c0a32848f78bf11d4fbf3355d00647a796"
+    },
+    {
+      "path": "assets/fonts/Roboto-Medium.ttf",
+      "sha1": "fa5192203f85ddb667579e1bdf26f12098bb873b"
+    },
+    {
+      "path": "assets/fonts/Roboto-Regular.ttf",
+      "sha1": "3bff51436aa7eb995d84cfc592cc63e1316bb400"
+    },
+    {
+      "path": "assets/fonts/Roboto-SemiBold.ttf",
+      "sha1": "9ca139684fe902c8310dd82991648376ac9838db"
+    },
+    {
+      "path": "assets/fonts/RobotoSlab-Bold.ttf",
+      "sha1": "5bbb92df078cc35240b517873096aa805dff034c"
+    },
+    {
       "path": "assets/fonts/Romanesco-Regular.ttf",
       "sha1": "d7aac3e18d4f6185f0d53ca6ae701062f03c96f4"
+    },
+    {
+      "path": "assets/fonts/Sahitya-Bold.ttf",
+      "sha1": "eea8be8c0f0a23bdb162e2808a8a6b9cd5302e9c"
+    },
+    {
+      "path": "assets/fonts/Sahitya-Regular.ttf",
+      "sha1": "7dd04564aa54f4d723eac1df455b59fa3d491595"
     }
   ]
 }

@@ -7,12 +7,13 @@ import { FONTS } from '../constants/fonts';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+
 import { BottomTabBarProps } from '@react-navigation/bottom-tabs';  //import this and put this as the type for 'state' and 'navigation' otherwise you'll get ts errors
 
 //this FC has become our custom TabNavigator
 const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
-    console.log('state:---',state);
-    console.log('navigation:---',navigation);
+    // console.log('state:---',state);
+    // console.log('navigation:---',navigation);
 
 
     const insets = useSafeAreaInsets();
@@ -117,7 +118,7 @@ const styles = StyleSheet.create({
         borderTopColor: '#FFFFFF',
         paddingTop: 15,
         paddingHorizontal: spacing.medium,
-        backgroundColor:'#000000'
+        backgroundColor:'#131314'
     },
     iconAndTextContainer: {
         gap: spacing.xtraSmall,
