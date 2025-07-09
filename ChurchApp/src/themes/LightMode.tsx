@@ -7,7 +7,7 @@ export const LightMode = {
         bkGroundClr: '#FFFFFF',
         textPrimary: '#000000',  //black
         textSecondary: '#FFFFFF',  //white
-        icon: '#000000',
+        icon: '#000000',  //black
         settingsBGC: '#F5F6FA',
         mediaBGC: '#F5F6FA',
         settingOptionsBGC: '#FFFFFF',

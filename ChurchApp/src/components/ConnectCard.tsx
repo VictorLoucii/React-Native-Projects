@@ -20,7 +20,7 @@ const ConnectCard = ({ imageSource, ONPRESS, children }: ConnectCardProps) => {
             <ImageBackground
                 source={imageSource}
                 style={styles.cardImageContainer}
-                imageStyle={styles.imageStyle}
+                imageStyle={styles.cardImageStyle}
             >
                 <View style={styles.overlayContainer}>
                     {/* Render whatever content the parent provides right here */}
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     cardImageContainer: {
         flex: 1,
     },
-    imageStyle: {
+    cardImageStyle: {
         // borderRadius:10,
 
     },

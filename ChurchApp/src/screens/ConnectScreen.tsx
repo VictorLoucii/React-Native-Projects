@@ -1,18 +1,29 @@
-import { ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { FONTS } from '../constants/fonts'
 import { FONTsize, spacing } from '../constants/dimensions'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import ConnectCard from '../components/ConnectCard'
 import { useThemeStore } from '../themes/ThemeStore'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import { CustomTheme } from '../themes/CustomTheme'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
+//define the type for the stack navigator screens 
+type ConnectScreenParamList = {
+  ConnectScreen: undefined;  // No params expected for the main screen
+  BecomeMemberScreen: undefined;  // No params expected for the main screen
+}
+
+// Define the navigation prop type for this screen
+type ConnectScreenNavigationProp = NativeStackNavigationProp<ConnectScreenParamList, 'ConnectScreen'>;
 
 const ConnectScreen = () => {
   const insets = useSafeAreaInsets();
   // const VERTICAL_PADDING = 10;
   const { isDarkMode, toggleTheme } = useThemeStore();
   const { colors } = useTheme() as CustomTheme;
+  const navigation = useNavigation<ConnectScreenNavigationProp>();  //get the navigation object
 
 
   return (
@@ -34,16 +45,18 @@ const ConnectScreen = () => {
         contentContainerStyle={styles.scrollViewStyle}
       >
         {/* --- CARD 1 --- */}
-        <ConnectCard
-          imageSource={require('../../assets/member.jpg')}
-          ONPRESS={() => null}
-        >
-          <View style={styles.cardContentCenter}>
-            <Text style={styles.titleBold}>
-              BECOME A MEMBER
-            </Text>
-          </View>
-        </ConnectCard>
+        {/* don't use TouchableOpacity opacity here to navigate to BecomeMemberScreen, check RNjs doc for explanation */}
+          <ConnectCard
+            imageSource={require('../../assets/member.jpg')}
+            ONPRESS={() => navigation.navigate('BecomeMemberScreen')}
+          >
+            <View style={styles.cardContentCenter}>
+              <Text style={styles.titleBold}>
+                BECOME A MEMBER
+              </Text>
+            </View>
+          </ConnectCard>
+
 
         {/* --- CARD 2 --- */}
         <ConnectCard
