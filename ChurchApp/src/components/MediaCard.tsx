@@ -1,0 +1,65 @@
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React from 'react'
+import { spacing } from '../constants/dimensions';
+
+// The props interface now accepts `children`
+interface MediaCardProps {
+    imageSource: any;
+    ONPRESS?: () => void;
+    children: React.ReactNode; // The type for any renderable content
+
+}
+
+const MediaCard = ({ imageSource, ONPRESS, children }: MediaCardProps) => {
+    return (
+        <TouchableOpacity
+            onPress={ONPRESS}
+            style={styles.container}
+        >
+
+            <ImageBackground
+                source={imageSource}
+                style={styles.cardImageContainer}
+                imageStyle={styles.cardImageStyle}
+            >
+                <View style={styles.overlayContainer}>
+                    {/* Render whatever content the parent provides right here */}
+                    {children}
+                </View>
+
+            </ImageBackground>
+
+        </TouchableOpacity>
+    )
+}
+
+export default MediaCard
+
+const styles = StyleSheet.create({
+    container: {
+        // width: 414,
+        height: 210,
+        backgroundColor: '#BDC1C6',
+        borderRadius:16,
+    },
+    cardImageContainer: {
+        flex: 1,
+
+    },
+    cardImageStyle: {
+        borderRadius:16,
+
+    },
+    overlayContainer: {
+        // This creates a semi-transparent dark layer over the image
+        // and acts as the container for our text and icons.
+        flex: 1, // Takes up the full space of the ImageBackground
+        backgroundColor: 'rgba(0, 0, 0, 0.3)', // Black with 30% opacity
+        // padding: spacing.small, // Inner spacing for the content
+        // justifyContent: 'center',
+        // alignItems: 'center',
+        borderRadius:16,
+
+
+    }
+})

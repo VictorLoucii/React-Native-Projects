@@ -20,6 +20,9 @@ export const LightMode = {
         searchInputBGC: '#F2F6FA',
         notifiBGC: '#F5F6FA',
         notifiIcon: '#000000',
+         MediaImageIconTextBGC:'#FFFFFF', //white
+         
+
        
 
     },

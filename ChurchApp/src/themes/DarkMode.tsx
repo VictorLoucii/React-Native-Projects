@@ -20,6 +20,7 @@ export const DarkMode = {
         searchInputBGC:'#FFFFFF',
         notifiBGC: '#F5F6FA',
          notifiIcon: '#000000',
+         MediaImageIconTextBGC:'#FFFFFF',  //white
       
     },
 }

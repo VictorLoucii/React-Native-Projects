@@ -24,6 +24,7 @@ export interface CustomColors {
   searchInputBGC: string,
   notifiBGC: string,
   notifiIcon: string;
+  MediaImageIconTextBGC: string;
  
 }
 

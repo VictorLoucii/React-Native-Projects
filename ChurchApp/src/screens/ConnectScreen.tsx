@@ -13,6 +13,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 type ConnectScreenParamList = {
   ConnectScreen: undefined;  // No params expected for the main screen
   BecomeMemberScreen: undefined;  // No params expected for the main screen
+  JoinSocialGroupScreen: undefined;  // No params expected for the main screen
+  PrayerRequestScreen: undefined;
+
 }
 
 // Define the navigation prop type for this screen
@@ -61,7 +64,7 @@ const ConnectScreen = () => {
         {/* --- CARD 2 --- */}
         <ConnectCard
           imageSource={require('../../assets/social.png')}
-          ONPRESS={() => null}
+          ONPRESS={() => navigation.navigate('JoinSocialGroupScreen')}
         >
           <View style={styles.cardContentAbsolute}>
             <View style={styles.joinSocialViewContainer}>
@@ -80,7 +83,7 @@ const ConnectScreen = () => {
         {/* --- CARD 3 --- */}
         <ConnectCard
           imageSource={require('../../assets/prayer.jpg')}
-          ONPRESS={() => null}
+          ONPRESS={() => navigation.navigate('PrayerRequestScreen')}
         >
           <View style={styles.cardContentCenterWithSpace}>
             <Text style={styles.titleSahtiyaStyle}>
@@ -144,10 +147,10 @@ const styles = StyleSheet.create({
   subtitleLeft: {
     fontSize: FONTsize.medium,
     fontFamily: FONTS.interMedium,
-    color: '#FFFFFF',
+    color: '#FFFFFF',  //don't use theme for this part as in the light theme the text is not visible
     position: 'absolute', // Takes the element out of the normal layout flow
-    bottom: 10,           // Positions it 20px from the bottom
-    left: 10,             // Positions it 20px from the left
+    bottom: 10,           // Positions it 10px from the bottom
+    left: 10,             // Positions it 10px from the left
 
   },
   discoverContainer: {

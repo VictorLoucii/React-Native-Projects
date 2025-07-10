@@ -6,10 +6,9 @@ import { CustomTheme } from '../themes/CustomTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FONTsize, spacing } from '../constants/dimensions';
 import { FONTS } from '../constants/fonts';
-import ConnectCard from '../components/ConnectCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
-const BecomeMemberScreen = () => {
+const JoinSocialGroupScreen = () => {
 
     const { isDarkMode, toggleTheme } = useThemeStore();
     const { colors } = useTheme() as CustomTheme;
@@ -19,6 +18,9 @@ const BecomeMemberScreen = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [address, setAddress] = useState('');
+
+
     return (
         <ScrollView style={[styles.container, { backgroundColor: colors.bkGroundClr, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
             <StatusBar
@@ -34,22 +36,24 @@ const BecomeMemberScreen = () => {
             </View>
 
             <ImageBackground
-                source={require('../../assets/becomeMember.jpg')}
+                source={require('../../assets/socialGroup.png')}
                 style={styles.cardImageContainer}
                 imageStyle={styles.cardImageStyle}
             >
                 <View style={styles.overlayContainer}>
                     <Text style={styles.titleBold}>
-                        BECOME A MEMBER
+                        JOIN A SOCIAL GROUP
                     </Text>
-
+                    <Text style={styles.subtitleLeft}>
+                        Discover People Like You
+                    </Text>
                 </View>
 
             </ImageBackground>
 
             <View style={styles.textContainer}>
                 <Text style={[styles.text1, { color: colors.textPrimary }]}>
-                    If you would like to become a member of Soteria church, we are happy to welcome you.
+                    Do you want to be a part of the family and join us all the way to the home every Wednesday at 7:00PM ?
                 </Text>
                 <Text style={[styles.text2, { color: colors.textPrimary }]}>
                     Please sign up here.
@@ -141,6 +145,26 @@ const BecomeMemberScreen = () => {
                 </View>
                 {/* phoneContainer view ends here */}
 
+                <View style={styles.addressContainer}>
+                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
+                        Address
+                    </Text>
+                    <TextInput
+                        value={address}
+                        onChangeText={(newText) => setAddress(newText)}
+                        multiline={true}
+                        placeholder='e.g `56/12, Ardee City, Gurgao'
+                        placeholderTextColor={colors.textPrimary}
+                        style={[styles.addressTextInput,
+                        {
+                            borderColor: '#BDC1C6',
+                            color: colors.textPrimary
+
+                        }
+                        ]}
+                    />
+                </View>
+
 
 
 
@@ -155,7 +179,7 @@ const BecomeMemberScreen = () => {
     )
 }
 
-export default BecomeMemberScreen
+export default JoinSocialGroupScreen
 
 const styles = StyleSheet.create({
     container: {
@@ -263,7 +287,7 @@ const styles = StyleSheet.create({
 
     },
     phoneNoformInput: {
-        flex:1,
+        flex: 1,
         // width: '75%',
         height: 47,
         borderColor: '#BDC1C6',
@@ -272,6 +296,33 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: spacing.small
 
+    },
+    addressContainer: {
+        paddingTop: spacing.small,
+        gap: spacing.small,
+    },
+    addressTextInput: {
+        height: 90,
+        flex: 1,
+        // width: '100%',
+        borderColor: '#BDC1C6',
+        borderWidth: 1,
+        borderRadius: 8,
+        textAlign: 'left',
+        textAlignVertical: 'top',
+        paddingHorizontal: spacing.small,
+        paddingVertical: spacing.small,
+        // alignItems:'center'
+
+    },
+    subtitleLeft: {
+        fontSize: FONTsize.medium,
+        fontFamily: FONTS.interMedium,
+        color: '#FFFFFF',   //don't use theme for this part as in the light theme the text is not visible
+        position: 'absolute', // Takes the element out of the normal layout flow
+        bottom: 19,           // Positions it 19px from the bottom
+        left: 10,             // Positions it 10px from the left
     }
+
 
 })

@@ -8,7 +8,7 @@ import { FONTsize, spacing } from '../constants/dimensions'
 import { FONTS } from '../constants/fonts'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import { CustomTheme } from '../themes/CustomTheme'
 import { useThemeStore } from '../themes/ThemeStore'
 
@@ -16,8 +16,13 @@ const MoreScreen = () => {
 
   const { isDarkMode, toggleTheme } = useThemeStore();
   const { colors } = useTheme() as CustomTheme;
+  const navigation = useNavigation()
 
   const insets = useSafeAreaInsets();
+
+  // const goToPrevScreen = () => {
+  //   navigation.goBack();
+  // }
 
   return (
     <View style={[styles.container, { paddingBottom: insets.bottom, paddingTop: insets.top, backgroundColor: colors.settingsBGC }]}>
@@ -28,13 +33,17 @@ const MoreScreen = () => {
         backgroundColor='transparent'
       />
 
-      <TouchableOpacity style={[styles.backButtonTouchable, { top: insets.top }]}>
+      {/* search for : //remove back button from MoreScreen.tsx (ChurchApp) in RNjs doc to know why i have commented out the below section */}
+      {/* <TouchableOpacity 
+        style={[styles.backButtonTouchable, { top: insets.top }]}
+        onPress={()=>goToPrevScreen()}
+      >
         <Ionicons
           name={'return-up-back'}
           size={30}
           style={[styles.backButtonStyling, { color: colors.icon }]} //  We use the top inset to position it safely below the status bar. The `top` value is now set dynamically in the component
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
       <View style={styles.userImageContainer}>
         {/* default icon when no user image is given */}

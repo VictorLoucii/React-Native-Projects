@@ -6,10 +6,9 @@ import { CustomTheme } from '../themes/CustomTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FONTsize, spacing } from '../constants/dimensions';
 import { FONTS } from '../constants/fonts';
-import ConnectCard from '../components/ConnectCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 
-const BecomeMemberScreen = () => {
+const PrayerRequestScreen = () => {
 
     const { isDarkMode, toggleTheme } = useThemeStore();
     const { colors } = useTheme() as CustomTheme;
@@ -19,6 +18,9 @@ const BecomeMemberScreen = () => {
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [address, setAddress] = useState('');
+
+
     return (
         <ScrollView style={[styles.container, { backgroundColor: colors.bkGroundClr, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
             <StatusBar
@@ -34,13 +36,16 @@ const BecomeMemberScreen = () => {
             </View>
 
             <ImageBackground
-                source={require('../../assets/becomeMember.jpg')}
+                source={require('../../assets/prayerRequest2.png')}
                 style={styles.cardImageContainer}
                 imageStyle={styles.cardImageStyle}
             >
                 <View style={styles.overlayContainer}>
-                    <Text style={styles.titleBold}>
-                        BECOME A MEMBER
+                    <Text style={styles.titleSahtiyaStyle}>
+                        PRAYER
+                    </Text>
+                    <Text style={styles.titleSahtiyaStyle}>
+                        REQUESTS
                     </Text>
 
                 </View>
@@ -48,11 +53,8 @@ const BecomeMemberScreen = () => {
             </ImageBackground>
 
             <View style={styles.textContainer}>
-                <Text style={[styles.text1, { color: colors.textPrimary }]}>
-                    If you would like to become a member of Soteria church, we are happy to welcome you.
-                </Text>
-                <Text style={[styles.text2, { color: colors.textPrimary }]}>
-                    Please sign up here.
+                <Text style={[styles.text3, { color: colors.textPrimary }]}>
+                    Hearts United in Prayer : Share Your Requests Here
                 </Text>
             </View>
 
@@ -141,6 +143,26 @@ const BecomeMemberScreen = () => {
                 </View>
                 {/* phoneContainer view ends here */}
 
+                <View style={styles.addressContainer}>
+                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
+                        Address
+                    </Text>
+                    <TextInput
+                        value={address}
+                        onChangeText={(newText) => setAddress(newText)}
+                        multiline={true}
+                        placeholder='e.g `56/12, Ardee City, Gurgao'
+                        placeholderTextColor={colors.textPrimary}
+                        style={[styles.addressTextInput,
+                        {
+                            borderColor: '#BDC1C6',
+                            color: colors.textPrimary
+
+                        }
+                        ]}
+                    />
+                </View>
+
 
 
 
@@ -155,7 +177,7 @@ const BecomeMemberScreen = () => {
     )
 }
 
-export default BecomeMemberScreen
+export default PrayerRequestScreen
 
 const styles = StyleSheet.create({
     container: {
@@ -188,8 +210,9 @@ const styles = StyleSheet.create({
         // justifyContent: 'center',
         // alignItems: 'center',
         // borderRadius:10,
-        justifyContent: 'center',
+        justifyContent: 'space-between',
         alignItems: 'center',
+        paddingVertical:spacing.large,
     },
     titleBold: {
         fontSize: FONTsize.superXtraLg,
@@ -263,7 +286,7 @@ const styles = StyleSheet.create({
 
     },
     phoneNoformInput: {
-        flex:1,
+        flex: 1,
         // width: '75%',
         height: 47,
         borderColor: '#BDC1C6',
@@ -272,6 +295,37 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         paddingHorizontal: spacing.small
 
-    }
+    },
+    addressContainer: {
+        paddingTop: spacing.small,
+        gap: spacing.small,
+    },
+    addressTextInput: {
+        height: 90,
+        flex: 1,
+        // width: '100%',
+        borderColor: '#BDC1C6',
+        borderWidth: 1,
+        borderRadius: 8,
+        textAlign: 'left',
+        textAlignVertical: 'top',
+        paddingHorizontal: spacing.small,
+        paddingVertical: spacing.small,
+        // alignItems:'center'
+
+    },
+    text3: {
+        fontSize: FONTsize.superXtraLg,
+        fontFamily: FONTS.interRegular,
+    },
+    titleSahtiyaStyle: {
+        fontSize: FONTsize.superXtraLg,
+        fontFamily: FONTS.sahityaRegular,
+        color: '#FFFFFF',
+        textAlign: 'center',
+
+
+    },
+
 
 })

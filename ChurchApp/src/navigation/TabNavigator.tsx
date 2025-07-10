@@ -10,6 +10,8 @@ import BecomeMemberScreen from '../screens/BecomeMemberScreen';
 // Import your custom footer component i.e HomeScreenFooter for the bottom tab navigator
 import HomeScreenFooter from '../components/HomeScreenFooter';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import JoinSocialGroupScreen from '../screens/JoinSocialGroupScreen';
+import PrayerRequestScreen from '../screens/PrayerRequestScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -22,6 +24,10 @@ const ConnectStackNavigator = () => {
         }}>
             <Stack.Screen name='ConnectScreen' component={ConnectScreen} />
             <Stack.Screen name="BecomeMemberScreen" component={BecomeMemberScreen} />
+            <Stack.Screen name="JoinSocialGroupScreen" component={JoinSocialGroupScreen} />
+            <Stack.Screen name="PrayerRequestScreen" component={PrayerRequestScreen} />
+
+
 
         </Stack.Navigator>
     )

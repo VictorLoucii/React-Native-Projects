@@ -19,6 +19,7 @@ export const spacing = {
 export const FONTsize = {
     small: 12,
     medium: 18,
+    biggerMedium:20,
     large: 24,
     xtraLarge: 26,
     superXtraLg: 32
