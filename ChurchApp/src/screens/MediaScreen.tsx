@@ -134,6 +134,7 @@ const styles = StyleSheet.create({
     height: 450,
     marginTop: spacing.bigerLarge,
     gap: spacing.biggerMedium,
+    paddingBottom: spacing.bigerLarge,
 
 
   },
@@ -141,7 +142,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     paddingRight: spacing.small,
     // marginTop: spacing.bigerLarge,
-    gap: spacing.medium,
     flexDirection: 'row',
     borderRadius: 16,  //same like MediaCard 
     alignItems: 'center',
@@ -150,11 +150,13 @@ const styles = StyleSheet.create({
   imageAndText: {
     flexDirection: 'row',
     gap: spacing.medium,
-    alignItems: 'center'
+    alignItems: 'center',
+    flex:1,
   },
   miniImages: {
     height: 78,
-    width: '45%',
+    // width: '45%',  //don't do this as here width will depend on the width of the parent i.e image and text, and suppose if text is a short word then the images will be uneven(check RNjs doc search for "problem in putting width: '45%' in miniImages ")
+    width:137,
     borderRadius: 16,  //same like MediaCard 
 
   },
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
     fontSize: FONTsize.biggerMedium,
     fontFamily: FONTS.interMedium,
     color: "#000000", //black
+    flexShrink:1,  //// Allow text to wrap if it's too long
 
   },
 })
