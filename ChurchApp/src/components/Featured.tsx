@@ -1,80 +1,111 @@
-import { Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { FONTsize, spacing } from '../constants/dimensions'
 import { FONTS } from '../constants/fonts'
 import { useThemeStore } from '../themes/ThemeStore'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import { CustomColors } from '../themes/CustomTheme'
+import { BottomTabNavigationProp } from '@react-navigation/bottom-tabs'
 
+
+// Definining the param list for tabs for type safety
+type RootTabParamList = {
+    Home: undefined;
+    Connect: {
+        screen: 'PrayerRequestScreen' | 'BecomeMemberScreen';
+        params?: undefined; // This is good practice to include
+    };
+    Media: undefined;
+    More: undefined;
+};
+
+// Define the specific navigation prop type for this screen
+type FeaturedNavigationProp = BottomTabNavigationProp<RootTabParamList, 'Home'>;
 
 const Featured = () => {
 
     const { isDarkMode, toggleTheme } = useThemeStore();
     const { colors } = useTheme() as CustomColors;
+    const navigation = useNavigation<FeaturedNavigationProp>(); //Get navigation object with types
 
     return (
-        <View style={[styles.container, {backgroundColor:colors.bkGroundClr}]}>
-            <Text style={[styles.FeaturedStyle, {color: colors.textPrimary}]}>
+        <View style={[styles.container, { backgroundColor: colors.bkGroundClr }]}>
+            <Text style={[styles.FeaturedStyle, { color: colors.textPrimary }]}>
                 Featured
             </Text>
+
             <View style={styles.allImagesContainer}>
+                {/* below statement we are traversing from one tab screen to another */}
+                <TouchableOpacity onPress={() => navigation.navigate('Media')}>
 
-                <ImageBackground
-                    source={require('../../assets/sermon.jpg')}
-                    style={styles.card1ImageContainer}
-                    imageStyle={styles.image1style}
-                >
-                    <View style={styles.overlayContainer1}>
+                    <ImageBackground
+                        source={require('../../assets/sermon.jpg')}
+                        style={styles.card1ImageContainer}
+                        imageStyle={styles.image1style}
+                    >
+                        <View style={styles.overlayContainer1}>
 
-                        <Text style={styles.sermonStyle}>
-                            Sermons
-                        </Text>
-                        <View style={styles.playIconAndWatchHereContainer}>
-                            <Image
-                                source={require('../../assets/play.png')}
-                                style={styles.playIconStyle}
-                            />
-
-                            <Text style={styles.watchHereStyle}>
-                                Watch here
+                            <Text style={styles.sermonStyle}>
+                                Sermons
                             </Text>
+                            <View style={styles.playIconAndWatchHereContainer}>
+                                <Image
+                                    source={require('../../assets/play.png')}
+                                    style={styles.playIconStyle}
+                                />
+
+                                <Text style={styles.watchHereStyle}>
+                                    Watch here
+                                </Text>
+                            </View>
                         </View>
-                    </View>
-                </ImageBackground>
+                    </ImageBackground>
+                </TouchableOpacity>
 
                 <View style={styles.prayerRequestAndConnectContainer}>
 
-                    <ImageBackground
-                        source={require('../../assets/prayerRequest.png')}
-                        style={styles.card2ImageContainer}
-                        imageStyle={styles.image2style}
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Connect', { screen: 'PrayerRequestScreen' })}
                     >
-                        <View style={styles.prayerRequestLetsPrayContainer}>
-                            <Text style={styles.PrayerRequestStyle}>
-                                Prayer Request
-                            </Text>
 
-                            <Text style={styles.LetsPrayStyle}>
-                                Lets Pray Together
-                            </Text>
-                        </View>
-                    </ImageBackground>
+                        <ImageBackground
+                            source={require('../../assets/prayerRequest.png')}
+                            style={styles.card2ImageContainer}
+                            imageStyle={styles.image2style}
+                        >
+                            <View style={styles.prayerRequestLetsPrayContainer}>
+                                <Text style={styles.PrayerRequestStyle}>
+                                    Prayer Request
+                                </Text>
 
-                    <ImageBackground
-                        source={require('../../assets/getConnected.png')}
-                        style={styles.card3ImageContainer}
-                        imageStyle={styles.image3style}
+                                <Text style={styles.LetsPrayStyle}>
+                                    Lets Pray Together
+                                </Text>
+                            </View>
+                        </ImageBackground>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('Connect', { screen: 'BecomeMemberScreen' })}
                     >
-                        <View style={styles.getConnectedJoinUsContainer}>
-                            <Text style={styles.GetConnectStyle}>
-                                Get Connected
-                            </Text>
 
-                            <Text style={styles.joinUsTyle}>
-                                Join Us
-                            </Text>
-                        </View>
-                    </ImageBackground>
+                        <ImageBackground
+                            source={require('../../assets/getConnected.png')}
+                            style={styles.card3ImageContainer}
+                            imageStyle={styles.image3style}
+                        >
+                            <View style={styles.getConnectedJoinUsContainer}>
+                                <Text style={styles.GetConnectStyle}>
+                                    Get Connected
+                                </Text>
+
+                                <Text style={styles.joinUsTyle}>
+                                    Join Us
+                                </Text>
+                            </View>
+                        </ImageBackground>
+                    </TouchableOpacity>
+
 
                 </View>
 

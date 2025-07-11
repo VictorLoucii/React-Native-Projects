@@ -159,13 +159,13 @@ const PrayerRequestScreen = () => {
 
                     <View style={styles.addressContainer}>
                         <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                            Address
+                            Description of Your Prayer Requests
                         </Text>
                         <TextInput
                             value={address}
                             onChangeText={(newText) => setAddress(newText)}
                             multiline={true}
-                            placeholder='e.g `56/12, Ardee City, Gurgao'
+                            placeholder='write your prayer request here'
                             placeholderTextColor={colors.textPrimary}
                             style={[styles.addressTextInput,
                             {

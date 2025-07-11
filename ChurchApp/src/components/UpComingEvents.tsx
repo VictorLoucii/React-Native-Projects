@@ -1,41 +1,58 @@
-import { ImageBackground, StyleSheet, Text, View } from 'react-native'
+import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { FONTS } from '../constants/fonts'
 import { FONTsize, spacing } from '../constants/dimensions'
 import { useThemeStore } from '../themes/ThemeStore'
-import { useTheme } from '@react-navigation/native'
+import { useNavigation, useTheme } from '@react-navigation/native'
 import { CustomTheme } from '../themes/CustomTheme'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
+//define the type for the stack navigator screens 
+type HomeStackParamList = {
+    HomeScreen: undefined;
+    UpcomingEventScreen: undefined;  // No params expected for the main screen
+
+
+}
+
+// Define the navigation prop type for this screen
+type HomeNavigationProp = NativeStackNavigationProp<HomeStackParamList, 'HomeScreen'>;
 
 const UpComingEvents = () => {
 
     const { isDarkMode, toggleTheme } = useThemeStore();
     const { colors } = useTheme() as CustomTheme;
+    const navigation = useNavigation<HomeNavigationProp>();
 
 
     return (
-        <View style={[styles.container, {backgroundColor:colors.bkGroundClr}]}>
-            <Text style={[styles.upComingEventsStyling, {color:colors.textPrimary}]}>UpComingEvents</Text>
+        <View style={[styles.container, { backgroundColor: colors.bkGroundClr }]}>
+            <Text style={[styles.upComingEventsStyling, { color: colors.textPrimary }]}>UpComingEvents</Text>
 
             <View style={styles.allImagesContainer}>
-
-                <ImageBackground
-                    source={require('../../assets/goodFriday.png')}
-                    style={styles.cardImageContainer}
-                    imageStyle={styles.imageStyle}
+                <TouchableOpacity
+                    onPress={()=>navigation.navigate('UpcomingEventScreen')}
                 >
+                    <ImageBackground
+                        source={require('../../assets/goodFriday.png')}
+                        style={styles.cardImageContainer}
+                        imageStyle={styles.imageStyle}
+                    >
 
-                    <View style={styles.overlayContainer}>
-                        <Text style={styles.headingStyling}>
-                            GOOD FRIDAY MEETING
-                        </Text>
-                        <Text style={styles.subHeadingStyling}>
-                            FRIDAY 18TH
-                        </Text>
-                        <Text style={styles.timeStyling}>
-                            10:00 AM
-                        </Text>
-                    </View>
-                </ImageBackground>
+                        <View style={styles.overlayContainer}>
+                            <Text style={styles.headingStyling}>
+                                GOOD FRIDAY MEETING
+                            </Text>
+                            <Text style={styles.subHeadingStyling}>
+                                FRIDAY 18TH
+                            </Text>
+                            <Text style={styles.timeStyling}>
+                                10:00 AM
+                            </Text>
+                        </View>
+                    </ImageBackground>
+
+                </TouchableOpacity>
 
                 <ImageBackground
                     source={require('../../assets/bibleStudy.png')}

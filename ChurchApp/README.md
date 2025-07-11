@@ -4,6 +4,14 @@ A modern, visually engaging church community app built with React Native. Church
 
 ---
 
+## 🚀 App Demo
+
+Check out a demo of the app in action! 
+
+![ChurchApp Demo GIF](assets/demo.gif)
+
+---
+
 ## ✨ Features
 
 - 🏠 **Multi-Screen Layout**
@@ -51,8 +59,49 @@ A modern, visually engaging church community app built with React Native. Church
 
 ## 📸 Screenshots
 
-> _Coming Soon!_
+<table>
+  <tr>
+    <td align="center"><img src="assets/screenshots/HomeTabLight.png" alt="Home Tab" width="300"></td>
+    <td align="center"><img src="assets/screenshots/ConnectTabLight.png" alt="Connect Tab Light" width="300"></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><b>Home Screen</b></sub></td>
+    <td align="center"><sub><b>Connect Tab (Light)</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/MediaTabLight.png" alt="Media Tab Light" width="300"></td>
+    <td align="center"><img src="assets/screenshots/MediaTabDark.png" alt="Media Tab Dark" width="300"></td>
+  </tr>
+   <tr>
+    <td align="center"><sub><b>Media Tab (Light)</b></sub></td>
+    <td align="center"><sub><b>Media Tab (Dark)</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/SocialLight.png" alt="Social Tab Light" width="300"></td>
+    <td align="center"><img src="assets/screenshots/SocialDark.png" alt="Social Tab Dark" width="300"></td>
+  </tr>
+   <tr>
+    <td align="center"><sub><b>Social Tab (Light)</b></sub></td>
+    <td align="center"><sub><b>Social Tab (Dark)</b></sub></td>
+  </tr>
+  <tr>
+    <td align="center"><img src="assets/screenshots/PrayerRequestLight.png" alt="Prayer Request Light" width="300"></td>
+    <td align="center"><img src="assets/screenshots/PrayerRequestDark.png" alt="Prayer Request Dark" width="300"></td>
+  </tr>
+   <tr>
+    <td align="center"><sub><b>Prayer Request (Light)</b></sub></td>
+    <td align="center"><sub><b>Prayer Request (Dark)</b></sub></td>
+  </tr>
+    <tr>
+    <td align="center"><img src="assets/screenshots/BecomeMemberLight.png" alt="Become Member Light" width="300"></td>
+    <td align="center"><img src="assets/screenshots/BecomeMemberDark.png" alt="Become Member Dark" width="300"></td>
+  </tr>
+   <tr>
+    <td align="center"><sub><b>Become a Member (Light)</b></sub></td>
+    <td align="center"><sub><b>Become a Member (Dark)</b></sub></td>
+  </tr>
+</table>
 
 ---
 
-_ChurchApp is a work in progress. More features coming soon!
+_ChurchApp is a work in progress. More features coming soon!_

@@ -12,13 +12,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import JoinSocialGroupScreen from '../screens/JoinSocialGroupScreen';
 import PrayerRequestScreen from '../screens/PrayerRequestScreen';
 import SermonsScreen from '../screens/SermonsScreen';
+import UpcomingEventScreen from '../screens/UpcomingEventScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
 
 
-// creating a new component for the 'ConnectStackNavigator' stack navigator which will be conencted with the bottom tab navigator(linking bottom tab navigator with stack navigator)
+// creating 'ConnectStackNavigator' which is a component for tab 'Connect' tab
 const ConnectStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{
@@ -37,6 +38,7 @@ const ConnectStackNavigator = () => {
     )
 }
 
+// creating 'MediaStackNavigator' which is a component for tab 'Media' tab
 const MediaStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={{
@@ -51,6 +53,22 @@ const MediaStackNavigator = () => {
     )
 }
 
+// creating 'HomeStackNavigator' which is a component for tab 'Home' tab
+const HomeStackNavigator = () => {
+    return (
+        <Stack.Navigator screenOptions={{
+            headerShown: false
+            // headerBackTitle: "",
+        }}>
+            <Stack.Screen name="HomeScreen" component={HomeScreen} />
+            <Stack.Screen name='UpcomingEventScreen' component={UpcomingEventScreen} />
+
+
+        </Stack.Navigator>
+    )
+}
+
+
 
 const TabNavigator = () => {
 
@@ -63,7 +81,7 @@ const TabNavigator = () => {
                 headerShown: false  //hide the default header because your screens have their own
             }}
         >
-            <Tab.Screen name="Home" component={HomeScreen} />
+            <Tab.Screen name="Home" component={HomeStackNavigator} />
             {/* Use the Stack Navigator for the "Connect" tab */}
             <Tab.Screen name="Connect" component={ConnectStackNavigator} />
 
