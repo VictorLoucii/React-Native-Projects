@@ -1,18 +1,31 @@
-import { Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { useThemeStore } from '../themes/ThemeStore';
-import { useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { CustomTheme } from '../themes/CustomTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FONTsize, spacing } from '../constants/dimensions';
 import { FONTS } from '../constants/fonts';
 import MediaCard from '../components/MediaCard';
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+
+// define the type for the stack navigator screens 
+type MediaScreenParamList = {
+  SermonsScreen: undefined;  // No params expected for the main screen
+
+}
+
+// Define the navigation prop type for this screen
+type MediaScreenNavigationProp = NativeStackNavigationProp<MediaScreenParamList, 'SermonsScreen'>;
+
+
 
 const MediaScreen = () => {
   const { isDarkMode, toggleTheme } = useThemeStore();
   const { colors } = useTheme() as CustomTheme;
   const insets = useSafeAreaInsets()
+  const navigation = useNavigation<MediaScreenNavigationProp>(); //get the navigation object
 
   return (
     <ScrollView
@@ -41,7 +54,10 @@ const MediaScreen = () => {
 
       <View style={[styles.allMediaList]}>
 
-        <View style={[styles.imageTextAndIcon, { backgroundColor: colors.MediaImageIconTextBGC }]}>
+        <TouchableOpacity 
+          style={[styles.imageTextAndIcon, { backgroundColor: colors.MediaImageIconTextBGC }]}
+          onPress={()=>navigation.navigate('SermonsScreen')}
+        >
           <View style={styles.imageAndText}>
             <Image
               source={require('../../assets/readingBible.png')}
@@ -56,7 +72,7 @@ const MediaScreen = () => {
             size={27}
           />
 
-        </View>
+        </TouchableOpacity>
 
         <View style={[styles.imageTextAndIcon, { backgroundColor: colors.MediaImageIconTextBGC }]}>
           <View style={styles.imageAndText}>

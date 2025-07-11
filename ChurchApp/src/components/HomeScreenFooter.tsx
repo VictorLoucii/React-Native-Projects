@@ -64,7 +64,7 @@ const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
                 </Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 onPress={() => navigation.navigate('Give')}
                 style={styles.iconAndTextContainer}
             >
@@ -76,7 +76,7 @@ const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
                 <Text style={[styles.textStyle, { color: activeRouteName === 'Give' ? colors.tabBarIconActive : colors.tabBarIconInactive }]}>
                     Give
                 </Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <TouchableOpacity
                 onPress={() => navigation.navigate('Media')}

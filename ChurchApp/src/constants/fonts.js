@@ -14,4 +14,5 @@ export const FONTS = {
   robotoRegular: 'Roboto-Regular',
   robotoSemiBold: 'RobotoSlab-Bold',
   robotoSlabBold: 'RobotoSlab-Bold',
+  interLightItalic: 'Inter-LightItalic-BETA'
 };

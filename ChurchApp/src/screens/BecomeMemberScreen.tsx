@@ -1,31 +1,46 @@
-import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { useThemeStore } from '../themes/ThemeStore';
-import { useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme } from '@react-navigation/native';
 import { CustomTheme } from '../themes/CustomTheme';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FONTsize, spacing } from '../constants/dimensions';
 import { FONTS } from '../constants/fonts';
 import ConnectCard from '../components/ConnectCard';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const BecomeMemberScreen = () => {
 
     const { isDarkMode, toggleTheme } = useThemeStore();
     const { colors } = useTheme() as CustomTheme;
     const insets = useSafeAreaInsets();
+    const navigation = useNavigation();
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
+
+
     return (
-        <ScrollView style={[styles.container, { backgroundColor: colors.bkGroundClr, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
+        <View style={[styles.container, { backgroundColor: colors.bkGroundClr, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
             <StatusBar
                 barStyle={isDarkMode ? 'light-content' : 'dark-content'}
                 translucent={true} //this hides the status bar in android 
                 backgroundColor='transparent'
             />
+
+            <TouchableOpacity
+                style={[styles.backButtonTouchable, { top: insets.top }]}
+                onPress={() => navigation.goBack()}
+            >
+                <Ionicons
+                    name={'return-up-back'}
+                    size={30}
+                    style={[styles.backButtonStyling, { color: colors.icon }]} //  We use the top inset to position it safely below the status bar. The `top` value is now set dynamically in the component
+                />
+            </TouchableOpacity>
 
             <View style={styles.headingContainer}>
                 <Text style={[styles.headingStyle, { color: colors.textPrimary }]}>
@@ -33,125 +48,127 @@ const BecomeMemberScreen = () => {
                 </Text>
             </View>
 
-            <ImageBackground
-                source={require('../../assets/becomeMember.jpg')}
-                style={styles.cardImageContainer}
-                imageStyle={styles.cardImageStyle}
-            >
-                <View style={styles.overlayContainer}>
-                    <Text style={styles.titleBold}>
-                        BECOME A MEMBER
-                    </Text>
-
-                </View>
-
-            </ImageBackground>
-
-            <View style={styles.textContainer}>
-                <Text style={[styles.text1, { color: colors.textPrimary }]}>
-                    If you would like to become a member of Soteria church, we are happy to welcome you.
-                </Text>
-                <Text style={[styles.text2, { color: colors.textPrimary }]}>
-                    Please sign up here.
-                </Text>
-            </View>
-
-            {/* Divider Line */}
-            <View style={styles.dividerLine} />
-
-            <View style={styles.formContainer}>
-
-                <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                    First Name
-                </Text>
-                <TextInput
-                    placeholder='enter your first name here'
-                    placeholderTextColor={colors.textPrimary}
-                    value={firstName}
-                    onChangeText={(newText) => setFirstName(newText)}
-                    style={[styles.formInput,
-                    {
-                        borderColor: '#BDC1C6',
-                        color: colors.textPrimary
-                    }
-                    ]}
-                />
-
-                <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                    Last Name
-                </Text>
-                <TextInput
-                    placeholder='enter your last name here'
-                    placeholderTextColor={colors.textPrimary}
-                    value={lastName}
-                    onChangeText={(newText) => setLastName(newText)}
-                    style={[styles.formInput,
-                    {
-                        borderColor: '#BDC1C6',
-                        color: colors.textPrimary
-                    }
-                    ]}
-                />
-
-                <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                    Email
-                </Text>
-                <TextInput
-                    placeholder='e.g: uknown@gmail.com'
-                    placeholderTextColor={colors.textPrimary}
-                    value={email}
-                    onChangeText={(newText) => setEmail(newText)}
-                    style={[styles.formInput,
-                    {
-                        borderColor: '#BDC1C6',
-                        color: colors.textPrimary
-                    }
-                    ]}
-                />
-
-                <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                    Phone Number
-                </Text>
-
-                <View style={styles.phoneContainer}>
-                    <View style={styles.phoneCodeAndSymbol}>
-                        <Text style={[styles.phoneCodeText, { color: colors.textPrimary }]}>
-                            US +1
+            <ScrollView>
+                <ImageBackground
+                    source={require('../../assets/becomeMember.jpg')}
+                    style={styles.cardImageContainer}
+                    imageStyle={styles.cardImageStyle}
+                >
+                    <View style={styles.overlayContainer}>
+                        <Text style={styles.titleBold}>
+                            BECOME A MEMBER
                         </Text>
 
-                        <FontAwesome
-                            name={'caret-down'}
-                            size={15.5}
-                            color={colors.icon}
-                        />
-
                     </View>
+
+                </ImageBackground>
+
+                <View style={styles.textContainer}>
+                    <Text style={[styles.text1, { color: colors.textPrimary }]}>
+                        If you would like to become a member of Soteria church, we are happy to welcome you.
+                    </Text>
+                    <Text style={[styles.text2, { color: colors.textPrimary }]}>
+                        Please sign up here.
+                    </Text>
+                </View>
+
+                {/* Divider Line */}
+                <View style={styles.dividerLine} />
+
+                <View style={styles.formContainer}>
+
+                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
+                        First Name
+                    </Text>
                     <TextInput
-                        placeholder='e.g: 9977765234'
+                        placeholder='enter your first name here'
                         placeholderTextColor={colors.textPrimary}
-                        value={phoneNumber}
-                        onChangeText={(newText) => setPhoneNumber(newText)}
-                        style={[styles.phoneNoformInput,
+                        value={firstName}
+                        onChangeText={(newText) => setFirstName(newText)}
+                        style={[styles.formInput,
                         {
                             borderColor: '#BDC1C6',
                             color: colors.textPrimary
                         }
                         ]}
                     />
+
+                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
+                        Last Name
+                    </Text>
+                    <TextInput
+                        placeholder='enter your last name here'
+                        placeholderTextColor={colors.textPrimary}
+                        value={lastName}
+                        onChangeText={(newText) => setLastName(newText)}
+                        style={[styles.formInput,
+                        {
+                            borderColor: '#BDC1C6',
+                            color: colors.textPrimary
+                        }
+                        ]}
+                    />
+
+                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
+                        Email
+                    </Text>
+                    <TextInput
+                        placeholder='e.g: uknown@gmail.com'
+                        placeholderTextColor={colors.textPrimary}
+                        value={email}
+                        onChangeText={(newText) => setEmail(newText)}
+                        style={[styles.formInput,
+                        {
+                            borderColor: '#BDC1C6',
+                            color: colors.textPrimary
+                        }
+                        ]}
+                    />
+
+                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
+                        Phone Number
+                    </Text>
+
+                    <View style={styles.phoneContainer}>
+                        <View style={styles.phoneCodeAndSymbol}>
+                            <Text style={[styles.phoneCodeText, { color: colors.textPrimary }]}>
+                                US +1
+                            </Text>
+
+                            <FontAwesome
+                                name={'caret-down'}
+                                size={15.5}
+                                color={colors.icon}
+                            />
+
+                        </View>
+                        <TextInput
+                            placeholder='e.g: 9977765234'
+                            placeholderTextColor={colors.textPrimary}
+                            value={phoneNumber}
+                            onChangeText={(newText) => setPhoneNumber(newText)}
+                            style={[styles.phoneNoformInput,
+                            {
+                                borderColor: '#BDC1C6',
+                                color: colors.textPrimary
+                            }
+                            ]}
+                        />
+                    </View>
+                    {/* phoneContainer view ends here */}
+
+
+
+
                 </View>
-                {/* phoneContainer view ends here */}
-
-
-
-
-            </View>
-            {/* formContainer view ends here */}
+                {/* formContainer view ends here */}
+            </ScrollView>
 
 
 
 
 
-        </ScrollView>
+        </View>
     )
 }
 
@@ -160,6 +177,15 @@ export default BecomeMemberScreen
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+    },
+    backButtonTouchable: {
+        zIndex: 1,  // Ensures the back button is on top of other content
+        // top:47,  // The `top` value is now set dynamically in the component
+        position: 'absolute',
+        left: 24,
+    },
+    backButtonStyling: {
+        // color: '#FFFFFF',
     },
     headingContainer: {
 
@@ -263,7 +289,7 @@ const styles = StyleSheet.create({
 
     },
     phoneNoformInput: {
-        flex:1,
+        flex: 1,
         // width: '75%',
         height: 47,
         borderColor: '#BDC1C6',
