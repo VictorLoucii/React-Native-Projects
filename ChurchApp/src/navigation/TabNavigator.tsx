@@ -13,6 +13,7 @@ import JoinSocialGroupScreen from '../screens/JoinSocialGroupScreen';
 import PrayerRequestScreen from '../screens/PrayerRequestScreen';
 import SermonsScreen from '../screens/SermonsScreen';
 import UpcomingEventScreen from '../screens/UpcomingEventScreen';
+import VideoPlayerScreen from '../screens/VideoPlayerScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -47,6 +48,8 @@ const MediaStackNavigator = () => {
         }}>
             <Stack.Screen name='MediaScreen' component={MediaScreen} />
             <Stack.Screen name="SermonsScreen" component={SermonsScreen} />
+            <Stack.Screen name="VideoPlayerScreen" component={VideoPlayerScreen} />
+
 
 
         </Stack.Navigator>

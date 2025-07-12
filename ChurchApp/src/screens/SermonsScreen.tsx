@@ -57,7 +57,7 @@ const SermonsScreen = () => {
 
           <MediaCard
             imageSource={require('../../assets/sermon.jpg')}
-            ONPRESS={() => null}
+            ONPRESS={() => navigation.navigate('VideoPlayerScreen')}
           >
             <Text style={[styles.titleBold, { color: colors.MediaImageIconTextBGC }]}>
               Trusting the Word Of God
