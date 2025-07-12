@@ -1,121 +1,120 @@
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
-import { useSafeAreaInsets } from 'react-native-safe-area-context'
+// --- START OF FILE VideoPlayerScreen.tsx ---
+
+import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { useState, useRef } from 'react'; // --- MODIFIED ---
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeStore } from '../themes/ThemeStore';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme, useRoute, RouteProp } from '@react-navigation/native';
 import { CustomTheme } from '../themes/CustomTheme';
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FONTsize, spacing } from '../constants/dimensions';
 import { FONTS } from '../constants/fonts';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Feather from 'react-native-vector-icons/Feather'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Video, { OnLoadData, OnProgressData } from 'react-native-video'; // --- MODIFIED ---
+import Slider from '@react-native-community/slider'; // --- NEW ---
 
-
+// --- (Sermon and RouteProp types remain the same) ---
+type Sermon = { id: number; title: string; pastor: string; date: string; thumbnail_url: string; video_url: string; };
+type VideoPlayerRouteProp = RouteProp<{ params: { sermon: Sermon } }, 'params'>;
 
 const VideoPlayerScreen = () => {
-
     const insets = useSafeAreaInsets();
-    const { isDarkMode, toggleTheme } = useThemeStore();
+    const { isDarkMode } = useThemeStore();
     const { colors } = useTheme() as CustomTheme;
     const navigation = useNavigation();
+    const route = useRoute<VideoPlayerRouteProp>();
+    const { sermon } = route.params;
 
+    // --- NEW --- Ref and State for slider functionality
+    const videoRef = useRef<Video>(null);
+    const [progress, setProgress] = useState({ currentTime: 0, duration: 0 });
+    const [isSeeking, setIsSeeking] = useState(false);
 
+    // --- NEW --- When the user starts sliding
+    const onSlidingStart = () => {
+        setIsSeeking(true);
+    };
+
+    // --- NEW --- When the user releases the slider
+    const onSlidingComplete = async (value: number) => {
+        if (videoRef.current) {
+            videoRef.current.seek(value);
+        }
+        setIsSeeking(false);
+    };
+
+    // --- NEW --- Update the slider's position as the video plays
+    const handleProgress = (data: OnProgressData) => {
+        if (!isSeeking) {
+            setProgress(prev => ({ ...prev, currentTime: data.currentTime }));
+        }
+    };
+
+    // --- NEW --- Get the total duration of the video when it loads
+    const handleLoad = (data: OnLoadData) => {
+        setProgress(prev => ({ ...prev, duration: data.duration }));
+    };
+
+    // --- NEW --- Format time from seconds to MM:SS
+    const formatTime = (seconds: number) => {
+        const date = new Date(seconds * 1000);
+        const hh = date.getUTCHours();
+        const mm = date.getUTCMinutes();
+        const ss = date.getUTCSeconds().toString().padStart(2, '0');
+        if (hh) {
+            return `${hh}:${mm.toString().padStart(2, '0')}:${ss}`;
+        }
+        return `${mm}:${ss}`;
+    };
 
     return (
         <View style={[styles.container, { paddingTop: insets.top, backgroundColor: colors.bkGroundClr }]}>
-
-            <StatusBar
-                barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-                translucent={true} //this hides the status bar in android 
-                backgroundColor='transparent'
-            />
-
-            <TouchableOpacity
-                style={[styles.backButtonTouchable, { top: insets.top }]}
-                onPress={() => navigation.goBack()}
-            >
-                <Ionicons
-                    name={'return-up-back'}
-                    size={30}
-                    style={[styles.backButtonStyling, { color: colors.icon }]} //  We use the top inset to position it safely below the status bar. The `top` value is now set dynamically in the component
-                />
+            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} translucent={true} backgroundColor='transparent' />
+            <TouchableOpacity style={[styles.backButtonTouchable, { top: insets.top }]} onPress={() => navigation.goBack()}>
+                <Ionicons name={'return-up-back'} size={30} style={[styles.backButtonStyling, { color: colors.icon }]} />
             </TouchableOpacity>
-
             <View style={styles.headingContainer}>
-                <Text style={[styles.headingStyle, { color: colors.textPrimary }]}>
-                    Trusting the Word Of God
-                </Text>
+                <Text style={[styles.headingStyle, { color: colors.textPrimary }]}>{sermon.title}</Text>
             </View>
 
-            <Image
-                source={require('../../assets/sermon.jpg')}
-                style={styles.imageStyle}
+            <Video
+                ref={videoRef} // --- NEW ---
+                source={{ uri: sermon.video_url }}
+                style={styles.videoStyle}
+                controls={true}   //set to true if you want to use the default slider
+                resizeMode="contain"
+                onLoad={handleLoad} // --- NEW ---
+                onProgress={handleProgress} // --- NEW ---
+                onError={(e) => console.log('Video Error:', e)}
             />
 
-            <ScrollView
-                contentContainerStyle={{
-                    paddingBottom:200,
-                }}
-            >
+            {/* --- NEW SLIDER COMPONENT --- */}
+            {/* <View style={styles.sliderContainer}>
+                <Text style={[styles.timeText, { color: colors.textPrimary }]}>{formatTime(progress.currentTime)}</Text>
+                <Slider
+                    style={styles.slider}
+                    minimumValue={0}
+                    maximumValue={progress.duration}
+                    value={progress.currentTime}
+                    minimumTrackTintColor="#A96F00"
+                    maximumTrackTintColor={colors.textPrimary}
+                    thumbTintColor="#A96F00"
+                    onSlidingStart={onSlidingStart}
+                    onSlidingComplete={onSlidingComplete}
+                />
+                <Text style={[styles.timeText, { color: colors.textPrimary }]}>{formatTime(progress.duration)}</Text>
+            </View> */}
+
+            <ScrollView contentContainerStyle={{ paddingBottom: 200 }}>
+                {/* ... The rest of your details view remains the same ... */}
                 <View style={styles.detailsContainer}>
-
-                    <View style={styles.iconAndTitle}>
-                        <Ionicons
-                            name={'book-outline'}
-                            size={29}
-                            color={colors.icon}
-                        />
-                        <Text style={[styles.subTitle, { color: colors.textPrimary }]}>
-                            Good Friday Meeting
-                        </Text>
-                    </View>
-
-                    <View style={styles.dateIconAndText}>
-                        <MaterialIcons
-                            name={'calendar-month'}
-                            size={29}
-                            color={colors.icon}
-                        />
-                        <Text style={[styles.dateText, { color: colors.textPrimary }]}>
-                            12-09-2023
-                        </Text>
-                    </View>
-
-                    <View style={styles.timeIconAndText}>
-                        <Feather
-                            name={'clock'}
-                            size={29}
-                            color={colors.icon}
-                        />
-                        <Text style={[styles.timeText, { color: colors.textPrimary }]}>
-                            10:00 AM
-                        </Text>
-                    </View>
-
-                    <Text style={[styles.timeText, { color: colors.textPrimary }]}>
-                        Theme: An Audience of One
-                    </Text>
-
-                    <Text style={[styles.timeText, { color: colors.textPrimary }]}>
-                        Join us for our Good Friday Meeting—an inspiring morning of fellowship, encouragement, and empowerment. Enjoy a delicious breakfast as we gather to celebrate the strength and beauty of JESUS in our community. All are welcome!
-                    </Text>
-
-                    <TouchableOpacity style={styles.commentButton}>
-                        <Text style={styles.commentText}>
-                            LEAVE A COMMENT
-                        </Text>
-
-                    </TouchableOpacity>
-
+                    <View style={styles.iconAndTitle}><Ionicons name={'book-outline'} size={29} color={colors.icon} /><Text style={[styles.subTitle, { color: colors.textPrimary }]}>{sermon.title}</Text></View>
+                    <View style={styles.dateIconAndText}><MaterialIcons name={'person-outline'} size={29} color={colors.icon} /><Text style={[styles.dateText, { color: colors.textPrimary }]}>{sermon.pastor}</Text></View>
+                    <View style={styles.dateIconAndText}><MaterialIcons name={'calendar-month'} size={29} color={colors.icon} /><Text style={[styles.dateText, { color: colors.textPrimary }]}>{sermon.date}</Text></View>
+                    <Text style={[styles.descriptionText, { color: colors.textPrimary, marginTop: spacing.medium }]}>When we walk with the lord we learn to trust his word.When we walk with the lord we learn to trust his word.When we walk with the lord we learn to trust his word.When we walk with the lord we learn to trust his word.</Text>
+                    <TouchableOpacity style={styles.commentButton}><Text style={styles.commentText}>LEAVE A COMMENT</Text></TouchableOpacity>
                 </View>
-
             </ScrollView>
-
-
-
-
-
-
         </View>
     )
 }
@@ -123,82 +122,37 @@ const VideoPlayerScreen = () => {
 export default VideoPlayerScreen
 
 const styles = StyleSheet.create({
-    container: {
+    container: { flex: 1 },
+    backButtonTouchable: { zIndex: 1, position: 'absolute', left: 24 },
+    backButtonStyling: {},
+    headingContainer: {},
+    headingStyle: { fontSize: FONTsize.medium, fontFamily: FONTS.interSemiBold, textAlign: 'center', paddingVertical: spacing.small },
+    videoStyle: { height: 235, backgroundColor: 'black' },
+
+    // --- NEW STYLES FOR SLIDER ---
+    sliderContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: spacing.medium,
+        marginTop: spacing.small,
+    },
+    slider: {
         flex: 1,
-
-    },
-    backButtonTouchable: {
-        zIndex: 1,  // Ensures the back button is on top of other content
-        // top:47,  // The `top` value is now set dynamically in the component
-        position: 'absolute',
-        left: 24,
-    },
-    backButtonStyling: {
-        // color: '#FFFFFF',
-    },
-    headingContainer: {
-
-    },
-    headingStyle: {
-        fontSize: FONTsize.medium,
-        fontFamily: FONTS.interSemiBold,
-        textAlign: 'center',
-        // color: '#FFFFFF',
-        paddingVertical: spacing.small,
-        // marginTop:10,
-    },
-    imageStyle: {
-        height: 235,
-
-    },
-    detailsContainer: {
-        marginTop: spacing.large,
-        height: 330,
-        paddingHorizontal: spacing.biggerMedium,
-        gap: spacing.medium,
-    },
-    iconAndTitle: {
-        flexDirection: 'row',
-        gap: spacing.medium,
-        alignItems: 'center',
-    },
-    subTitle: {
-        fontSize: FONTsize.large,
-        fontFamily: FONTS.interSemiBold,
-
-    },
-    dateIconAndText: {
-        flexDirection: 'row',
-        gap: spacing.medium,
-        alignItems: 'center',
-
-    },
-    dateText: {
-        fontSize: FONTsize.medium,
-        fontFamily: FONTS.interLightItalic,
-
-    },
-    timeIconAndText: {
-        flexDirection: 'row',
-        gap: spacing.medium,
-        alignItems: 'center',
-
+        marginHorizontal: spacing.small,
     },
     timeText: {
-        fontSize: FONTsize.biggerMedium,
-        fontFamily: FONTS.interRegular
-
-    },
-    commentButton: {
-        height: 51,
-        borderColor: '#A96F00',
-        borderWidth: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    commentText: {
-        color: '#A96F00',
         fontFamily: FONTS.interRegular,
-        fontSize: FONTsize.biggerMedium
-    }
+        fontSize: FONTsize.small,
+    },
+    // --- END NEW STYLES ---
+
+    detailsContainer: { marginTop: spacing.large, paddingHorizontal: spacing.biggerMedium, gap: spacing.medium },
+    iconAndTitle: { flexDirection: 'row', gap: spacing.medium, alignItems: 'center' },
+    subTitle: { fontSize: FONTsize.large, fontFamily: FONTS.interSemiBold },
+    dateIconAndText: { flexDirection: 'row', gap: spacing.medium, alignItems: 'center' },
+    dateText: { fontSize: FONTsize.medium, fontFamily: FONTS.interLightItalic },
+    descriptionText: { fontSize: FONTsize.biggerMedium, fontFamily: FONTS.interRegular },
+    commentButton: { height: 51, borderColor: '#A96F00', borderWidth: 1, justifyContent: 'center', alignItems: 'center', marginTop: spacing.large },
+    commentText: { color: '#A96F00', fontFamily: FONTS.interRegular, fontSize: FONTsize.biggerMedium }
 })

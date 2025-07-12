@@ -10,12 +10,80 @@ import { FONTS } from '../constants/fonts';
 import MediaCard from '../components/MediaCard';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 
+//below imports for supabase:
+// --- ADD THESE IMPORTS ---
+import { useState, useEffect } from 'react';
+import { supabase } from '../../supabase'; // Assuming supabase.js is in the root
+import { ActivityIndicator, FlatList } from 'react-native';
+
+// Define the type for a single sermon object for TypeScript
+type Sermon = {
+  id: number;
+  title: string;
+  pastor: string;
+  date: string;
+  thumbnail_url: string;
+  video_url: string;
+};
+
+
 const SermonsScreen = () => {
   // console.log('succesfully navigated to SermonsScreen')
   const insets = useSafeAreaInsets();
   const { isDarkMode, toggleTheme } = useThemeStore();
   const { colors } = useTheme() as CustomTheme;
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();  // Use <any> for simplicity for now
+
+  // State to hold our sermons and loading status
+  const [sermons, setSermons] = useState<Sermon[]>([]);  //empty array initially
+  const [loading, setLoading] = useState(true);
+
+    //use useEffect to fetch data when the screen loads
+  useEffect(() => {
+    const fetchSermons = async () => {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('sermon')  //here 'sermon' is the name of the table in supa base
+        .select('*');
+
+      if (error) {
+        console.error('Error fetching sermons:', error.message);
+      } else if (data) {
+        setSermons(data);
+      }
+      setLoading(false);
+    };
+
+    fetchSermons();
+  }, []);
+
+   // A function to render each item in the list
+  const renderSermonCard = ({ item }: { item: Sermon }) => (
+    <MediaCard
+      // Use the thumbnail_url from your database later. For now, we'll keep the local one.
+      imageSource={require('../../assets/sermon.jpg')} 
+      ONPRESS={() => navigation.navigate('VideoPlayerScreen', { sermon: item })} // --- MODIFIED --- Pass the entire sermon object to the next screen
+    >
+      <Text style={[styles.titleBold, { color: colors.MediaImageIconTextBGC }]}>
+        {item.title}
+      </Text>
+      <Text style={[styles.subheading, { color: colors.MediaImageIconTextBGC }]}>
+        {item.pastor}
+      </Text>
+      <Text style={[styles.date, { color: colors.MediaImageIconTextBGC }]}>
+        {item.date} 
+      </Text>
+      <MaterialIcons
+        name={'play-circle-outline'}
+        size={30}
+        color={colors.MediaImageIconTextBGC}
+        style={styles.playIcon}
+      />
+      <Text style={[styles.watchHere, { color: colors.MediaImageIconTextBGC }]}>
+        Watch here
+      </Text>
+    </MediaCard>
+  );
 
 
   return (
@@ -47,102 +115,22 @@ const SermonsScreen = () => {
       {/* Divider Line */}
       <View style={styles.dividerLine} />
 
-      <ScrollView contentContainerStyle={{
-        paddingBottom:150,
-      }}
-      >
+            {/* --- MODIFIED --- Use a loading indicator or the FlatList */}
+      {loading ? (
+        <ActivityIndicator size="large" color={colors.textPrimary} style={{ flex: 1 }} />
+      ) : (
+        <FlatList
+          data={sermons}
+          renderItem={renderSermonCard}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={styles.allMediaCards}
+          ItemSeparatorComponent={() => <View style={{ height: spacing.biggerMedium }} />} // This adds space between items
+        />
+      )}
 
+      
 
-        <View style={styles.allMediaCards}>
-
-          <MediaCard
-            imageSource={require('../../assets/sermon.jpg')}
-            ONPRESS={() => navigation.navigate('VideoPlayerScreen')}
-          >
-            <Text style={[styles.titleBold, { color: colors.MediaImageIconTextBGC }]}>
-              Trusting the Word Of God
-            </Text>
-
-            <Text style={[styles.subheading, { color: colors.MediaImageIconTextBGC }]}>
-              Pst John Doe
-            </Text>
-            <Text style={[styles.date, { color: colors.MediaImageIconTextBGC }]}>
-              12-09-2023
-            </Text>
-
-            <MaterialIcons
-              name={'play-circle-outline'}
-              size={30}
-              color={colors.MediaImageIconTextBGC}
-              style={styles.playIcon}
-            />
-            <Text style={[styles.watchHere, { color: colors.MediaImageIconTextBGC }]}>
-              Watch here
-            </Text>
-
-          </MediaCard>
-
-
-          <MediaCard
-            imageSource={require('../../assets/gospelMusic1.jpg')}
-            ONPRESS={() => null}
-          >
-            <Text style={[styles.titleBold, { color: colors.MediaImageIconTextBGC }]}>
-              Alawys Living By Faith
-            </Text>
-
-            <Text style={[styles.subheading, { color: colors.MediaImageIconTextBGC }]}>
-              Pst Jane Roger
-            </Text>
-            <Text style={[styles.date, { color: colors.MediaImageIconTextBGC }]}>
-              10-01-2023
-            </Text>
-
-            <MaterialIcons
-              name={'play-circle-outline'}
-              size={30}
-              color={colors.MediaImageIconTextBGC}
-              style={styles.playIcon}
-            />
-            <Text style={[styles.watchHere, { color: colors.MediaImageIconTextBGC }]}>
-              Watch here
-            </Text>
-
-          </MediaCard>
-
-
-          <MediaCard
-            imageSource={require('../../assets/gospelMusic2.jpg')}
-            ONPRESS={() => null}
-          >
-            <Text style={[styles.titleBold, { color: colors.MediaImageIconTextBGC }]}>
-              Knowing God
-            </Text>
-
-            <Text style={[styles.subheading, { color: colors.MediaImageIconTextBGC }]}>
-              Pst Jeffery Epstein
-            </Text>
-            <Text style={[styles.date, { color: colors.MediaImageIconTextBGC }]}>
-              09-04-2023
-            </Text>
-
-            <MaterialIcons
-              name={'play-circle-outline'}
-              size={30}
-              color={colors.MediaImageIconTextBGC}
-              style={styles.playIcon}
-            />
-            <Text style={[styles.watchHere, { color: colors.MediaImageIconTextBGC }]}>
-              Watch here
-            </Text>
-
-          </MediaCard>
-
-
-
-        </View>
-      </ScrollView>
-
+      
 
     </View >
   )
