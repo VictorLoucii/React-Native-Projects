@@ -46,6 +46,16 @@ Check out this quick demo of the app in action! Click the GIF to see the full 2-
 
 ---
 
+## 🗄 Backend Services
+
+- **Supabase** is used as the backend platform for:
+  - Uploading and streaming sermon videos
+  - Storing user/member data
+  - Handling prayer requests and community submissions
+  - Providing real-time data and secure access
+
+---
+
 ## 🛠 Tech Stack
 
 - React Native (TypeScript)
@@ -53,6 +63,7 @@ Check out this quick demo of the app in action! Click the GIF to see the full 2-
 - Custom Theme Store (Dark/Light Mode)
 - Safe Area Context
 - ESLint & Prettier
+- Supabase
 
 ---
 

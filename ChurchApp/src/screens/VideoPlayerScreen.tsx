@@ -1,7 +1,6 @@
-// --- START OF FILE VideoPlayerScreen.tsx ---
 
 import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState, useRef } from 'react'; // --- MODIFIED ---
+import React, { useState, useRef } from 'react'; 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useThemeStore } from '../themes/ThemeStore';
 import { useNavigation, useTheme, useRoute, RouteProp } from '@react-navigation/native';
@@ -10,32 +9,31 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { FONTsize, spacing } from '../constants/dimensions';
 import { FONTS } from '../constants/fonts';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Video, { OnLoadData, OnProgressData } from 'react-native-video'; // --- MODIFIED ---
-import Slider from '@react-native-community/slider'; // --- NEW ---
+import Video, { OnLoadData, OnProgressData } from 'react-native-video'; 
+import Slider from '@react-native-community/slider'; 
 
-// --- (Sermon and RouteProp types remain the same) ---
-type Sermon = { id: number; title: string; pastor: string; date: string; thumbnail_url: string; video_url: string; };
-type VideoPlayerRouteProp = RouteProp<{ params: { sermon: Sermon } }, 'params'>;
+//import type file:
+import { VideoPlayerScreenRouteProp } from '../navigation/navigationTypes';
 
 const VideoPlayerScreen = () => {
     const insets = useSafeAreaInsets();
     const { isDarkMode } = useThemeStore();
     const { colors } = useTheme() as CustomTheme;
     const navigation = useNavigation();
-    const route = useRoute<VideoPlayerRouteProp>();
+    const route = useRoute<VideoPlayerScreenRouteProp>();
     const { sermon } = route.params;
 
-    // --- NEW --- Ref and State for slider functionality
+    // Ref and State for slider functionality
     const videoRef = useRef<Video>(null);
     const [progress, setProgress] = useState({ currentTime: 0, duration: 0 });
     const [isSeeking, setIsSeeking] = useState(false);
 
-    // --- NEW --- When the user starts sliding
+    // When the user starts sliding
     const onSlidingStart = () => {
         setIsSeeking(true);
     };
 
-    // --- NEW --- When the user releases the slider
+    //When the user releases the slider
     const onSlidingComplete = async (value: number) => {
         if (videoRef.current) {
             videoRef.current.seek(value);
@@ -43,19 +41,19 @@ const VideoPlayerScreen = () => {
         setIsSeeking(false);
     };
 
-    // --- NEW --- Update the slider's position as the video plays
+    // Update the slider's position as the video plays
     const handleProgress = (data: OnProgressData) => {
         if (!isSeeking) {
             setProgress(prev => ({ ...prev, currentTime: data.currentTime }));
         }
     };
 
-    // --- NEW --- Get the total duration of the video when it loads
+    //Get the total duration of the video when it loads
     const handleLoad = (data: OnLoadData) => {
         setProgress(prev => ({ ...prev, duration: data.duration }));
     };
 
-    // --- NEW --- Format time from seconds to MM:SS
+    //  Format time from seconds to MM:SS
     const formatTime = (seconds: number) => {
         const date = new Date(seconds * 1000);
         const hh = date.getUTCHours();
@@ -78,17 +76,17 @@ const VideoPlayerScreen = () => {
             </View>
 
             <Video
-                ref={videoRef} // --- NEW ---
+                ref={videoRef} 
                 source={{ uri: sermon.video_url }}
                 style={styles.videoStyle}
                 controls={true}   //set to true if you want to use the default slider
                 resizeMode="contain"
-                onLoad={handleLoad} // --- NEW ---
+                onLoad={handleLoad} 
                 onProgress={handleProgress} // --- NEW ---
                 onError={(e) => console.log('Video Error:', e)}
             />
 
-            {/* --- NEW SLIDER COMPONENT --- */}
+            {/* --- CUSTOM SLIDER COMPONENT --- */}
             {/* <View style={styles.sliderContainer}>
                 <Text style={[styles.timeText, { color: colors.textPrimary }]}>{formatTime(progress.currentTime)}</Text>
                 <Slider
@@ -129,7 +127,7 @@ const styles = StyleSheet.create({
     headingStyle: { fontSize: FONTsize.medium, fontFamily: FONTS.interSemiBold, textAlign: 'center', paddingVertical: spacing.small },
     videoStyle: { height: 235, backgroundColor: 'black' },
 
-    // --- NEW STYLES FOR SLIDER ---
+    // ---STYLES FOR SLIDER ---
     sliderContainer: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -145,7 +143,7 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.interRegular,
         fontSize: FONTsize.small,
     },
-    // --- END NEW STYLES ---
+    // --- END Slider STYLES ---
 
     detailsContainer: { marginTop: spacing.large, paddingHorizontal: spacing.biggerMedium, gap: spacing.medium },
     iconAndTitle: { flexDirection: 'row', gap: spacing.medium, alignItems: 'center' },

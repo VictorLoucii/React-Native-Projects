@@ -16,15 +16,8 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../../supabase'; // Assuming supabase.js is in the root
 import { ActivityIndicator, FlatList } from 'react-native';
 
-// Define the type for a single sermon object for TypeScript
-type Sermon = {
-  id: number;
-  title: string;
-  pastor: string;
-  date: string;
-  thumbnail_url: string;
-  video_url: string;
-};
+// IMPORT from our types file ---
+import { MediaStackScreenProps, vid } from '../navigation/navigationTypes';
 
 
 const SermonsScreen = () => {
@@ -32,13 +25,13 @@ const SermonsScreen = () => {
   const insets = useSafeAreaInsets();
   const { isDarkMode, toggleTheme } = useThemeStore();
   const { colors } = useTheme() as CustomTheme;
-  const navigation = useNavigation<any>();  // Use <any> for simplicity for now
+  const navigation = useNavigation<MediaStackScreenProps<'SermonsScreen'>['navigation']>();
 
   // State to hold our sermons and loading status
-  const [sermons, setSermons] = useState<Sermon[]>([]);  //empty array initially
+  const [sermons, setSermons] = useState<vid[]>([]);  //empty array initially
   const [loading, setLoading] = useState(true);
 
-    //use useEffect to fetch data when the screen loads
+  //use useEffect to fetch data when the screen loads
   useEffect(() => {
     const fetchSermons = async () => {
       setLoading(true);
@@ -57,12 +50,12 @@ const SermonsScreen = () => {
     fetchSermons();
   }, []);
 
-   // A function to render each item in the list
-  const renderSermonCard = ({ item }: { item: Sermon }) => (
+  // A function to render each item in the FLAT list
+  const renderSermonCard = ({ item }: { item: vid }) => (
     <MediaCard
       // Use the thumbnail_url from your database later. For now, we'll keep the local one.
-      imageSource={require('../../assets/sermon.jpg')} 
-      ONPRESS={() => navigation.navigate('VideoPlayerScreen', { sermon: item })} // --- MODIFIED --- Pass the entire sermon object to the next screen
+      imageSource={require('../../assets/sermon.jpg')}
+      ONPRESS={() => navigation.navigate('VideoPlayerScreen', { sermon: item })} //Pass the entire sermon object to the next screen
     >
       <Text style={[styles.titleBold, { color: colors.MediaImageIconTextBGC }]}>
         {item.title}
@@ -71,7 +64,7 @@ const SermonsScreen = () => {
         {item.pastor}
       </Text>
       <Text style={[styles.date, { color: colors.MediaImageIconTextBGC }]}>
-        {item.date} 
+        {item.date}
       </Text>
       <MaterialIcons
         name={'play-circle-outline'}
@@ -115,7 +108,7 @@ const SermonsScreen = () => {
       {/* Divider Line */}
       <View style={styles.dividerLine} />
 
-            {/* --- MODIFIED --- Use a loading indicator or the FlatList */}
+      {/*Using a loading indicator or the FlatList */}
       {loading ? (
         <ActivityIndicator size="large" color={colors.textPrimary} style={{ flex: 1 }} />
       ) : (
@@ -128,9 +121,9 @@ const SermonsScreen = () => {
         />
       )}
 
-      
 
-      
+
+
 
     </View >
   )
