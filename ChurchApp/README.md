@@ -6,11 +6,10 @@ A modern, visually engaging church community app built with React Native. Church
 
 ## 🚀 App Demo
 
-Check out a demo of the app in action! 
+Check out this quick demo of the app in action! Click the GIF to see the full 2-minute video with audio.
 
-![ChurchApp Demo GIF](assets/demo.gif)
+[![ChurchApp Demo GIF](assets/demo.gif)](https://www.youtube.com/shorts/6WL1zxYI_vE)
 
----
 
 ## ✨ Features
 
