@@ -13,6 +13,7 @@ import VideoPlayerScreen from '../screens/VideoPlayerScreen';
 
 // Import your custom footer component i.e HomeScreenFooter for the bottom tab navigator
 import HomeScreenFooter from '../components/HomeScreenFooter';
+
 // Import CREATED TYPES from file 'navigationTypes.ts'
 import { 
     RootTabParamList, 

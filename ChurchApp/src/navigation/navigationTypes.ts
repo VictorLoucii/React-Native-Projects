@@ -3,7 +3,7 @@ import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { BottomTabScreenProps, } from '@react-navigation/bottom-tabs';
 import { NavigatorScreenParams } from '@react-navigation/native'; // Important for nesting
 
-// define the shape of the data we pass around, like the vid object
+// define the shape of the data we pass around
 export type vid = {
   id: number;
   title: string;
@@ -117,26 +117,14 @@ export type VideoPlayerScreenRouteProp = MediaStackScreenProps<'VideoPlayerScree
 //   // `navigation` and `route` are now perfectly typed for SermonsScreen
 //   // ...
 // };
-// IGNORE_WHEN_COPYING_START
-// content_copy
-// download
-// Use code with caution.
-// TypeScript
-// IGNORE_WHEN_COPYING_END
 
 // This is a powerful pattern because you define it once and can reuse it for every screen in the MediaStack.
 
 // Statement 2: The Specific "Shortcut Type"
-// Generated typescript
 // export type VideoPlayerScreenRouteProp = MediaStackScreenProps<'VideoPlayerScreen'>['route'];
-// IGNORE_WHEN_COPYING_START
-// content_copy
-// download
-// Use code with caution.
-// TypeScript
-// IGNORE_WHEN_COPYING_END
 
-// What it is: This line uses the "type factory" we created in Statement 1 to create a very specific, non-generic "shortcut" type. It represents only the route prop for only the VideoPlayerScreen.
+
+// What it is: This line uses the "type factory" we created in Statement 1 to create a very specific, non-generic "shortcut" type because it doesn't contain <...>. It represents only the route prop for only the VideoPlayerScreen.
 
 // Let's dissect the pieces:
 
@@ -148,7 +136,6 @@ export type VideoPlayerScreenRouteProp = MediaStackScreenProps<'VideoPlayerScree
 
 // The result is the full props object type specifically for the VideoPlayerScreen. This resulting type looks like this:
 
-// Generated typescript
 // {
 //   navigation: // The specific navigation prop for VideoPlayerScreen
 //   route: { // The specific route prop for VideoPlayerScreen
@@ -157,12 +144,7 @@ export type VideoPlayerScreenRouteProp = MediaStackScreenProps<'VideoPlayerScree
 //     params: { sermon: vid; }
 //   }
 // }
-// IGNORE_WHEN_COPYING_START
-// content_copy
-// download
-// Use code with caution.
-// TypeScript
-// IGNORE_WHEN_COPYING_END
+
 
 // ['route']
 
@@ -183,11 +165,5 @@ export type VideoPlayerScreenRouteProp = MediaStackScreenProps<'VideoPlayerScree
 // const route = useRoute<VideoPlayerScreenRouteProp>();
 
 // // `route` is now perfectly typed, and TypeScript knows `route.params.sermon` exists.
-// IGNORE_WHEN_COPYING_START
-// content_copy
-// download
-// Use code with caution.
-// TypeScript
-// IGNORE_WHEN_COPYING_END
 
 // This is a convenience. It's much cleaner to import and use the simple VideoPlayerScreenRouteProp name than to write useRoute<MediaStackScreenProps<'VideoPlayerScreen'>['route']>() every time.
