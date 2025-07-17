@@ -13,8 +13,14 @@ import Video, { OnLoadData, OnProgressData, VideoRef } from 'react-native-video'
 import Slider from '@react-native-community/slider';
 import Orientation from 'react-native-orientation-locker';
 
+// 1. IMPORT THE NEW LIBRARY for hiding status bar elements in full screen
+import SystemNavigationBar from 'react-native-system-navigation-bar';
+
 //import type file:
 import { VideoPlayerScreenRouteProp } from '../navigation/navigationTypes';
+
+// --- 1. IMPORT THE HOOK (for hiding tab bar) ---
+import { useTabBarVisibility } from '../contexts/TabBarVisibilityContext';
 
 const VideoPlayerScreen = () => {
     const insets = useSafeAreaInsets();
@@ -34,32 +40,32 @@ const VideoPlayerScreen = () => {
 
     const videoRef = useRef<VideoRef>(null);
 
-    // // This effect will hide/show the tab bar based on the fullscreen state
-    // useEffect(() => {
-    //     // Hide the tab bar when going fullscreen
-    //     if (fullScreen) {
-    //         navigation.setOptions({ tabBarStyle: { display: 'none' } });
-    //     } else {
-    //         // Show the tab bar when exiting fullscreen
-    //         navigation.setOptions({ tabBarStyle: { display: 'flex' } });
-    //     }
-    // }, [fullScreen, navigation]); // This effect runs whenever 'fullScreen' or 'navigation' changes
+    // --- 2. GET THE "SETTER" FUNCTION FROM THE CONTEXT  (for hiding tab bar)---
+    const { setIsTabBarVisible } = useTabBarVisibility();
 
-    // Use this instead of the useEffect
+    // Use this instead of the useEffect (for hiding tab bar and status bar elements)
+    // 3. THIS HOOK NOW CONTROLS EVERYTHING
     useFocusEffect(
-        useCallback(() => {
-            // This code runs when the screen comes into focus
+        useCallback(() => {  
             if (fullScreen) {
-                navigation.setOptions({ tabBarStyle: { display: 'none' } });
+                // Hide Tab Bar navigator
+                setIsTabBarVisible(false);
+                // Go immersive mode on Android
+                SystemNavigationBar.immersive();
             } else {
-                navigation.setOptions({ tabBarStyle: { display: 'flex' } });
+                // Show Tab Bar
+                setIsTabBarVisible(true);
+                // Show navigation bar on Android
+                SystemNavigationBar.navigationShow();
             }
 
-            // This cleanup function runs when the screen goes out of focus
-            return () => navigation.setOptions({ tabBarStyle: { display: 'flex' } });
-        }, [fullScreen, navigation])
+            // Cleanup function: runs when the screen is left
+            return () => {
+                setIsTabBarVisible(true);
+                SystemNavigationBar.navigationShow();
+            };
+        }, [fullScreen]) // Effect depends on the 'fullScreen' state
     );
-
 
     const format = seconds => {
         console.log('seconds:', seconds);
@@ -88,8 +94,16 @@ const VideoPlayerScreen = () => {
 
     return (
         <View style={[styles.container, { backgroundColor: colors.bkGroundClr }, fullScreen ? styles.fullscreenContainer : { paddingTop: insets.top }]}>
-            <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} translucent={true} backgroundColor='transparent' />
-
+             {/* --- UPDATED StatusBar ---
+            // 3. ADD THE 'hidden' PROP TO HIDE THE TOP STATUS BAR IN FULLSCREEN
+            */}
+            <StatusBar 
+                barStyle={isDarkMode ? 'light-content' : 'dark-content'} 
+                translucent={true} 
+                backgroundColor='transparent'
+                hidden={fullScreen} 
+            />
+            
             {/* conditional rendering based on fullscreen */}
             {/* --- HIDE back button and title IN FULLSCREEN --- */}
             {!fullScreen && (
@@ -397,7 +411,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
     },
-   fullScreenButtonContainer: { // The new, larger touch area or the maximize/minimize button/icon
+    fullScreenButtonContainer: { // The new, larger touch area or the maximize/minimize button/icon
         padding: 10, // Creates a 10px invisible border around the icon
     },
 

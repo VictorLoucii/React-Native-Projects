@@ -13,6 +13,9 @@ import { useTheme } from '@react-navigation/native';
 import { CustomTheme } from '../themes/CustomTheme';
 import { useThemeStore } from '../themes/ThemeStore';
 
+// --- 1. IMPORT THE HOOK ---
+import { useTabBarVisibility } from '../contexts/TabBarVisibilityContext';
+
 //this FC has become our custom TabNavigator
 const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
     // console.log('state:---',state);
@@ -31,8 +34,18 @@ const HomeScreenFooter = ({ state, navigation }: BottomTabBarProps) => {
 
     const activeRouteName = state.routes[state.index].name;
 
+    // --- 2. GET THE VISIBILITY STATE FROM THE CONTEXT ---
+    const { isTabBarVisible } = useTabBarVisibility();
+
+    // --- 3. IF THE CONTEXT SAYS TO HIDE, RENDER NOTHING ---
+    if (!isTabBarVisible) {
+        return null;
+    }
+
+    // --- OTHERWISE, RENDER THE TAB BAR AS USUAL ---
+
     return (
-        <View style={[styles.container, { paddingBottom: insets.bottom + VERTICAL_PADDING, backgroundColor:colors.tabBarBGC,  borderTopColor: colors.border, borderTopWidth:1  }]}>
+        <View style={[styles.container, { paddingBottom: insets.bottom + VERTICAL_PADDING, backgroundColor: colors.tabBarBGC, borderTopColor: colors.border, borderTopWidth: 1 }]}>
 
             <TouchableOpacity
                 onPress={() => navigation.navigate('Home')}

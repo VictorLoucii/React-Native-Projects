@@ -8,6 +8,9 @@ import { useThemeStore } from './src/themes/ThemeStore'
 import { DarkMode } from './src/themes/DarkMode'
 import { LightMode } from './src/themes/LightMode'
 
+// --- IMPORT THE PROVIDER component ---
+import { TabBarVisibilityProvider } from './src/contexts/TabBarVisibilityContext'
+
 const App = () => {
   
 
@@ -20,12 +23,13 @@ const App = () => {
 
   return (
     <SafeAreaProvider>
+    {/* ---  WRAP THE NAVIGATOR WITH THE PROVIDER for toggling tab bar visibility,  placed above all components that need to access its state--- */}
+    <TabBarVisibilityProvider>
       <NavigationContainer theme={isDarkMode ? DarkMode : LightMode}>
         <TabNavigator />
       </NavigationContainer>
-
-    </SafeAreaProvider>
-
+    </TabBarVisibilityProvider>
+  </SafeAreaProvider>
 
   )
 }
