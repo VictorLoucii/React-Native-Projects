@@ -126,12 +126,16 @@ const styles = StyleSheet.create({
 
     },
     cardImageContainer: {
-        width: 364,
+        // width: 364,
+        flex:1,
         height: 203,
+        
 
     },
     imageStyle: {
         borderRadius: 16,
+        width:'100%',
+        height:'100%',
 
     },
     overlayContainer: {

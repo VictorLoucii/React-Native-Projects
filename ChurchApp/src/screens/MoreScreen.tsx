@@ -1,4 +1,4 @@
-import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -25,7 +25,14 @@ const MoreScreen = () => {
   // }
 
   return (
-    <View style={[styles.container, { paddingBottom: insets.bottom, paddingTop: insets.top, backgroundColor: colors.settingsBGC }]}>
+    <ScrollView
+      style={[styles.container, { backgroundColor: colors.settingsBGC }]}
+      contentContainerStyle={[styles.contentContainer, {
+        paddingBottom: insets.bottom + spacing.large,
+        paddingTop: insets.top
+      }]}
+      showsVerticalScrollIndicator={false}
+    >
 
       <StatusBar
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
@@ -170,7 +177,7 @@ const MoreScreen = () => {
 
 
 
-    </View>
+    </ScrollView>
   )
 }
 
@@ -180,20 +187,16 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     // backgroundColor: '#131314',  //use cutom theme
-    alignItems: 'center',
+    // alignItems: 'center',
     // paddingHorizontal:spacing.medium
   },
-  backButtonTouchable: {
-    zIndex: 1,  // Ensures the back button is on top of other content
-    // top:47,  // The `top` value is now set dynamically in the component
-    position: 'absolute',
-    left: 24,
+  contentContainer: {
+    alignItems: 'center', // Center all the content horizontally
+    paddingBottom: 100,    // This creates the space at the very bottom!
   },
-  backButtonStyling: {
-    // color: '#FFFFFF',
-  },
+
   userImageContainer: {
-    marginTop: spacing.medium,
+    marginTop: spacing.biggerMedium,
     // flexDirection: 'row',
     alignItems: 'center',
     // height: 156,
@@ -250,7 +253,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingBottom: spacing.medium,
 
-    // marginBottom: spacing.xtraLarge,
+    marginBottom: spacing.xtraLarge,
 
   },
   optionsText: {

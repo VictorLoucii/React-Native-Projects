@@ -36,7 +36,10 @@ const Featured = () => {
 
             <View style={styles.allImagesContainer}>
                 {/* below statement we are traversing from one tab screen to another */}
-                <TouchableOpacity onPress={() => navigation.navigate('Media')}>
+                <TouchableOpacity 
+                    onPress={() => navigation.navigate('Media')}
+                    style={{flex:1}}
+                >
 
                     <ImageBackground
                         source={require('../../assets/sermon.jpg')}
@@ -127,8 +130,11 @@ const styles = StyleSheet.create({
     },
     allImagesContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        // justifyContent: 'space-between',
+        gap: spacing.small,
         marginTop: 20,
+        // alignItems: 'flex-start', // Ensures columns align at the top
+
 
     },
     FeaturedStyle: {
@@ -137,24 +143,34 @@ const styles = StyleSheet.create({
         // color: "#FFFFFF",
     },
     card1ImageContainer: {
-        width: 164,
-        height: 247,
-        paddingHorizontal: spacing.small,
+        // width: 134,
+        // flex: 1,
+        width:'100%',
+        // height: 247,
+        height: (113 * 2) + spacing.medium, // Calculation: (card2.height + card3.height + gap)
+        // paddingHorizontal: spacing.small,
+        // justifyContent:'center',
+        // alignItems:'center',
 
     },
     image1style: {
         borderRadius: 16,
+        // resizeMode: 'contain', 
+
+        // width: '100%',
+        // height: '100%',
 
     },
     overlayContainer1: {
         // This creates a semi-transparent dark layer over the image
         // and acts as the container for our text and icons.
-        flex: 1, // Takes up the full space of the ImageBackground
+        // flex: 1, // Takes up the full space of the ImageBackground
+        width: '100%',
+        height: '100%',
         backgroundColor: 'rgba(0, 0, 0, 0.3)', // Black with 30% opacity
         borderRadius: 16, // Match the parent's border radius
         padding: spacing.small, // Inner spacing for the content
 
-        // Flexbox to position items
         justifyContent: 'space-between', // Pushes title to top, action to bottom
 
     },
@@ -167,6 +183,8 @@ const styles = StyleSheet.create({
         gap: spacing.small
     },
     playIconStyle: {
+        width: 24,
+        height: 24,
 
     },
     watchHereStyle: {
@@ -176,19 +194,24 @@ const styles = StyleSheet.create({
         // paddingTop:spacing.medium
     },
     prayerRequestAndConnectContainer: {
-        gap: spacing.medium
+        gap: spacing.medium,
+        // width:180,
+        flex:1,
+        
 
 
     },
     card2ImageContainer: {
-        width: 180,
+        width: '100%',
         height: 113,
-        paddingHorizontal: spacing.small,
+        // paddingHorizontal: spacing.small,
 
 
     },
     image2style: {
         borderRadius: 16,
+        height: '100%',
+        width: '100%',
 
 
     },
@@ -196,22 +219,26 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         flex: 1,
         padding: spacing.small,
+
     },
     PrayerRequestStyle: {
         fontFamily: FONTS.interExtraLight,
         fontSize: FONTsize.medium,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        textAlign:'center',
 
     },
     LetsPrayStyle: {
         fontFamily: FONTS.interRegular,
         fontSize: FONTsize.small,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        textAlign:'center',
+
     },
     card3ImageContainer: {
-        width: 180,
+        width: '100%',
         height: 113,
-        paddingHorizontal: spacing.small,
+        // paddingHorizontal: spacing.small,
     },
     getConnectedJoinUsContainer: {
         justifyContent: 'space-between',
@@ -221,19 +248,24 @@ const styles = StyleSheet.create({
     },
     image3style: {
         borderRadius: 16,
+        height: '100%',
+        width: '100%',
 
 
     },
     GetConnectStyle: {
         fontFamily: FONTS.interExtraLight,
         fontSize: FONTsize.medium,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        textAlign:'center',
 
     },
     joinUsTyle: {
         fontFamily: FONTS.interRegular,
         fontSize: FONTsize.small,
-        color: '#FFFFFF'
+        color: '#FFFFFF',
+        textAlign:'center',
+
     },
 
 

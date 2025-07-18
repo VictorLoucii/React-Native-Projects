@@ -46,17 +46,21 @@ const MediaScreen = () => {
       {/* Divider Line */}
       <View style={styles.dividerLine} />
 
-      <MediaCard
-        ONPRESS={() => null}
-        imageSource={require('../../assets/sermon.jpg')}
-        children={null}
-      />
+      <View style={styles.mainImageContainer}>
+
+        <Image
+          // ONPRESS={() => null}
+          source={require('../../assets/sermon.jpg')}
+          style={styles.mainImage}
+        // children={null}
+        />
+      </View>
 
       <View style={[styles.allMediaList]}>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={[styles.imageTextAndIcon, { backgroundColor: colors.MediaImageIconTextBGC }]}
-          onPress={()=>navigation.navigate('SermonsScreen')}
+          onPress={() => navigation.navigate('SermonsScreen')}
         >
           <View style={styles.imageAndText}>
             <Image
@@ -127,7 +131,7 @@ export default MediaScreen
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: spacing.biggerMedium,
+    paddingHorizontal: spacing.medium,
     // gap: spacing.medium  //gap doesn't work on scroll lock
 
   },
@@ -167,12 +171,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: spacing.medium,
     alignItems: 'center',
-    flex:1,
+    flex: 1,
   },
   miniImages: {
     height: 78,
     // width: '45%',  //don't do this as here width will depend on the width of the parent i.e image and text, and suppose if text is a short word then the images will be uneven(check RNjs doc search for "problem in putting width: '45%' in miniImages ")
-    width:137,
+    width: 137,
     borderRadius: 16,  //same like MediaCard 
 
   },
@@ -180,7 +184,18 @@ const styles = StyleSheet.create({
     fontSize: FONTsize.biggerMedium,
     fontFamily: FONTS.interMedium,
     color: "#000000", //black
-    flexShrink:1,  //// Allow text to wrap if it's too long
+    flexShrink: 1,  //// Allow text to wrap if it's too long
 
   },
+  mainImageContainer: {
+    height: 210,
+    width: '100%',
+    borderRadius: 16,     // Apply the border radius to the container
+    overflow: 'hidden',   // This is the magic that clips the corners
+},
+mainImage: {
+    height: '100%',       // Make the image fill the container
+    width: '100%',
+    resizeMode: 'cover', // 'cover' usually looks better than 'contain' for this
+},
 })

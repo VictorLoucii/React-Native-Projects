@@ -31,7 +31,7 @@ const SermonsScreen = () => {
   const [sermons, setSermons] = useState<vid[]>([]);  //empty array initially
   const [loading, setLoading] = useState(true);
 
-  //use useEffect to fetch data when the screen loads
+  //use useEffect to fetch data from supabase when the screen loads
   useEffect(() => {
     const fetchSermons = async () => {
       setLoading(true);
