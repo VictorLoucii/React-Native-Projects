@@ -9,6 +9,7 @@ apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
  */
 react {
     /* Folders */
+    
     //   The root of your project, i.e. where "package.json" lives. Default is '../..'
     // root = file("../../")
     //   The folder where the react-native NPM package is. Default is ../../node_modules/react-native
@@ -83,8 +84,9 @@ android {
         applicationId "com.churchapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 1 // This must be an integer. Increment it for each new release.
+        versionName "1.0.0" // This must match the "version" in your package.json
+    
     }
     signingConfigs {
         debug {
@@ -111,6 +113,8 @@ android {
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
+
+     implementation("androidx.activity:activity:1.9.+") // <-- image picker library requirement for older devices api less than 30
 
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")

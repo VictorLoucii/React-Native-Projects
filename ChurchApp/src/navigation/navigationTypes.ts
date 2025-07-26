@@ -2,6 +2,19 @@
 import type { NativeStackScreenProps } from '@react-navigation/native-stack';
 import type { BottomTabScreenProps, } from '@react-navigation/bottom-tabs';
 import { NavigatorScreenParams } from '@react-navigation/native'; // Important for nesting
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';   //for navigation prop type
+
+
+export type Comment = {
+  id: number;
+  created_at: string;
+  content: string;
+  user_id: string;
+  profiles: {
+    username: string | null;
+    avatar_url: string | null;
+  };
+};
 
 // define the shape of the data we pass around
 export type vid = {
@@ -33,8 +46,14 @@ export type ConnectStackParamList = {
 
 // For the stack inside the "Home" tab
 export type HomeStackParamList = {
-    HomeScreen: undefined;
-    UpcomingEventScreen: undefined;
+  HomeScreen: undefined;
+  UpcomingEventScreen: undefined;
+};
+
+// For the stack inside the "More" tab
+export type MoreStackParamList = {
+  MoreScreen: undefined;
+  EditProfileScreen: undefined;
 };
 
 
@@ -44,19 +63,47 @@ export type RootTabParamList = {
   Home: NavigatorScreenParams<HomeStackParamList>; // The "Home" tab contains the HomeStack
   Connect: NavigatorScreenParams<ConnectStackParamList>; // The "Connect" tab contains the ConnectStack
   Media: NavigatorScreenParams<MediaStackParamList>; // The "Media" tab contains the MediaStack
-  More: undefined;
+  More: NavigatorScreenParams<MoreStackParamList>;
 };
 
 
 // --- Screen Prop Type Definitions ---
+// below are the navigation prop types which we will export. // This is our library of reusable types for all screens.
 // This makes it easier to type your screens. we can now import these directly.
 
 // Props for any screen in the Media Stack
+// --- Screen Prop Type Definitions ---
+// This is our library of reusable types for all screens:
+
+// --- Home Stack Types ---
+export type HomeStackScreenProps<T extends keyof HomeStackParamList> =
+  NativeStackScreenProps<HomeStackParamList, T>;
+export type HomeStackNavigationProp = NativeStackNavigationProp<HomeStackParamList>;  //now import these in screens of Home Stack and then wrap it in <> in use navigation
+
+
+// --- Connect Stack Types ---
+export type ConnectStackScreenProps<T extends keyof ConnectStackParamList> =
+  NativeStackScreenProps<ConnectStackParamList, T>;
+export type ConnectStackNavigationProp = NativeStackNavigationProp<ConnectStackParamList>;//now import these in screens of Home Stack and then wrap it in <> in use navigation
+
+
+
+// --- Media Stack Types ---
 export type MediaStackScreenProps<T extends keyof MediaStackParamList> =
   NativeStackScreenProps<MediaStackParamList, T>;
+export type MediaStackNavigationProp = NativeStackNavigationProp<MediaStackParamList>;//now import these in screens of Home Stack and then wrap it in <> in use navigation
+// Specific route prop for convenience
+export type VideoPlayerScreenRouteProp = MediaStackScreenProps<'VideoPlayerScreen'>['route'];//now import these in screens of Home Stack and then wrap it in <> in use navigation
 
-// We can keep the specific one for VideoPlayerScreen for convenience if we want, but the generic one above is powerful
-export type VideoPlayerScreenRouteProp = MediaStackScreenProps<'VideoPlayerScreen'>['route'];
+
+
+// --- More Stack Types ---
+export type MoreStackScreenProps<T extends keyof MoreStackParamList> =
+  NativeStackScreenProps<MoreStackParamList, T>;
+export type MoreStackNavigationProp = NativeStackNavigationProp<MoreStackParamList>;//now import these in screens of Home Stack and then wrap it in <> in use navigation
+
+
+
 
 
 ////////////////////////////////////////////

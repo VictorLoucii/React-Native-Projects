@@ -15,14 +15,16 @@ import VideoPlayerScreen from '../screens/VideoPlayerScreen';
 import HomeScreenFooter from '../components/HomeScreenFooter';
 
 // Import CREATED TYPES from file 'navigationTypes.ts'
-import { 
-    RootTabParamList, 
-    ConnectStackParamList, 
-    MediaStackParamList, 
-    HomeStackParamList 
-} from './navigationTypes'; 
+import {
+    RootTabParamList,
+    ConnectStackParamList,
+    MediaStackParamList,
+    HomeStackParamList,
+    MoreStackParamList
+} from './navigationTypes';
 
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import EditProfileScreen from '../screens/EditProfileScreen';
 
 const Tab = createBottomTabNavigator<RootTabParamList>();
 // const Stack = createNativeStackNavigator();
@@ -31,6 +33,7 @@ const Tab = createBottomTabNavigator<RootTabParamList>();
 const HomeStack = createNativeStackNavigator<HomeStackParamList>();
 const ConnectStack = createNativeStackNavigator<ConnectStackParamList>();
 const MediaStack = createNativeStackNavigator<MediaStackParamList>();
+const MoreStack = createNativeStackNavigator<MoreStackParamList>();
 
 // creating 'ConnectStackNavigator' which is a component for tab 'Connect' tab
 const ConnectStackNavigator = () => {
@@ -41,7 +44,7 @@ const ConnectStackNavigator = () => {
 
         }}>
             <ConnectStack.Screen name='ConnectScreen' component={ConnectScreen}
-                // options={{ headerShown: false }}
+            // options={{ headerShown: false }}
             />
             <ConnectStack.Screen name="BecomeMemberScreen" component={BecomeMemberScreen} />
             <ConnectStack.Screen name="JoinSocialGroupScreen" component={JoinSocialGroupScreen} />
@@ -83,6 +86,21 @@ const HomeStackNavigator = () => {
     )
 }
 
+// creating 'MoreStackNavigator' which is a component for tab 'More' tab
+const MoreStackNavigator = () => {
+    return (
+        <MoreStack.Navigator screenOptions={{
+            headerShown: false
+            // headerBackTitle: "",
+        }}>
+            <MoreStack.Screen name="MoreScreen" component={MoreScreen} />
+            <MoreStack.Screen name='EditProfileScreen' component={EditProfileScreen} />
+
+
+        </MoreStack.Navigator>
+    )
+}
+
 
 
 const TabNavigator = () => {
@@ -96,14 +114,16 @@ const TabNavigator = () => {
                 headerShown: false  //hide the default header because your screens have their own
             }}
         >
-             {/* The Tab.Screen 'name' now has autocomplete and type-checking! */}
+            {/* The Tab.Screen 'name' now has autocomplete and type-checking! */}
             <Tab.Screen name="Home" component={HomeStackNavigator} />
             {/* Use the Stack Navigator for the "Connect" tab */}
             <Tab.Screen name="Connect" component={ConnectStackNavigator} />
 
             {/* Use the Stack Navigator for the "Media" tab */}
             <Tab.Screen name="Media" component={MediaStackNavigator} />
-            <Tab.Screen name="More" component={MoreScreen} />
+            
+            {/* Use the Stack Navigator for the "More" tab --- */}
+            <Tab.Screen name="More" component={MoreStackNavigator} />
 
         </Tab.Navigator>
     );

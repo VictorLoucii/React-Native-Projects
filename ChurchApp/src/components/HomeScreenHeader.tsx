@@ -7,12 +7,19 @@ import { useThemeStore } from '../themes/ThemeStore';
 import { useTheme } from '@react-navigation/native';
 import { CustomTheme } from '../themes/CustomTheme';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { Color } from 'react-native/types_generated/Libraries/Animated/AnimatedExports';
+import { useProfileStore } from '../ZustandStore/ProfileStore'
+
+
 
 const HomeScreenHeader = () => {
 
     const insets = useSafeAreaInsets();
     const { isDarkMode, toggleTheme } = useThemeStore();
     const { colors } = useTheme() as CustomTheme;
+
+    // GET THE PROFILE DATA FROM THE STORE 
+    const { profile } = useProfileStore();
 
 
     return (
@@ -22,10 +29,11 @@ const HomeScreenHeader = () => {
                 translucent={true} //this hides the status bar in android 
                 backgroundColor='transparent'
             />
+
             <View style={styles.userIconAndNotificationContainer}>
                 <View style={styles.userIconContainer}>
                     <Image
-                        source={require('../../assets/person.png')}
+                        source={profile?.avatar_url ? { uri: profile.avatar_url } : require('../../assets/person.png')}
                         style={styles.userIconStyle}
                     />
                 </View>
@@ -38,24 +46,30 @@ const HomeScreenHeader = () => {
                     <MaterialIcons
                         name={'notifications'}
                         size={23}
-                    color={colors.notifiIcon}
+                        color={colors.notifiIcon}
                     />
                 </View>
             </View>
             <Text style={[styles.WelcomeStyle, { color: colors.textPrimary }]}>
-                Welcome User
+                Welcome {profile?.username ? profile.username.split(' ')[0] : 'User'}
             </Text>
-            <View style={[styles.searchIconAndInputContainer, { backgroundColor: colors.searchInputBGC }]}>
+
+            {/* Divider Line */}
+            <View style={styles.dividerLine} />
+
+            {/* <View style={[styles.searchIconAndInputContainer, { backgroundColor: colors.searchInputBGC }]}>
                 <Image
                     source={require('../../assets/searchIcon.png')}
                     style={styles.searchIconStyle}
                 />
                 <TextInput
                     placeholder='Search your Query here'
+                    placeholderTextColor={'black'}
                     onChangeText={() => null}
-                    style={styles.textInputStyle}
+                    style={[styles.textInputStyle, { color: 'black' }]}
+                    cursorColor={'black'}
                 />
-            </View>
+            </View> */}
         </View>
     )
 }
@@ -83,10 +97,13 @@ const styles = StyleSheet.create({
         borderRadius: 14,
         alignItems: 'center',
         justifyContent: 'center',
+        overflow: 'hidden', // Add this to ensure the borderRadius clips the image
     },
     userIconStyle: {
-        height: 58,
-        width: 58,
+        height: '100%',
+        width: '100%',
+        // height: 58,
+        // width: 58,
     },
     notificationImageContainer: {
         height: 40,
@@ -103,7 +120,7 @@ const styles = StyleSheet.create({
         width: 6,
         borderRadius: 3,
         backgroundColor: 'red',
-        top:7,               // Position it from the top
+        top: 7,               // Position it from the top
         right: 13,            // Position it from the right
         zIndex: 1,            // Make sure it's on top of the icon
     },
@@ -118,6 +135,11 @@ const styles = StyleSheet.create({
         fontSize: FONTsize.superXtraLg,
         paddingHorizontal: spacing.large,
 
+    },
+    dividerLine: {
+        height: 1,
+        backgroundColor: '#A96F00',
+        marginTop: spacing.small,
     },
     searchIconAndInputContainer: {
         flexDirection: 'row',

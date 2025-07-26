@@ -107,7 +107,7 @@ const SermonsScreen = () => {
 
       {/* Divider Line */}
       <View style={styles.dividerLine} />
-      
+
       {/* conditional rendering: */}
       {/*Using a loading indicator or the FlatList */}
       {loading ? (

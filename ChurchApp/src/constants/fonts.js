@@ -14,5 +14,7 @@ export const FONTS = {
   robotoRegular: 'Roboto-Regular',
   robotoSemiBold: 'RobotoSlab-Bold',
   robotoSlabBold: 'RobotoSlab-Bold',
-  interLightItalic: 'Inter-LightItalic-BETA'
+  interLightItalic: 'Inter-LightItalic-BETA',
+  poppinsRegular: 'Poppins-Regular',
+  poppinsBold: 'Poppins-Regular',
 };

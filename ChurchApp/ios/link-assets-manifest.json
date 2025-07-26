@@ -34,6 +34,14 @@
       "sha1": "ff17bae635a4bffbaa773aa18ef3cfd8d6f41a17"
     },
     {
+      "path": "assets/fonts/Poppins-Bold.ttf",
+      "sha1": "875cf0cecd647bcf22e79d633d868c1b1ec98dfa"
+    },
+    {
+      "path": "assets/fonts/Poppins-Regular.ttf",
+      "sha1": "fdd3002e7d814ee47c1c1b8487c72c6bbb3a2d00"
+    },
+    {
       "path": "assets/fonts/Roboto-Light.ttf",
       "sha1": "318b44c0a32848f78bf11d4fbf3355d00647a796"
     },

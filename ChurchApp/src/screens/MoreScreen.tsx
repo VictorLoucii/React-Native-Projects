@@ -1,5 +1,5 @@
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React from 'react'
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Modal } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -8,17 +8,82 @@ import { FONTsize, spacing } from '../constants/dimensions'
 import { FONTS } from '../constants/fonts'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons'
 import Entypo from 'react-native-vector-icons/Entypo'
-import { useNavigation, useTheme } from '@react-navigation/native'
+import { useFocusEffect, useNavigation, useTheme } from '@react-navigation/native'
 import { CustomTheme } from '../themes/CustomTheme'
 import { useThemeStore } from '../themes/ThemeStore'
+// --- IMPORT THE TYPE  from navigationTypes.ts---
+import { MoreStackNavigationProp } from '../navigation/navigationTypes';
+import { useProfileStore } from '../ZustandStore/ProfileStore'; // Import ProfileStore to access our global state
+import { supabase } from '../../supabase'
+import { Alert } from 'react-native'
+import { ProgressBar } from '@react-native-community/progress-bar-android';
+
+import { useUpdateChecker } from '../hooks/useUpdateChecker';
 
 const MoreScreen = () => {
 
   const { isDarkMode, toggleTheme } = useThemeStore();
   const { colors } = useTheme() as CustomTheme;
-  const navigation = useNavigation()
-
+  const navigation = useNavigation<MoreStackNavigationProp>()
   const insets = useSafeAreaInsets();
+  // Access the profile store ---
+  const { profile, loading } = useProfileStore();
+
+  //use the update checker hook:
+  const {
+    isUpdateAvailable,
+    isDownloading,
+    downloadProgress,
+    latestVersionInfo,
+    checkForUpdates,
+    startUpdate,
+  } = useUpdateChecker();
+
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
+
+
+  // Only run the automatic check if notifications are actually enabled.
+  useEffect(() => {
+    if (isNotificationsEnabled) {
+      checkForUpdates();
+    }
+  }, [isNotificationsEnabled]);
+
+
+  const handleUpdatePress = () => {
+    // First, check if the user has updates disabled
+    if (!isNotificationsEnabled) {
+      Alert.alert(
+        "Updates Disabled",
+        "Please enable notifications to check for app updates."
+      );
+      return; // Stop here
+    }
+
+
+    // If an update is ready, show the details modal.
+    if (isUpdateAvailable) {
+      setModalVisible(true);
+    } else {
+      // If no update, just tell the user they are up to date.
+      Alert.alert("No Updates", "You are running the latest version of the app.");
+      // You could also re-run the check here if you want:
+      // checkForUpdates(); 
+    }
+  };
+
+  //supabase singout function:
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+
+    if (error) {
+      Alert.alert("Logout Error", error.message);
+    }
+    // If logout is successful, you don't need to do anything else.
+    // The onAuthStateChange listener in App.tsx will automatically
+    // navigate the user back to the AuthScreen.
+  };
 
   // const goToPrevScreen = () => {
   //   navigation.goBack();
@@ -35,7 +100,7 @@ const MoreScreen = () => {
     >
 
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle={(isDarkMode ? 'light-content' : 'dark-content')}
         translucent={true} //this hides the status bar in android 
         backgroundColor='transparent'
       />
@@ -52,30 +117,52 @@ const MoreScreen = () => {
         />
       </TouchableOpacity> */}
 
-      <View style={styles.userImageContainer}>
-        {/* default icon when no user image is given */}
-        {/* <FontAwesome
-          name={'user'}
-          style={styles.userImageDefault}
-          size={100}
-        /> */}
+      {/* Show a loading spinner while the profile is being fetched initially */}
+      {loading && <ActivityIndicator style={{ marginTop: 40, marginBottom: 40 }} size="large" color={colors.textPrimary} />}
 
-        <Image
-          source={require('../../assets/userImage.png')}
-          style={styles.userImage}
-        />
-      </View>
-      <Text style={[styles.name, { color: colors.textPrimary }]}>
-        XABI
-      </Text>
-      <Text style={[styles.email, { color: colors.textPrimary }]}>
-        uknown@gmail.com
-      </Text>
-      <TouchableOpacity style={styles.editContainer}>
-        <Text style={[styles.editText, { color: colors.textPrimary }]}>
-          Edit Profile
-        </Text>
-      </TouchableOpacity>
+      {/* --- TEMPORARY CODE FOR TESTING --- */}
+      {/* This block now shows the profile section as long as loading is done, */}
+      {/* allowing access to the "Edit Profile" button even when not logged in. */}
+      {!loading && (
+        <>
+          <TouchableOpacity
+            style={styles.userImageContainer}
+            onPress={() => navigation.navigate('EditProfileScreen')}
+          >
+            <Image
+              // Safely access avatar_url with optional chaining (?.)
+              source={profile?.avatar_url ? { uri: profile.avatar_url } : require('../../assets/userImage.png')}
+              style={styles.userImage}
+            />
+          </TouchableOpacity>
+
+          <Text style={[styles.name, { color: colors.textPrimary }]}>
+            {/* Safely access username with a fallback */}
+            {profile?.username || 'Set Your Name'}
+          </Text>
+
+          <Text style={[styles.email, { color: colors.textPrimary }]}>
+            {/* Safely access email with a fallback */}
+            {profile?.email || 'No email found in the database'}
+          </Text>
+
+          <Text style={[styles.email, { color: colors.textPrimary }]}>
+            {/* Safely access email with a fallback */}
+            {profile?.phone_number || 'No phone number found in the database'}
+          </Text>
+
+          <TouchableOpacity
+            style={styles.editContainer}
+            onPress={() => navigation.navigate('EditProfileScreen')}
+          >
+            <Text style={[styles.editText, { color: colors.textPrimary }]}>
+              Edit Profile
+            </Text>
+          </TouchableOpacity>
+        </>
+      )}
+      {/* --- END OF TEMPORARY CODE --- */}
+
 
 
       <View style={[styles.optionsContainer, { backgroundColor: colors.settingOptionsBGC }]}>
@@ -94,9 +181,11 @@ const MoreScreen = () => {
               Notifications
             </Text>
           </View>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => setIsNotificationsEnabled(!isNotificationsEnabled)}
+          >
             <FontAwesome
-              name={'toggle-on'}
+              name={isNotificationsEnabled ? 'toggle-on' : 'toggle-off'}
               size={40}
               style={styles.toggleStyle}
             />
@@ -126,6 +215,26 @@ const MoreScreen = () => {
         </View>
 
         <Text style={styles.optionsText}>SUPPORT</Text>
+        {/* UPDATE CHECKER BUTTON */}
+        <TouchableOpacity style={styles.updateButtonContainer} onPress={handleUpdatePress}>
+          <View style={styles.updateIconAndTextContainer}>
+            <View style={styles.updateIconContainer}>
+              <MaterialIcons
+                name={'system-update-alt'}
+                size={24}
+                style={[styles.updateIcon, isUpdateAvailable && { color: 'gold' }]} // Icon turns gold if update is available!
+              />
+            </View>
+            <Text style={styles.updateText}>
+              Check for Updates
+            </Text>
+          </View>
+          {isUpdateAvailable && (
+            <View style={styles.updateAvailableBadge}>
+              <Text style={styles.updateAvailableBadgeText}>!</Text>
+            </View>
+          )}
+        </TouchableOpacity>
 
         <View style={styles.faqContainer}>
           <View style={styles.faqIconContainer}>
@@ -157,7 +266,9 @@ const MoreScreen = () => {
         <View style={styles.dividerLine} />
 
         <View style={styles.logoutContainer}>
-          <TouchableOpacity style={styles.logOutIconAndText}>
+          <TouchableOpacity style={styles.logOutIconAndText}
+            onPress={handleLogout}
+          >
             <View style={styles.logoutIconContainer}>
               <Entypo
                 name={'log-out'}
@@ -176,6 +287,51 @@ const MoreScreen = () => {
       {/* optionsContainer view ends here */}
 
 
+
+
+      {/* UPDATE MODAL */}
+      <Modal
+        visible={isModalVisible}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalContainer}>
+          <View style={[styles.modalContent, { backgroundColor: colors.settingOptionsBGC }]}>
+            <Text style={[styles.modalTitle, { color: colors.textPrimary }]}>Update Available!</Text>
+
+            {/* This ensures the app doesn't crash if info isn't ready yet */}
+            {latestVersionInfo && (
+              <>
+                <Text style={[styles.modalVersion, { color: colors.textSecondary }]}>Version {latestVersionInfo.version} is ready to install.</Text>
+                <Text style={[styles.modalNotesTitle, { color: colors.textPrimary }]}>Release Notes:</Text>
+                <Text style={[styles.modalNotes, { color: colors.textSecondary }]}>{latestVersionInfo.releaseNotes}</Text>
+              </>
+            )}
+
+            {isDownloading ? (
+              <View style={styles.progressContainer}>
+                <Text style={{ color: colors.textPrimary, textAlign: 'center' }}>Downloading... {downloadProgress}%</Text>
+                <ProgressBar
+                  styleAttr="Horizontal"
+                  indeterminate={false}
+                  progress={downloadProgress / 100}
+                  color="gold"
+                />
+              </View>
+            ) : (
+              <View style={styles.buttonRow}>
+                <TouchableOpacity onPress={() => setModalVisible(false)} style={styles.modalButton}>
+                  <Text style={{ color: colors.textSecondary }}>Later</Text>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={startUpdate} style={styles.confirmUpdateButton}>
+                  <Text style={styles.confirmUpdateButtonText}>Update Now</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+      </Modal>
 
     </ScrollView>
   )
@@ -252,7 +408,6 @@ const styles = StyleSheet.create({
     // backgroundColor: '#FFFFFF',
     borderRadius: 20,
     paddingBottom: spacing.medium,
-
     marginBottom: spacing.xtraLarge,
 
   },
@@ -419,6 +574,110 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.robotoMedium,
     fontSize: FONTsize.medium,
 
-  }
+  },
+  // --- NEW STYLES FOR THE UPDATE BUTTON 
+  updateButtonContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.xtraLarge,
+    paddingTop: spacing.medium,
+  },
+  updateIconAndTextContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.medium,
+  },
+  updateIconContainer: {
+    height: 36,
+    width: 36,
+    backgroundColor: '#F5F6FA',
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  updateIcon: {
+    color: '#000000'
+  },
+  updateText: {
+    color: '#000000',
+    fontFamily: FONTS.robotoMedium,
+    fontSize: FONTsize.medium,
+  },
+  updateAvailableBadge: {
+    backgroundColor: 'red',
+    borderRadius: 10,
+    width: 20,
+    height: 20,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  updateAvailableBadgeText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+
+  // --- ANEW STYLES FOR THE MODAL 
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.6)',
+  },
+  modalContent: {
+    width: '90%',
+    padding: 20,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalTitle: {
+    fontSize: FONTsize.large,
+    fontFamily: FONTS.interSemiBold,
+    textAlign: 'center',
+    marginBottom: 10,
+  },
+  modalVersion: {
+    fontSize: FONTsize.medium,
+    fontFamily: FONTS.interRegular,
+    textAlign: 'center',
+    marginBottom: 15,
+  },
+  modalNotesTitle: {
+    fontSize: FONTsize.medium,
+    fontFamily: FONTS.interSemiBold,
+    marginBottom: 5,
+  },
+  modalNotes: {
+    fontSize: FONTsize.medium,
+    fontFamily: FONTS.interRegular,
+    marginBottom: 20,
+  },
+  progressContainer: {
+    marginTop: 20,
+    gap: 10,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 20,
+  },
+  modalButton: {
+    padding: 10,
+  },
+  confirmUpdateButton: {
+    backgroundColor: 'gold',
+    borderRadius: 8,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  confirmUpdateButtonText: {
+    fontFamily: FONTS.interBold,
+    color: '#000000',
+    fontSize: FONTsize.medium,
+  },
 
 })
