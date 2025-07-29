@@ -4,7 +4,8 @@ import { Alert, Linking, Platform } from 'react-native';
 import DeviceInfo from 'react-native-device-info';
 import semver from 'semver';
 import RNFS from 'react-native-fs';
-import FileProvider from 'react-native-file-provider';
+// import FileProvider from 'react-native-file-provider';
+import FileViewer from 'react-native-file-viewer';
 
 // The public URL to your manifest file on Supabase(get the project url from supabase)
 const MANIFEST_URL = 'https://nmrvqljaropmkxkzbkra.supabase.co/storage/v1/object/public/app-releases/latest.json';
@@ -64,40 +65,47 @@ export const useUpdateChecker = () => {
     setIsDownloading(true);
     setDownloadProgress(0);
 
-    const downloadPath = `${RNFS.CachesDirectoryPath}/update.apk`;
-
-    const download = RNFS.downloadFile({
-      fromUrl: latestVersionInfo.url,
-      toFile: downloadPath,
-      progress: (res) => {
-        const progress = (res.bytesWritten / res.contentLength) * 100;
-        setDownloadProgress(Math.round(progress));
-      },
-      begin: () => {
-        console.log('Download started...');
-      },
-    });
+    // Use a version-specific name to avoid cache issues
+    const downloadPath = `${RNFS.CachesDirectoryPath}/ChurchApp-v${latestVersionInfo.version}.apk`;
 
     try {
+      const download = RNFS.downloadFile({
+        fromUrl: latestVersionInfo.url,
+        toFile: downloadPath,
+        progress: (res) => {
+          const progress = (res.bytesWritten / res.contentLength) * 100;
+          setDownloadProgress(Math.round(progress));
+        },
+        begin: () => {
+          console.log('Download started...');
+        },
+      });
+
       const result = await download.promise;
+
       if (result.statusCode === 200) {
-        console.log('Download complete. Triggering install...');
+        console.log('Download complete. Opening installer...');
         setIsDownloading(false);
-        
-        // Critical step for modern Android: use FileProvider
-        const fileUri = await FileProvider.getUriForFile(downloadPath);
-        await FileProvider.open(fileUri);
+
+        // ---- THIS IS THE CRITICAL CHANGE ----
+        // Use FileViewer to open the downloaded APK. It handles the FileProvider logic for you.
+        await FileViewer.open(downloadPath, { showOpenWithDialog: true });
 
       } else {
-        throw new Error(`Download failed with status code ${result.statusCode}`);
+        // This handles cases where the GitHub URL might be broken (e.g., 404 error)
+        throw new Error(`Download failed: Server responded with status code ${result.statusCode}`);
       }
     } catch (error) {
       console.error('Update process failed:', error);
+      console.error('FileViewer specific error:', JSON.stringify(error, null, 2)); //debug line
+      
       setIsDownloading(false);
-      Alert.alert('Update Failed', 'The new version could not be downloaded. Please try again.');
+      // Provide a more accurate error message
+      Alert.alert('Installation Failed', `Could not open the installer. Please check app permissions. Error: ${error.message}`);
     }
   };
-  
+
+
   // Return all the state and functions so our UI can use them
   return {
     isUpdateAvailable,

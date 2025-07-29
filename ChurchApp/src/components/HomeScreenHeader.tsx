@@ -1,4 +1,4 @@
-import { Image, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native'
+import { Image, StatusBar, TouchableOpacity, StyleSheet, Text, TextInput, View } from 'react-native'
 import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { FONTS } from '../constants/fonts';
@@ -9,6 +9,8 @@ import { CustomTheme } from '../themes/CustomTheme';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Color } from 'react-native/types_generated/Libraries/Animated/AnimatedExports';
 import { useProfileStore } from '../ZustandStore/ProfileStore'
+import { useNotificationStore } from '../ZustandStore/NotificationStore';
+
 
 
 
@@ -17,6 +19,8 @@ const HomeScreenHeader = () => {
     const insets = useSafeAreaInsets();
     const { isDarkMode, toggleTheme } = useThemeStore();
     const { colors } = useTheme() as CustomTheme;
+    // GET STATE AND ACTIONS FROM THE NOTIFICATION STORE ---
+    const { isNotificationsEnabled, toggleNotifications } = useNotificationStore();
 
     // GET THE PROFILE DATA FROM THE STORE 
     const { profile } = useProfileStore();
@@ -37,18 +41,21 @@ const HomeScreenHeader = () => {
                         style={styles.userIconStyle}
                     />
                 </View>
-                <View style={[styles.notificationImageContainer, { backgroundColor: colors.notifiBGC }]}>
+                <TouchableOpacity 
+                    style={[styles.notificationImageContainer, { backgroundColor: colors.notifiBGC }]}
+                    onPress={toggleNotifications}
+                >
                     {/* <Image
                         source={require('../../assets/notifications_none_24px.png')}
                         style={styles.notificationImageStyle}
                     /> */}
                     <View style={styles.redDot} />
                     <MaterialIcons
-                        name={'notifications'}
+                        name={isNotificationsEnabled ? 'notifications-active' : 'notifications-off'}
                         size={23}
                         color={colors.notifiIcon}
                     />
-                </View>
+                </TouchableOpacity>
             </View>
             <Text style={[styles.WelcomeStyle, { color: colors.textPrimary }]}>
                 Welcome {profile?.username ? profile.username.split(' ')[0] : 'User'}

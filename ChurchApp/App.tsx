@@ -10,6 +10,7 @@ import { LightMode } from './src/themes/LightMode'
 import AuthScreen from './src/screens/AuthScreen'
 import { Session } from '@supabase/supabase-js';
 import { MenuProvider } from 'react-native-popup-menu';
+import SplashScreen from 'react-native-splash-screen';
 
 
 // --- IMPORT THE PROVIDER component ---
@@ -38,6 +39,7 @@ const App = () => {
 
   useEffect(() => {
 
+    SplashScreen.hide();  //this should be at top 
 
     // Check for an active session AND fetch the profile when the app starts
     supabase.auth.getSession().then(({ data: { session } }) => {

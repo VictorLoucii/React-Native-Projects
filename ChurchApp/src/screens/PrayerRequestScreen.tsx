@@ -1,4 +1,4 @@
-import { ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Alert, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import React, { useState } from 'react'
 import { useThemeStore } from '../themes/ThemeStore';
 import { useNavigation, useTheme } from '@react-navigation/native';
@@ -8,6 +8,8 @@ import { FONTsize, spacing } from '../constants/dimensions';
 import { FONTS } from '../constants/fonts';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
+import { supabase } from '../../supabase'; // Adjust the path to your supabase file
+
 
 const PrayerRequestScreen = () => {
 
@@ -16,12 +18,71 @@ const PrayerRequestScreen = () => {
     const insets = useSafeAreaInsets();
     const navigation = useNavigation();
 
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [email, setEmail] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [address, setAddress] = useState('');
+    const [prayerRequest, setprayerRequest] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
+    const handlePrayerRequests = async () => {
+        //Check if the prayer request text is empty. If it is, show an alert and stop.
+        if (!prayerRequest) {
+            Alert.alert('Empty Request, please write your prayer request before clicking submit');
+            return;
+        }
+        // Set the loading state to true for activity indicator
+        setIsSubmitting(true);
+
+        try {
+            //  Get the current user's data from Supabase auth.
+            const { data: { user } } = await supabase.auth.getUser();
+            //    The user's ID will be inside the object that is returned.
+
+            if (!user) {
+                // This will be caught by the catch block below
+                throw new Error("You must be logged in to submit a prayer request.");
+            }
+
+            // Use the supabase client to insert a new row into your 'prayer_requests' table
+            const { error: insertError } = await supabase
+                .from('prayer_requests')
+                .insert({
+                    // The object you insert should have two properties:
+                    // request_text: (the value from your `prayerRequest` state)
+                    request_text: prayerRequest,
+                    // user_id: (the ID you got in step 3)
+                    user_id: user.id
+                });
+
+            //  Check if the insertion resulted in an error. If so, show an error alert.
+            if (insertError) {
+                // This will be caught by the catch block below
+                throw insertError;
+            }
+
+            //  If the insertion was successful:
+            //     Show a success alert to the user.
+            Alert.alert("Success", "Your prayer request has been submitted successfully.");
+            //    Clear the input field by setting the state back to empty.
+            setprayerRequest('');
+            //    Navigate the user back to the previous screen.
+            navigation.goBack();
+
+
+
+        }
+        catch (error) {
+            // If any other unexpected error happens, show a generic error alert.
+            console.error("Error submitting prayer request:", error);
+            Alert.alert("Submission Failed", error.message || "An unexpected error occurred. Please try again.")
+
+        }
+
+        finally {
+            // No matter what happens (success or error), set the loading state back to false
+            setIsSubmitting(false);
+        }
+
+
+
+    }
 
     return (
         <View style={[styles.container, { backgroundColor: colors.bkGroundClr, paddingTop: insets.top, paddingBottom: insets.bottom }]}>
@@ -77,93 +138,13 @@ const PrayerRequestScreen = () => {
 
                 <View style={styles.formContainer}>
 
-                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                        First Name
-                    </Text>
-                    <TextInput
-                        placeholder='enter your first name here'
-                        placeholderTextColor={colors.textPrimary}
-                        value={firstName}
-                        onChangeText={(newText) => setFirstName(newText)}
-                        style={[styles.formInput,
-                        {
-                            borderColor: '#BDC1C6',
-                            color: colors.textPrimary
-                        }
-                        ]}
-                    />
-
-                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                        Last Name
-                    </Text>
-                    <TextInput
-                        placeholder='enter your last name here'
-                        placeholderTextColor={colors.textPrimary}
-                        value={lastName}
-                        onChangeText={(newText) => setLastName(newText)}
-                        style={[styles.formInput,
-                        {
-                            borderColor: '#BDC1C6',
-                            color: colors.textPrimary
-                        }
-                        ]}
-                    />
-
-                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                        Email
-                    </Text>
-                    <TextInput
-                        placeholder='e.g: uknown@gmail.com'
-                        placeholderTextColor={colors.textPrimary}
-                        value={email}
-                        onChangeText={(newText) => setEmail(newText)}
-                        style={[styles.formInput,
-                        {
-                            borderColor: '#BDC1C6',
-                            color: colors.textPrimary
-                        }
-                        ]}
-                    />
-
-                    <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
-                        Phone Number
-                    </Text>
-
-                    <View style={styles.phoneContainer}>
-                        <View style={styles.phoneCodeAndSymbol}>
-                            <Text style={[styles.phoneCodeText, { color: colors.textPrimary }]}>
-                                US +1
-                            </Text>
-
-                            <FontAwesome
-                                name={'caret-down'}
-                                size={15.5}
-                                color={colors.icon}
-                            />
-
-                        </View>
-                        <TextInput
-                            placeholder='e.g: 9977765234'
-                            placeholderTextColor={colors.textPrimary}
-                            value={phoneNumber}
-                            onChangeText={(newText) => setPhoneNumber(newText)}
-                            style={[styles.phoneNoformInput,
-                            {
-                                borderColor: '#BDC1C6',
-                                color: colors.textPrimary
-                            }
-                            ]}
-                        />
-                    </View>
-                    {/* phoneContainer view ends here */}
-
                     <View style={styles.addressContainer}>
                         <Text style={[styles.formLabel, { color: colors.textPrimary }]}>
                             Description of Your Prayer Requests
                         </Text>
                         <TextInput
-                            value={address}
-                            onChangeText={(newText) => setAddress(newText)}
+                            value={prayerRequest}
+                            onChangeText={(newText) => setprayerRequest(newText)}
                             multiline={true}
                             placeholder='write your prayer request here'
                             placeholderTextColor={colors.textPrimary}
@@ -176,6 +157,29 @@ const PrayerRequestScreen = () => {
                             ]}
                         />
                     </View>
+
+                    <TouchableOpacity
+                        style={[styles.submitContainer, {
+                            borderColor: colors.tabBarIconActive,
+                            // Make the button look disabled if state 'isSubmitting' is true/false
+                            backgroundColor: isSubmitting ? '#ccc' : 'transparent'
+                        }]}
+                        onPress={() => handlePrayerRequests()}  //or you can do this: 
+                        // onPress={handlePrayerRequests}
+                        disabled={isSubmitting} // Disable button when state 'isSubmitting' is true
+                    >
+                        {/* conditional rendering based on state 'isSubmitting'*/}
+                        {/* show activity indicator if the user has tapped the submit button */}
+                        {isSubmitting ? (
+                            <ActivityIndicator size={30} color={colors.tabBarIconActive} />
+                        ) : (
+                            // show the 'submit' button if the user hasn't interacted with the button
+                            <Text style={[styles.submitText, { color: colors.tabBarIconActive }]}>
+                                SUBMIT
+                            </Text>
+
+                        )}
+                    </TouchableOpacity>
 
 
 
@@ -275,6 +279,7 @@ const styles = StyleSheet.create({
     formLabel: {
         fontSize: FONTsize.medium,
         fontFamily: FONTS.interMedium,
+        // marginBottom:spacing.medium,
 
     },
     formInput: {
@@ -324,6 +329,7 @@ const styles = StyleSheet.create({
     addressContainer: {
         paddingTop: spacing.small,
         gap: spacing.small,
+        height: 300,
     },
     addressTextInput: {
         height: 90,
@@ -349,6 +355,21 @@ const styles = StyleSheet.create({
         color: '#FFFFFF',
         textAlign: 'center',
 
+
+    },
+    submitContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: spacing.medium,
+        borderWidth: 1,
+        height: 47,
+        borderRadius: 8,
+        paddingHorizontal: spacing.xtraLarge,
+
+    },
+    submitText: {
+        fontSize: FONTsize.medium,
+        fontFamily: FONTS.interMedium,
 
     },
 

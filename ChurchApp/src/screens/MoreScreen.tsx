@@ -1,4 +1,4 @@
-import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Modal } from 'react-native'
+import { Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View, ActivityIndicator, Modal, Touchable } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
@@ -17,6 +17,8 @@ import { useProfileStore } from '../ZustandStore/ProfileStore'; // Import Profil
 import { supabase } from '../../supabase'
 import { Alert } from 'react-native'
 import { ProgressBar } from '@react-native-community/progress-bar-android';
+import { useNotificationStore } from '../ZustandStore/NotificationStore';
+
 
 import { useUpdateChecker } from '../hooks/useUpdateChecker';
 
@@ -40,7 +42,8 @@ const MoreScreen = () => {
   } = useUpdateChecker();
 
   const [isModalVisible, setModalVisible] = useState(false);
-  const [isNotificationsEnabled, setIsNotificationsEnabled] = useState(true);
+  const { isNotificationsEnabled, toggleNotifications } = useNotificationStore();
+
 
 
   // Only run the automatic check if notifications are actually enabled.
@@ -181,8 +184,9 @@ const MoreScreen = () => {
               Notifications
             </Text>
           </View>
+          {/* USE THE NOTIFICATION STORE'S ACTION to toggle notification  */}
           <TouchableOpacity
-            onPress={() => setIsNotificationsEnabled(!isNotificationsEnabled)}
+            onPress={toggleNotifications}  // Use the action from the store
           >
             <FontAwesome
               name={isNotificationsEnabled ? 'toggle-on' : 'toggle-off'}
@@ -236,19 +240,26 @@ const MoreScreen = () => {
           )}
         </TouchableOpacity>
 
-        <View style={styles.faqContainer}>
+        <TouchableOpacity 
+          style={styles.faqContainer}
+          onPress={() => Alert.alert('FAQ update coming soon')}
+        >
           <View style={styles.faqIconContainer}>
             <Ionicons
               name={'document-text'}
               size={24}
+
               style={styles.faqIcon}
             />
 
           </View>
           <Text style={styles.faqText}>FAQ</Text>
-        </View>
+        </TouchableOpacity>
 
-        <View style={styles.helpContainer}>
+        <TouchableOpacity 
+          style={styles.helpContainer}
+          onPress={() => Alert.alert('Help update coming soon')}
+        >
           <View style={styles.helpIconContainer}>
             <SimpleLineIcons
               name={'earphones-alt'}
@@ -259,7 +270,7 @@ const MoreScreen = () => {
           <Text style={styles.helpText}>
             Help
           </Text>
-        </View>
+        </TouchableOpacity>
 
 
         {/* Divider Line */}
@@ -287,8 +298,6 @@ const MoreScreen = () => {
       {/* optionsContainer view ends here */}
 
 
-
-
       {/* UPDATE MODAL */}
       <Modal
         visible={isModalVisible}
@@ -298,17 +307,23 @@ const MoreScreen = () => {
       >
         <View style={styles.modalContainer}>
           <View style={[styles.modalContent, { backgroundColor: colors.settingOptionsBGC }]}>
+                  {/* --- This top section will now ALWAYS be visible --- */}
             <Text style={[styles.modalTitle, { color: colors.textPrimary }]}>Update Available!</Text>
 
             {/* This ensures the app doesn't crash if info isn't ready yet */}
             {latestVersionInfo && (
               <>
-                <Text style={[styles.modalVersion, { color: colors.textSecondary }]}>Version {latestVersionInfo.version} is ready to install.</Text>
-                <Text style={[styles.modalNotesTitle, { color: colors.textPrimary }]}>Release Notes:</Text>
-                <Text style={[styles.modalNotes, { color: colors.textSecondary }]}>{latestVersionInfo.releaseNotes}</Text>
+                <Text style={[styles.modalVersion, { color: colors.textSecondary }]}>
+                  Version {latestVersionInfo.version} is ready to install.
+                </Text>
+                <Text style={[styles.modalNotesTitle, { color: colors.textPrimary }]}>
+                  Release Notes:
+                </Text>
+                <Text style={[styles.modalNotes, { color: colors.textSecondary }]}>{latestVersionInfo.releaseNotes}
+                </Text>
               </>
             )}
-
+            {/* conditional rendering based on if it's downloading or not */}
             {isDownloading ? (
               <View style={styles.progressContainer}>
                 <Text style={{ color: colors.textPrimary, textAlign: 'center' }}>Downloading... {downloadProgress}%</Text>
@@ -644,7 +659,7 @@ const styles = StyleSheet.create({
     fontSize: FONTsize.medium,
     fontFamily: FONTS.interRegular,
     textAlign: 'center',
-    marginBottom: 15,
+    marginBottom: 10,
   },
   modalNotesTitle: {
     fontSize: FONTsize.medium,
@@ -654,7 +669,7 @@ const styles = StyleSheet.create({
   modalNotes: {
     fontSize: FONTsize.medium,
     fontFamily: FONTS.interRegular,
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   progressContainer: {
     marginTop: 20,
