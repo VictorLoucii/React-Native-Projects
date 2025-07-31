@@ -53,8 +53,7 @@ const SermonsScreen = () => {
   // A function to render each item in the FLAT list
   const renderSermonCard = ({ item }: { item: vid }) => (
     <MediaCard
-      // Use the thumbnail_url from your database later. For now, we'll keep the local one.
-      imageSource={require('../../assets/sermon.jpg')}
+      imageSource={{ uri: item.thumbnail_url }}  // The image source uses the URL from the database
       ONPRESS={() => navigation.navigate('VideoPlayerScreen', { sermon: item })} //Pass the entire sermon object to the next screen
     >
       <Text style={[styles.titleBold, { color: colors.MediaImageIconTextBGC }]}>

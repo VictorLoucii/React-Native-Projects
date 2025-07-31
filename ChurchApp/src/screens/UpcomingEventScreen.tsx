@@ -161,7 +161,7 @@ const UpcomingEventScreen = ({ route }) => {
       <ScrollView
         style={{ flex: 1 }}
         contentContainerStyle={{
-          paddingBottom: 40,
+          paddingBottom: 100,
         }}
       >
         <Image

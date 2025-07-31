@@ -15,9 +15,9 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
-    storage: AsyncStorage, // Use AsyncStorage for session persistence
+    storage: AsyncStorage, // Use AsyncStorage for session persistence,tells Supabase where to save that memory on the user's phone
     autoRefreshToken: true,
-    persistSession: true,
+    persistSession: true,  //tells Supabase you want to remember the user
     detectSessionInUrl: false,
   },
 })

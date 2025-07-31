@@ -46,6 +46,7 @@ const VideoPlayerScreen = () => {
     const [isCommentModalVisible, setCommentModalVisible] = useState(false);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const [editingComment, setEditingComment] = useState<Comment | null>(null);
+    const [videoEnded, setVideoEnded] = useState(false);
 
 
     const videoRef = useRef<VideoRef>(null);
@@ -85,6 +86,13 @@ const VideoPlayerScreen = () => {
         };
         getCurrentUser();
     }, []); // Runs once when the screen loads
+
+    const handleReplay = () => {
+        videoRef.current?.seek(0); // Go back to the beginning
+        setVideoEnded(false);      // Reset the ended state
+        setIsPaused(false);        // Start playing automatically
+        setProgress({ currentTime: 0 }); // Reset progress UI
+    };
 
 
     //function for deleting commment
@@ -253,12 +261,10 @@ const VideoPlayerScreen = () => {
             {/* --- HIDE back button and title IN FULLSCREEN --- */}
             {!fullScreen && (
                 <>
-                    {/* CORRECTED LINE: Removed extra '}' from onPress */}
                     <TouchableOpacity style={[styles.backButtonTouchable, { top: insets.top }]} onPress={() => navigation.goBack()}>
                         <Ionicons name={'return-up-back'} size={30} style={[styles.backButtonStyling, { color: colors.icon }]} />
                     </TouchableOpacity>
                     <View style={styles.headingContainer}>
-                        {/* CORRECTED LINE: Ensure no extra '}' at the end of the style prop */}
                         <Text style={[styles.headingStyle, { color: colors.textPrimary }]}>{sermon.title}</Text>
                     </View>
                 </>
@@ -307,6 +313,10 @@ const VideoPlayerScreen = () => {
                     onError={(e) => console.log('Video Error:', e)}
                     paused={isPaused} //When isPaused becomes true, the video pauses, when isPaused becomes false, the video plays.
                     muted={false}
+                    onEnd={() => {
+                        setVideoEnded(true); // Set the video as ended
+                        setIsPaused(true);   // Ensure the player state is paused
+                    }}
                 />
 
                 {/* Item 2: A dedicated, invisible transparent Touchable layer on top */}
@@ -315,67 +325,82 @@ const VideoPlayerScreen = () => {
                     activeOpacity={1}
                     onPress={() => setIsCliked(!isClicked)}
                 >
+                    {/* isClicked state gets triggered whenever the user touches the screen
+                     */}
                     {isClicked && (
                         // This is the visible black overlay with the controls
                         <View style={styles.controlsOverlay}>
-
-                            <View style={{ flexDirection: 'row', gap: spacing.xtraLarge }}>
-
-                                {/* backward button */}
-                                <TouchableOpacity
-                                    onPress={(e) => {
-                                        console.log('e:', e)
-                                        e.stopPropagation();  // Stop the tap from bubbling up to the main overlay
-
-                                        // Seek back 10 seconds, but don't go below 0
-                                        const newTime = Math.max(0, progress.currentTime - 10);
-                                        console.log('Seeking backward to:', newTime);
-                                        console.log('videoRef.current: ', videoRef.current);
-                                        videoRef.current?.seek(newTime);
-                                        //check RNjs doc "what is videoRef.current?"
-
-                                    }}
-                                >
+                            {/* below is conditionalrendering based on if video has ended or not */}
+                            {videoEnded ? (
+                                // IF VIDEO HAS ENDED, SHOW THE REPLAY BUTTON
+                                <TouchableOpacity onPress={handleReplay}>
                                     <Image
-                                        source={require('../../assets/backward.png')
-                                        }
-                                        style={{ width: 30, height: 30, tintColor: 'white' }}
+                                        source={require('../../assets/refresh.png')}
+                                        style={styles.replayIcon}
                                     />
                                 </TouchableOpacity>
 
-                                {/* play-pause button */}
-                                <TouchableOpacity
-                                    onPress={(e) => {
-                                        e.stopPropagation();
-                                        setIsPaused(!isPaused);
-                                    }}
-                                >
-                                    <Image
-                                        source={isPaused ? require('../../assets/play.png') : require('../../assets/video-pause-button.png')
-                                        }
-                                        style={{ width: 30, height: 30, tintColor: 'white' }}
-                                    />
-                                </TouchableOpacity>
+                            ) : (
+                                // if video hasn't ended show other buttons
+                                <View style={{ flexDirection: 'row', gap: spacing.xtraLarge }}>
 
-                                {/* forward button */}
-                                <TouchableOpacity
-                                    onPress={(e) => {
-                                        e.stopPropagation();  // Stop the tap from bubbling up to the main overlay
+                                    {/* backward 10 sec button */}
+                                    <TouchableOpacity
+                                        onPress={(e) => {
+                                            console.log('e:', e)
+                                            e.stopPropagation();  // Stop the tap from bubbling up to the main overlay
 
-                                        // Only seek if we have a valid duration    
-                                        const newTime = progress.currentTime + 10;
-                                        videoRef.current?.seek(newTime);
+                                            // Seek back 10 seconds, but don't go below 0
+                                            const newTime = Math.max(0, progress.currentTime - 10);
+                                            console.log('Seeking backward to:', newTime);
+                                            console.log('videoRef.current: ', videoRef.current);
+                                            videoRef.current?.seek(newTime);
+                                            //check RNjs doc "what is videoRef.current?"
 
-                                    }}
-                                >
-                                    <Image
-                                        source={require('../../assets/forward.png')
-                                        }
-                                        style={{ width: 30, height: 30, tintColor: 'white' }}
-                                    />
-                                </TouchableOpacity>
-                                {/* end of backward,play,pause,forward buttons                 */}
-                            </View>
+                                        }}
+                                    >
+                                        <Image
+                                            source={require('../../assets/backward.png')
+                                            }
+                                            style={{ width: 30, height: 30, tintColor: 'white' }}
+                                        />
+                                    </TouchableOpacity>
+
+                                    {/* play-pause button */}
+                                    <TouchableOpacity
+                                        onPress={(e) => {
+                                            e.stopPropagation();
+                                            setIsPaused(!isPaused);
+                                        }}
+                                    >
+                                        <Image
+                                            source={isPaused ? require('../../assets/play.png') : require('../../assets/video-pause-button.png')
+                                            }
+                                            style={{ width: 30, height: 30, tintColor: 'white' }}
+                                        />
+                                    </TouchableOpacity>
+
+                                    {/* forward 10 sec button */}
+                                    <TouchableOpacity
+                                        onPress={(e) => {
+                                            e.stopPropagation();  // Stop the tap from bubbling up to the main overlay
+
+                                            // Only seek if we have a valid duration    
+                                            const newTime = progress.currentTime + 10;
+                                            videoRef.current?.seek(newTime);
+
+                                        }}
+                                    >
+                                        <Image
+                                            source={require('../../assets/forward.png')
+                                            }
+                                            style={{ width: 30, height: 30, tintColor: 'white' }}
+                                        />
+                                    </TouchableOpacity>
+                                    {/* end of backward,play,pause,forward buttons                 */}
+                                </View>
+                            )}
+
 
                             <View style={styles.timeAndSlider}>
                                 <Text style={styles.videoTime}>
@@ -457,7 +482,7 @@ const VideoPlayerScreen = () => {
                                 </Text>
                             </View>
                             <Text style={[styles.descriptionText, { color: colors.textPrimary, marginTop: spacing.small }]}>
-                                When we walk with the lord we learn to trust his word.When we walk with the lord we learn to trust his word.When we walk with the lord we learn to trust his word.When we walk with the lord we learn to trust his word.
+                                {sermon.description}
                             </Text>
                             <TouchableOpacity style={styles.commentButton}
                                 onPress={() => setCommentModalVisible(true)} // Open the modal
@@ -483,8 +508,6 @@ const VideoPlayerScreen = () => {
                                     />
                                 )}
                             </View>
-
-
 
                         </View>
                     </ScrollView>
@@ -525,7 +548,7 @@ const styles = StyleSheet.create({
     },
     backButtonTouchable: { zIndex: 1, position: 'absolute', left: 24 },
     backButtonStyling: {},
-    headingContainer: {},
+    headingContainer: {marginTop: spacing.medium},
     headingStyle: { fontSize: FONTsize.medium, fontFamily: FONTS.interSemiBold, textAlign: 'center', paddingVertical: spacing.small },
 
     videoStyle: { width: '100%', height: '100%', backgroundColor: 'black' },
@@ -591,7 +614,7 @@ const styles = StyleSheet.create({
     },
     orientation: {
         flexDirection: 'row',
-        // justifyContent: 'space-between',
+        justifyContent:'flex-end',   //this will bring the maximize/minimize button to the top right
         width: '100%',
         position: 'absolute',
         top: 10,
@@ -603,6 +626,7 @@ const styles = StyleSheet.create({
     },
     fullScreenButtonContainer: { // The new, larger touch area or the maximize/minimize button/icon
         padding: 10, // Creates a 10px invisible border around the icon
+        // justifyContent:'flex-end'
     },
     // STYLES FOR COMMENTS:
     commentsSection: {
@@ -615,6 +639,11 @@ const styles = StyleSheet.create({
         fontSize: FONTsize.large,
         fontFamily: FONTS.interSemiBold,
         marginBottom: spacing.medium,
+    },
+    replayIcon: {
+        width: 30,
+        height: 30,
+        tintColor: 'white',
     },
 
 })

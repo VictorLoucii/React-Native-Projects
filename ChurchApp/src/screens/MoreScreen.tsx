@@ -21,6 +21,8 @@ import { useNotificationStore } from '../ZustandStore/NotificationStore';
 
 
 import { useUpdateChecker } from '../hooks/useUpdateChecker';
+import type { VersionInfo } from '../hooks/useUpdateChecker';
+
 
 const MoreScreen = () => {
 
@@ -42,6 +44,7 @@ const MoreScreen = () => {
   } = useUpdateChecker();
 
   const [isModalVisible, setModalVisible] = useState(false);
+  const [modalInfo, setModalInfo] = useState<VersionInfo | null>(null);
   const { isNotificationsEnabled, toggleNotifications } = useNotificationStore();
 
 
@@ -66,7 +69,8 @@ const MoreScreen = () => {
 
 
     // If an update is ready, show the details modal.
-    if (isUpdateAvailable) {
+    if (isUpdateAvailable && latestVersionInfo) {  // Also check if latestVersionInfo is not null
+      setModalInfo(latestVersionInfo); // this is the key "snapshot" step. snapshot means: Copy the data from the hook's state into our stable local state i.e modalInfo
       setModalVisible(true);
     } else {
       // If no update, just tell the user they are up to date.
@@ -240,7 +244,7 @@ const MoreScreen = () => {
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.faqContainer}
           onPress={() => Alert.alert('FAQ update coming soon')}
         >
@@ -256,7 +260,7 @@ const MoreScreen = () => {
           <Text style={styles.faqText}>FAQ</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity 
+        <TouchableOpacity
           style={styles.helpContainer}
           onPress={() => Alert.alert('Help update coming soon')}
         >
@@ -307,19 +311,22 @@ const MoreScreen = () => {
       >
         <View style={styles.modalContainer}>
           <View style={[styles.modalContent, { backgroundColor: colors.settingOptionsBGC }]}>
-                  {/* --- This top section will now ALWAYS be visible --- */}
+            {/* --- This top section will now ALWAYS be visible --- */}
             <Text style={[styles.modalTitle, { color: colors.textPrimary }]}>Update Available!</Text>
 
             {/* This ensures the app doesn't crash if info isn't ready yet */}
-            {latestVersionInfo && (
+            {modalInfo && (
               <>
                 <Text style={[styles.modalVersion, { color: colors.textSecondary }]}>
-                  Version {latestVersionInfo.version} is ready to install.
+                  Version {modalInfo.version} is ready to install.
                 </Text>
+                {/* This is the title */}
                 <Text style={[styles.modalNotesTitle, { color: colors.textPrimary }]}>
                   Release Notes:
                 </Text>
-                <Text style={[styles.modalNotes, { color: colors.textSecondary }]}>{latestVersionInfo.releaseNotes}
+                {/* This is the content, reading from the stable modalInfo state */}
+                <Text style={[styles.modalNotes, { color: colors.textSecondary }]}>
+                  {modalInfo.releaseNotes}
                 </Text>
               </>
             )}

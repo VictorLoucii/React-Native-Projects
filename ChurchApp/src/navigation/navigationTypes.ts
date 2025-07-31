@@ -24,6 +24,7 @@ export type vid = {
   date: string;
   thumbnail_url: string;
   video_url: string;
+  description: string | null;
 };
 
 // --- Stack Navigator Type Definitions ---

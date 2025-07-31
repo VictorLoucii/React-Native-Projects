@@ -113,13 +113,7 @@ const MediaScreen = () => {
         </View>
 
 
-
-
-
       </View>
-
-
-
 
 
     </ScrollView>

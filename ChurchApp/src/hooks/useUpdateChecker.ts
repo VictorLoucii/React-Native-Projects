@@ -11,7 +11,7 @@ import FileViewer from 'react-native-file-viewer';
 const MANIFEST_URL = 'https://nmrvqljaropmkxkzbkra.supabase.co/storage/v1/object/public/app-releases/latest.json';
 
 // Define the structure of your latest.json file
-interface VersionInfo {
+export interface VersionInfo {
   version: string;
   url: string;
   releaseNotes: string;
