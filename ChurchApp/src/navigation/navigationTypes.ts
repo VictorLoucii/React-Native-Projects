@@ -20,7 +20,7 @@ export type Comment = {
 export type vid = {
   id: number;
   title: string;
-  pastor: string;
+  creator: string; 
   date: string;
   thumbnail_url: string;
   video_url: string;
@@ -33,8 +33,9 @@ export type vid = {
 // For the stack inside the "Media" tab
 export type MediaStackParamList = {
   MediaScreen: undefined;
-  SermonsScreen: undefined;
-  VideoPlayerScreen: { sermon: vid }; // This screen requires a 'sermon' object
+  // SermonsScreen: undefined;
+  VideoListScreen: { title: string; tableName: string };
+  VideoPlayerScreen: { video: vid, videoType: string; }; // This screen Requires a 'video' parameter (type: vid) and a 'videoType' parameter (type: string).
 };
 
 // For the stack inside the "Connect" tab

@@ -161,12 +161,15 @@ const styles = StyleSheet.create({
   },
   formInput: {
     width: '100%',
-    height: 47,
+    // height: 47,
+    paddingVertical: 12, // <--- ADD THIS LINE
     // borderColor: '#5A2F23',
     borderWidth: 1,
     borderRadius: spacing.xtraLarge,
     textAlign: 'left',
-    paddingHorizontal: spacing.medium
+    paddingHorizontal: spacing.medium,
+    fontFamily: FONTS.poppinsRegular, // Ensure consistent font
+    fontSize: FONTsize.medium,      // Ensure consistent font size
   },
   buttonContainer: {
     // This container only job is to center the button horizontally
@@ -199,7 +202,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    height: 47,
+    // height: 47,   //remove fixed height as it cause layout issues in older devices
     borderColor: '#5A2F23',
     borderWidth: 1,
     borderRadius: spacing.xtraLarge,
@@ -211,6 +214,8 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.poppinsRegular,
     fontSize: FONTsize.medium,
     paddingRight: spacing.small, // Add a little space before the icon
+    paddingVertical: 12,  //adding this for older devices layout
+
   },
   disabledButton: {
     backgroundColor: '#8A6F69', // A muted version of your primary color

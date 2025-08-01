@@ -32,7 +32,7 @@ const VideoPlayerScreen = () => {
     const { colors } = useTheme() as CustomTheme;
     const navigation = useNavigation();
     const route = useRoute<VideoPlayerScreenRouteProp>();
-    const { sermon } = route.params;
+    const { video, videoType } = route.params;  //search for this statement in RNjs doc for better understanding
 
     //states and ref for video 
     const [isPaused, setIsPaused] = useState(false);
@@ -162,8 +162,8 @@ const VideoPlayerScreen = () => {
             content,
             user_id,
             profiles ( username, avatar_url )  
-        `)   //from table 'profiles' select username and avatar_url columns
-            .eq('sermon_id', sermon.id)   //.eq means equal
+        `)   //This code tells Supabase: "Get me all the columns from the comments table, and for each comment, please also go to the profiles table and get the username and avatar_url for the user who wrote it." For this to work, Supabase must know how to connect a comment to a profile.
+            .eq('sermon_id', video.id)   //.eq means equal
             .order('created_at', { ascending: false });
 
         if (error) {
@@ -194,7 +194,7 @@ const VideoPlayerScreen = () => {
         if (!fullScreen) { // Only fetch comments if not in fullscreen
             fetchComments();
         }
-    }, [sermon.id, fullScreen]);
+    }, [video.id, fullScreen]);
 
     // FUNCTION TO HANDLE NEW COMMENT SUBMISSION 
     const handleCommentSubmit = async (commentText: string) => {
@@ -209,7 +209,7 @@ const VideoPlayerScreen = () => {
             .from('comments')
             .insert({
                 content: commentText,
-                sermon_id: sermon.id,
+                sermon_id: video.id,
                 user_id: user.id
             });
 
@@ -265,7 +265,7 @@ const VideoPlayerScreen = () => {
                         <Ionicons name={'return-up-back'} size={30} style={[styles.backButtonStyling, { color: colors.icon }]} />
                     </TouchableOpacity>
                     <View style={styles.headingContainer}>
-                        <Text style={[styles.headingStyle, { color: colors.textPrimary }]}>{sermon.title}</Text>
+                        <Text style={[styles.headingStyle, { color: colors.textPrimary }]}>{video.title}</Text>
                     </View>
                 </>
             )}
@@ -277,7 +277,7 @@ const VideoPlayerScreen = () => {
                 {/* Item 1: The Video. It sits at the bottom of the stack. */}
                 <Video
                     ref={videoRef}
-                    source={{ uri: sermon.video_url }} //note: encode the video from some software(e.g: handbrake) before uploading to supabase
+                    source={{ uri: video.video_url }} //note: encode the video from some software(e.g: handbrake) before uploading to supabase
                     // source={{ uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4' }} // Use this test video
                     style={[styles.videoStyle]}
                     controls={false}  //make it false, so that we can use custom controls for our video 
@@ -407,7 +407,8 @@ const VideoPlayerScreen = () => {
                                     {format(progress.currentTime)}
                                 </Text>
                                 <Slider
-                                    style={{ width: '80%', height: 40 }}
+                                    // style={{ width: '80%', height: 40 }}  //dont' use fixed width here as it may cause layout issues in some devices
+                                    style={{ flex: 1, height: 40 }}  //use flex:1 for the slider is better practice
                                     minimumValue={0}
                                     maximumValue={duration}
                                     value={progress.currentTime} // Connect the slider's position to the video's progress
@@ -466,23 +467,52 @@ const VideoPlayerScreen = () => {
 
                         <View style={styles.detailsContainer}>
 
+                            {/* --- TITLE (Always visible) --- */}
                             <View style={styles.iconAndTitle}>
-                                <Ionicons name={'book-outline'} size={29} color={colors.icon} />
-                                <Text style={[styles.subTitle, { color: colors.textPrimary }]}>{sermon.title}
+                                {/* Conditionally hide the ICON */}
+                                {videoType === 'sermon' && <Ionicons name={'book-outline'} size={29} color={colors.icon} />}
+                                <Text style={[styles.subTitle, { color: colors.textPrimary }]}>{video.title}
                                 </Text>
                             </View>
-                            <View style={styles.dateIconAndText}>
-                                <MaterialIcons name={'person-outline'} size={29} color={colors.icon} />
-                                <Text style={[styles.dateText, { color: colors.textPrimary }]}>{sermon.pastor}
-                                </Text>
-                            </View>
-                            <View style={styles.dateIconAndText}>
-                                <MaterialIcons name={'calendar-month'} size={29} color={colors.icon} />
-                                <Text style={[styles.dateText, { color: colors.textPrimary }]}>{sermon.date}
-                                </Text>
-                            </View>
+
+                            {/* below is old code for creator: */}
+                            {/* <View style={styles.dateIconAndText}> */}
+                            {/* Conditionally hide the ICON */}
+                            {/* {videoType === 'sermon' && <MaterialIcons name={'person-outline'} size={29} color={colors.icon} />} */}
+
+                            {/* --- PASTOR / ARTIST (Text is always visible) --- */}
+                            {/* <Text style={[styles.dateText, { color: colors.textPrimary }]}>{video.creator} */}
+                            {/* </Text> */}
+                            {/* </View> */}
+
+
+                            {/* below is new code for creator: */}
+                            {/* --- CREATOR / ARTIST (This entire row only renders if a creator name exists) --- */}
+                            {video.creator && (
+                                <View style={styles.dateIconAndText}>
+                                    {/* Conditionally show the ICON */}
+                                    {videoType === 'sermon' && <MaterialIcons name={'person-outline'} size={29} color={colors.icon} />}
+                                    {/* --- PASTOR / ARTIST (Text is always visible) --- */}
+                                    <Text style={[styles.dateText, { color: colors.textPrimary }]}>{video.creator}</Text>
+                                </View>
+                            )}
+
+
+
+                            {/* --- HIDE THE ENTIRE DATE ROW FOR SONGS if the object received is gospel songs --- */}
+                            {videoType === 'sermon' && (
+                                <View style={styles.dateIconAndText}>
+                                    {videoType === 'sermon' && <MaterialIcons name={'calendar-month'} size={29} color={colors.icon} />}
+
+                                    <Text style={[styles.dateText, { color: colors.textPrimary }]}>{video.date}
+                                    </Text>
+                                </View>
+                            )}
+
+
+                            {/* --- DESCRIPTION (Always visible ) --- */}
                             <Text style={[styles.descriptionText, { color: colors.textPrimary, marginTop: spacing.small }]}>
-                                {sermon.description}
+                                {video.description}
                             </Text>
                             <TouchableOpacity style={styles.commentButton}
                                 onPress={() => setCommentModalVisible(true)} // Open the modal
@@ -548,7 +578,7 @@ const styles = StyleSheet.create({
     },
     backButtonTouchable: { zIndex: 1, position: 'absolute', left: 24 },
     backButtonStyling: {},
-    headingContainer: {marginTop: spacing.medium},
+    headingContainer: { marginTop: spacing.medium },
     headingStyle: { fontSize: FONTsize.medium, fontFamily: FONTS.interSemiBold, textAlign: 'center', paddingVertical: spacing.small },
 
     videoStyle: { width: '100%', height: '100%', backgroundColor: 'black' },
@@ -614,7 +644,7 @@ const styles = StyleSheet.create({
     },
     orientation: {
         flexDirection: 'row',
-        justifyContent:'flex-end',   //this will bring the maximize/minimize button to the top right
+        justifyContent: 'flex-end',   //this will bring the maximize/minimize button to the top right
         width: '100%',
         position: 'absolute',
         top: 10,

@@ -2,7 +2,7 @@ import { ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 
 import React from 'react'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { useThemeStore } from '../themes/ThemeStore';
-import { useNavigation, useTheme } from '@react-navigation/native';
+import { useNavigation, useTheme, useRoute } from '@react-navigation/native';
 import { CustomTheme } from '../themes/CustomTheme';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { FONTsize, spacing } from '../constants/dimensions';
@@ -20,47 +20,51 @@ import { ActivityIndicator, FlatList } from 'react-native';
 import { MediaStackScreenProps, vid } from '../navigation/navigationTypes';
 
 
-const SermonsScreen = () => {
-  // console.log('succesfully navigated to SermonsScreen')
+const VideoListScreen = () => {
+  // console.log('succesfully navigated to VideoListScreen')
   const insets = useSafeAreaInsets();
   const { isDarkMode, toggleTheme } = useThemeStore();
   const { colors } = useTheme() as CustomTheme;
-  const navigation = useNavigation<MediaStackScreenProps<'SermonsScreen'>['navigation']>();
 
   // State to hold our sermons and loading status
-  const [sermons, setSermons] = useState<vid[]>([]);  //empty array initially
+  const [mediaItems, setMediaItems] = useState<vid[]>([]);  //empty array initially
   const [loading, setLoading] = useState(true);
 
-  //use useEffect to fetch data from supabase when the screen loads
+  const navigation = useNavigation<MediaStackScreenProps<'VideoListScreen'>['navigation']>();
+  // Get the parameters we will pass to this screen
+  const route = useRoute<MediaStackScreenProps<'VideoListScreen'>['route']>();
+  const { title, tableName } = route.params; // Destructure the params
+
+  //use useEffect to fetch media data from supabase when the screen loads
   useEffect(() => {
-    const fetchSermons = async () => {
+    const fetchMedia = async () => {
       setLoading(true);
       const { data, error } = await supabase
-        .from('sermon')  //here 'sermon' is the name of the table in supa base
+        .from(tableName)  //dynmaiclly fetching the table name
         .select('*');
 
       if (error) {
-        console.error('Error fetching sermons:', error.message);
+        console.error(`Error fetching from ${tableName}:`, error.message);
       } else if (data) {
-        setSermons(data);
+        setMediaItems(data);
       }
       setLoading(false);
     };
 
-    fetchSermons();
-  }, []);
+    fetchMedia();
+  }, [tableName]);
 
   // A function to render each item in the FLAT list
-  const renderSermonCard = ({ item }: { item: vid }) => (
+  const renderMediaItem = ({ item }: { item: vid }) => (
     <MediaCard
       imageSource={{ uri: item.thumbnail_url }}  // The image source uses the URL from the database
-      ONPRESS={() => navigation.navigate('VideoPlayerScreen', { sermon: item })} //Pass the entire sermon object to the next screen
+      ONPRESS={() => navigation.navigate('VideoPlayerScreen', { video: item, videoType: tableName })} //Pass the entire sermon and videoType objects to the next screen i.e VideoPlayerScreen
     >
       <Text style={[styles.titleBold, { color: colors.MediaImageIconTextBGC }]}>
         {item.title}
       </Text>
       <Text style={[styles.subheading, { color: colors.MediaImageIconTextBGC }]}>
-        {item.pastor}
+        {item.creator}
       </Text>
       <Text style={[styles.date, { color: colors.MediaImageIconTextBGC }]}>
         {item.date}
@@ -100,7 +104,7 @@ const SermonsScreen = () => {
 
       <View style={styles.headingContainer}>
         <Text style={[styles.headingStyle, { color: colors.textPrimary }]}>
-          Sermons
+          {title}
         </Text>
       </View>
 
@@ -113,10 +117,11 @@ const SermonsScreen = () => {
         <ActivityIndicator size="large" color={colors.textPrimary} style={{ flex: 1 }} />
       ) : (
         <FlatList
-          data={sermons}
-          renderItem={renderSermonCard}
+
+          data={mediaItems}
+          renderItem={renderMediaItem}
           keyExtractor={(item) => item.id.toString()}
-          contentContainerStyle={styles.allMediaCards}
+          contentContainerStyle={[styles.allMediaCards, { paddingBottom: 150 }]}
           ItemSeparatorComponent={() => <View style={{ height: spacing.biggerMedium }} />} // This adds space between items
         />
       )}
@@ -129,7 +134,7 @@ const SermonsScreen = () => {
   )
 }
 
-export default SermonsScreen
+export default VideoListScreen
 
 const styles = StyleSheet.create({
   container: {

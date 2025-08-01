@@ -9,15 +9,8 @@ import { FONTS } from '../constants/fonts';
 import MediaCard from '../components/MediaCard';
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MediaStackNavigationProp } from '../navigation/navigationTypes';
 
-// define the type for the stack navigator screens 
-type MediaScreenParamList = {
-  SermonsScreen: undefined;  // No params expected for the main screen
-
-}
-
-// Define the navigation prop type for this screen
-type MediaScreenNavigationProp = NativeStackNavigationProp<MediaScreenParamList, 'SermonsScreen'>;
 
 
 
@@ -25,7 +18,7 @@ const MediaScreen = () => {
   const { isDarkMode, toggleTheme } = useThemeStore();
   const { colors } = useTheme() as CustomTheme;
   const insets = useSafeAreaInsets()
-  const navigation = useNavigation<MediaScreenNavigationProp>(); //get the navigation object
+  const navigation = useNavigation<MediaStackNavigationProp>(); //get the navigation object
 
   return (
     <ScrollView
@@ -60,7 +53,10 @@ const MediaScreen = () => {
 
         <TouchableOpacity
           style={[styles.imageTextAndIcon, { backgroundColor: colors.MediaImageIconTextBGC }]}
-          onPress={() => navigation.navigate('SermonsScreen')}
+          onPress={() => navigation.navigate('VideoListScreen', {
+            title: 'Sermons',
+            tableName: 'sermon'
+          })}
         >
           <View style={styles.imageAndText}>
             <Image
@@ -78,14 +74,20 @@ const MediaScreen = () => {
 
         </TouchableOpacity>
 
-        <View style={[styles.imageTextAndIcon, { backgroundColor: colors.MediaImageIconTextBGC }]}>
+        <TouchableOpacity
+          style={[styles.imageTextAndIcon, { backgroundColor: colors.MediaImageIconTextBGC }]}
+          onPress={() => navigation.navigate('VideoListScreen', {
+            title: 'Gospel Songs',
+            tableName: 'gospel_songs'
+          })}
+        >
           <View style={styles.imageAndText}>
             <Image
-              source={require('../../assets/liveStream.png')}
+              source={require('../../assets/gospelSong.jpg')}
               style={styles.miniImages}
             />
             <Text style={styles.textStyle}>
-              Live Stream
+              Gospel Songs
             </Text>
           </View>
           <AntDesign
@@ -93,7 +95,7 @@ const MediaScreen = () => {
             size={27}
           />
 
-        </View>
+        </TouchableOpacity>
 
         <View style={[styles.imageTextAndIcon, { backgroundColor: colors.MediaImageIconTextBGC }]}>
           <View style={styles.imageAndText}>
@@ -186,10 +188,10 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 16,     // Apply the border radius to the container
     overflow: 'hidden',   // This is the magic that clips the corners
-},
-mainImage: {
+  },
+  mainImage: {
     height: '100%',       // Make the image fill the container
     width: '100%',
     resizeMode: 'cover', // 'cover' usually looks better than 'contain' for this
-},
+  },
 })

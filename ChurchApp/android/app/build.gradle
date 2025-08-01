@@ -84,8 +84,8 @@ android {
         applicationId "com.churchapp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 4 // changes this as you keep updating the app
-        versionName "1.0.3" // changes this as you keep updating the app
+        versionCode 5 // changes this as you keep updating the app
+        versionName "1.0.4" // changes this as you keep updating the app
     
     }
     signingConfigs {

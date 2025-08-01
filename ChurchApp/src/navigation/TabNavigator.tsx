@@ -7,7 +7,7 @@ import MediaScreen from '../screens/MediaScreen';
 import BecomeMemberScreen from '../screens/BecomeMemberScreen';
 import JoinSocialGroupScreen from '../screens/JoinSocialGroupScreen';
 import PrayerRequestScreen from '../screens/PrayerRequestScreen';
-import SermonsScreen from '../screens/SermonsScreen';
+import VideoListScreen from '../screens/VideoListScreen';
 import UpcomingEventScreen from '../screens/UpcomingEventScreen';
 import VideoPlayerScreen from '../screens/VideoPlayerScreen';
 
@@ -62,7 +62,7 @@ const MediaStackNavigator = () => {
             // headerBackTitle: "",
         }}>
             <MediaStack.Screen name='MediaScreen' component={MediaScreen} />
-            <MediaStack.Screen name="SermonsScreen" component={SermonsScreen} />
+            <MediaStack.Screen name="VideoListScreen" component={VideoListScreen} />
             <MediaStack.Screen name="VideoPlayerScreen" component={VideoPlayerScreen} />
 
 

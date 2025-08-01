@@ -41,7 +41,7 @@ const LoginForm = ({ onSwitchTab }: LoginSignUpFormProps) => {
       if (error) {
         Alert.alert("Login Error", error.message);
       }
-      // No 'else' needed. onAuthStateChange handles success.
+      // No 'else' block is needed. onAuthStateChange handles success.
     } catch (e) {
       Alert.alert('Error', 'An unexpected error occurred. Please try again.');
     } finally {
@@ -83,7 +83,7 @@ const LoginForm = ({ onSwitchTab }: LoginSignUpFormProps) => {
           <TextInput
             value={password}
             onChangeText={(newText) => setPassword(newText)}
-            style={styles.passwordInput} // Use a new style
+            style={styles.passwordInput} 
             cursorColor={'#5A2F23'}
             autoCapitalize="none"
             // Connect secureTextEntry to state
@@ -145,12 +145,15 @@ const styles = StyleSheet.create({
   },
   formInput: {
     width: '100%',
-    height: 47,
+    // height: 47,   //remove fixed height as it cause layout issues in older devices
+    paddingVertical: 12, 
     // borderColor: '#5A2F23',
     borderWidth: 1,
     borderRadius: spacing.xtraLarge,
     textAlign: 'left',
-    paddingHorizontal: spacing.medium
+    paddingHorizontal: spacing.medium,
+    fontFamily: FONTS.poppinsRegular, // Ensure consistent font
+    fontSize: FONTsize.medium,      // Ensure consistent font size
   },
   buttonContainer: {
     // This container only job is to center the button horizontally
@@ -183,7 +186,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     width: '100%',
-    height: 47,
+    // height: 47,   //remove fixed height as it cause layout issues in older devices
     borderColor: '#5A2F23',
     borderWidth: 1,
     borderRadius: spacing.xtraLarge,
@@ -195,6 +198,9 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.poppinsRegular,
     fontSize: FONTsize.medium,
     paddingRight: spacing.small, // Add a little space before the icon
+    // paddingTop:spacing.medium,
+    paddingVertical: 12, // need this for older devices
+
   },
   disabledButton: {
     backgroundColor: '#8A6F69', // A muted version of your primary color

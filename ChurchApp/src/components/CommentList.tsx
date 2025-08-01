@@ -31,7 +31,7 @@ const CommentList: React.FC<CommentListProps> = ({ comments, loading, currentUse
   if (comments.length === 0) {
     return (
       <View style={styles.emptyContainer}>
-        <Text style={[styles.emptyText, { color: colors.textSecondary }]}>
+        <Text style={[styles.emptyText, { color: colors.textPrimary }]}>
           No comments yet. Be the first to share your thoughts!
         </Text>
       </View>
