@@ -1,2 +1,2 @@
 # React-Native-Projects
-React-native Projects that i have delved into
+React-native CLI Projects that i have delved into
